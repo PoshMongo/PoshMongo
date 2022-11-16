@@ -6,7 +6,7 @@ namespace PoshMongo
     [Cmdlet(VerbsCommon.Get, "Database")]
     public class GetDatabase : PSCmdlet
     {
-        [Parameter(Mandatory = false, ParameterSetName = "Default")]
+        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]
         public string? DatabaseName { get; set; }
         protected override void BeginProcessing()
         {
