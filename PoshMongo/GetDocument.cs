@@ -7,7 +7,7 @@ namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Get, "Document")]
     [OutputType("System.Text.Json")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Get-MongoDBDocument.md#get-mongodbdocument", PositionalBinding = true)]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBDocument.md#get-mongodbdocument", PositionalBinding = true)]
     public class GetDocument : PSCmdlet
     {
         [Parameter(Mandatory = false, Position = 0)]

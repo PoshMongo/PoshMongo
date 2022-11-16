@@ -6,7 +6,7 @@ namespace PoshMongo.Collection
 {
     [Cmdlet(VerbsCommon.Get, "Collection")]
     [OutputType("MongoDB.Driver.IMongoCollection")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Get-MongoDBCollection.md#get-mongodbcollection", PositionalBinding = true)]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBCollection.md#get-mongodbcollection", PositionalBinding = true)]
     public class GetCollection : PSCmdlet
     {
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]

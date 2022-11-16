@@ -6,7 +6,7 @@ namespace PoshMongo.Connection
 {
     [Cmdlet(VerbsCommunications.Connect, "Instance")]
     [OutputType("MongoDB.Driver.MongoClient")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Connect-MongoDBInstance.md#connect-mongodbinstance", PositionalBinding = true)]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Connect-MongoDBInstance.md#connect-mongodbinstance", PositionalBinding = true)]
     public class ConnectInstance : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]

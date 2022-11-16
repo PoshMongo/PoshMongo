@@ -7,7 +7,7 @@ namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Add, "Document")]
     [OutputType("System.Text.Json")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Add-MongoDBDocument.md#add-mongodbdocument", PositionalBinding = true)]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Add-MongoDBDocument.md#add-mongodbdocument", PositionalBinding = true)]
     public class AddDocument : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]

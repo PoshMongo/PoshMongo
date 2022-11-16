@@ -5,7 +5,7 @@ namespace PoshMongo.Database
 {
     [Cmdlet(VerbsCommon.Get, "Database")]
     [OutputType("MongoDB.Driver.MongoDatabaseBase")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Get-MongoDBDatabase0.md#get-mongodbdatabase", PositionalBinding = true)]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBDatabase0.md#get-mongodbdatabase", PositionalBinding = true)]
     public class GetDatabase : PSCmdlet
     {
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]
