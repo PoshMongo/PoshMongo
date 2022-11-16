@@ -1,9 +1,11 @@
 ﻿using MongoDB.Driver;
 using System.Management.Automation;
 
-namespace PoshMongo
+namespace PoshMongo.Database
 {
     [Cmdlet(VerbsCommon.Remove, "Database")]
+    [OutputType("MongoDB.Driver.MongoDatabaseBase")]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Remove-MongoDBDatabase0.md#remove-mongodbdatabase", PositionalBinding = true)]
     public class RemoveDatabase : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]

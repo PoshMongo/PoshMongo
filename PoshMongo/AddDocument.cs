@@ -3,9 +3,11 @@ using MongoDB.Driver;
 using System.Management.Automation;
 using System.Reflection.Metadata;
 
-namespace PoshMongo
+namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Add, "Document")]
+    [OutputType("System.Text.Json")]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Add-MongoDBDocument.md#add-mongodbdocument", PositionalBinding = true)]
     public class AddDocument : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]

@@ -3,9 +3,11 @@ using MongoDB.Driver;
 using System.Collections;
 using System.Management.Automation;
 
-namespace PoshMongo
+namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Remove, "Document")]
+    [OutputType("System.Text.Json")]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Remove-MongoDBDocument.md#remove-mongodbdocument", PositionalBinding = true)]
     public class RemoveDocument : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0)]

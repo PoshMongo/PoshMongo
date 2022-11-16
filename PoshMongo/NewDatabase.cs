@@ -1,9 +1,11 @@
 ﻿using MongoDB.Driver;
 using System.Management.Automation;
 
-namespace PoshMongo
+namespace PoshMongo.Database
 {
     [Cmdlet(VerbsCommon.New, "Database")]
+    [OutputType("MongoDB.Driver.MongoDatabaseBase")]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/New-MongoDBDatabase0.md#new-mongodbdatabase", PositionalBinding = true)]
     public class NewDatabase : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]

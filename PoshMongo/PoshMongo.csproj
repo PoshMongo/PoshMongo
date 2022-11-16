@@ -1,10 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>PoshMongo</Title>
+    <Authors>Jeffrey Patton</Authors>
+    <Company>Patton-Tech.com</Company>
+    <Copyright>11/16/2022 1:56:31 PM</Copyright>
+    <Description>A PowerShell module to work with MongoDB</Description>
+    <PackageProjectUrl>https://github.com/PoshMongo/PoshMongo</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/PoshMongo/PoshMongo</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,9 +3,11 @@ using MongoDB.Driver;
 using System.Collections;
 using System.Management.Automation;
 
-namespace PoshMongo
+namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Get, "Document")]
+    [OutputType("System.Text.Json")]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/Get-MongoDBDocument.md#get-mongodbdocument", PositionalBinding = true)]
     public class GetDocument : PSCmdlet
     {
         [Parameter(Mandatory = false, Position = 0)]

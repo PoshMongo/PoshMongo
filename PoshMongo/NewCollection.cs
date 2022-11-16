@@ -2,9 +2,11 @@
 using MongoDB.Driver;
 using System.Management.Automation;
 
-namespace PoshMongo
+namespace PoshMongo.Collection
 {
     [Cmdlet(VerbsCommon.New, "Collection")]
+    [OutputType("MongoDB.Driver.IMongoCollection")]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/docs/New-MongoDBCollection.md#new-mongodbcollection", PositionalBinding = true)]
     public class NewCollection : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]
