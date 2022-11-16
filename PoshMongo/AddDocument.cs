@@ -15,7 +15,7 @@ namespace PoshMongo
             IMongoCollection<BsonDocument> Collection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
             BsonDocument bsonDocument = BsonDocument.Parse(Document);
             Collection.InsertOne(bsonDocument);
-            var filter = Builders<BsonDocument>.Filter.Eq("_id", bsonDocument["_id"]);
+            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", bsonDocument["_id"]);
             WriteObject(Collection.Find(filter).FirstOrDefault().ToJson());
 
         }
