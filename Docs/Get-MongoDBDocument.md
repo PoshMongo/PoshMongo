@@ -123,4 +123,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-### [FilterDefinitionBuilder](https://mongodb.github.io/mongo-csharp-driver/2.18/apidocs/html/T_MongoDB_Driver_FilterDefinitionBuilder_1.htm)
+[FilterDefinitionBuilder](https://mongodb.github.io/mongo-csharp-driver/2.18/apidocs/html/T_MongoDB_Driver_FilterDefinitionBuilder_1.htm)

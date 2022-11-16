@@ -75,4 +75,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-### [Get-MongoDBCollection](Get-MongoDBCollection.md)
+[Get-MongoDBCollection](Get-MongoDBCollection.md)

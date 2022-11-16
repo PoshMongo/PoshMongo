@@ -82,4 +82,4 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-### [MongoDB Connection String](https://www.mongodb.com/docs/manual/reference/connection-string/)
+[MongoDB Connection String](https://www.mongodb.com/docs/manual/reference/connection-string/)
