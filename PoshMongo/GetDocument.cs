@@ -19,13 +19,16 @@ namespace PoshMongo
             switch (ParameterSetName)
             {
                 case "Filter":
-                    List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
-                    foreach (string key in Filter.Keys)
+                    if (!(Filter == null))
                     {
-                        filters.Add(Builders<BsonDocument>.Filter.Eq(key, Filter[key]));
+                        List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
+                        foreach (string key in Filter.Keys)
+                        {
+                            filters.Add(Builders<BsonDocument>.Filter.Eq(key, Filter[key]));
+                        }
+                        FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.And(filters);
+                        WriteObject(Collection.Find(filter).FirstOrDefault().ToJson());
                     }
-                    FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.And(filters);
-                    WriteObject(Collection.Find(filter).FirstOrDefault().ToJson());
                     break;
                 default:
                     if (!(string.IsNullOrEmpty(DocumentId)))
