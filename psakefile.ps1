@@ -1,5 +1,7 @@
 Task default -depends UpdateReadme
 
+Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles
+
 Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush, RemoveModuleDirectory
 
 Task UpdateReadme -Description "Update the README file" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, RemoveModuleDirectory -Action {
@@ -42,6 +44,10 @@ Task BuildProject -Description "Build the project" -Action {
 }
 
 Task CreateModuleDirectory -Description "Create the module directory" -Action {
+ if (Test-Path .\Module)
+ {
+  Remove-Item .\Module -Recurse -Force
+ }
  New-Item Module -ItemType Directory
 }
 
@@ -50,7 +56,7 @@ Task RemoveModuleDirectory -Description "Remove module directory" -Action {
 }
 
 Task CopyModuleFiles -Description "Copy files for the module" -Action {
- Copy-Item .\PoshMongo\bin\Release\net6.0\PoshMongo.dll Module
+ Copy-Item .\PoshMongo\bin\Release\net6.0\*.dll Module
  Copy-Item .\PoshMongo.psd1 Module
 }
 
@@ -71,6 +77,6 @@ Task NugetPack -Description "Pack the nuget file" -Action {
 }
 
 Task NugetPush -Description "Push nuget to PowerShell Gallery" -Action {
-	$config = [xml](Get-Content .\nuget.config)
+ $config = [xml](Get-Content .\nuget.config)
  nuget push .\Module\*.nupkg -NonInteractive -ApiKey "$($config.configuration.apikeys.add.value)" -ConfigFile .\nuget.config
 }
