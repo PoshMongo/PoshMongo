@@ -26,7 +26,7 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  Get-Content .\Build.md |Out-File $readMe.FullName -Append
 }
 
-Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, RemoveModuleDirectory -Action {
+Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $moduleName =  'PoshMongo'
 
  if (!(Get-Module -Name $moduleName )) {Import-Module -Name ".\Module\$($moduleName).psd1" }
