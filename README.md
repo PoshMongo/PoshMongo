@@ -1,5 +1,5 @@
 | Latest Version | PowerShell Gallery | Issues | License |
-|-----------------|-----------------|----------------|----------------|----------------|----------------|
+|-----------------|----------------|----------------|----------------|
 | [![Latest Version](https://img.shields.io/github/v/tag/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/tags) | [![Powershell Gallery](https://img.shields.io/powershellgallery/dt/PoshMongo)](https://www.powershellgallery.com/packages/PoshMongo) | [![GitHub issues](https://img.shields.io/github/issues/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/issues) | [![GitHub license](https://img.shields.io/github/license/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/blob/master/LICENSE) |
 # PoshMongo Module
 
