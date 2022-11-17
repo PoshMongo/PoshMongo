@@ -7,7 +7,7 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  $readMe = Get-Item .\README.md
 
  $TableHeaders = "| Latest Version | PowerShell Gallery | Issues | License |"
- $Columns = "|-----------------|-----------------|----------------|----------------|----------------|----------------|"
+ $Columns = "|-----------------|----------------|----------------|----------------|"
  $VersionBadge = "[![Latest Version](https://img.shields.io/github/v/tag/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/tags)"
  $GalleryBadge = "[![Powershell Gallery](https://img.shields.io/powershellgallery/dt/PoshMongo)](https://www.powershellgallery.com/packages/PoshMongo)"
  $IssueBadge = "[![GitHub issues](https://img.shields.io/github/issues/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/issues)"
