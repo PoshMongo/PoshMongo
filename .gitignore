@@ -12,6 +12,7 @@
 *.Program.cs
 *.config
 
+Module/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
