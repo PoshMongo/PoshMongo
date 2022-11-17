@@ -1,8 +1,8 @@
 ---
 Module Name: PoshMongo
 Module Guid: 719f1aa2-e358-4424-ab62-865c08e78c96
-Download Help Link: {{ Update Download Link }}
-Help Version: {{ Please enter version of help manually (X.X.X.X) format }}
+Download Help Link: https://raw.githubusercontent.com/PoshMongo/master/cabs/
+Help Version: 2.0.0
 Locale: en-US
 ---
 
