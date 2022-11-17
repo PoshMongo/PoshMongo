@@ -1,10 +1,10 @@
-Task default -depends UpdateReadme
+Task default -depends UpdateReadme, RemoveModuleDirectory
 
 Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles
 
 Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush, RemoveModuleDirectory
 
-Task UpdateReadme -Description "Update the README file" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, RemoveModuleDirectory -Action {
+Task UpdateReadme -Description "Update the README file" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $moduleName =  'PoshMongo'
  $readMe = Get-Item .\README.md
 
@@ -15,7 +15,7 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  $IssueBadge = "[![GitHub issues](https://img.shields.io/github/issues/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/issues)"
  $LicenseBadge = "[![GitHub license](https://img.shields.io/github/license/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/blob/master/LICENSE)"
 
- if (!(Get-Module -Name $moduleName )) {Import-Module -Name ".\$($moduleName)\Module\$($moduleName).psd1" }
+ if (!(Get-Module -Name $moduleName )) {Import-Module -Name ".\Module\$($moduleName).psd1" }
 
  Write-Output $TableHeaders |Out-File $readMe.FullName -Force
  Write-Output $Columns |Out-File $readMe.FullName -Append
@@ -29,7 +29,7 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
 Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, RemoveModuleDirectory -Action {
  $moduleName =  'PoshMongo'
 
- if (!(Get-Module -Name $moduleName )) {Import-Module -Name ".\$($moduleName)\Module\$($moduleName).psd1" }
+ if (!(Get-Module -Name $moduleName )) {Import-Module -Name ".\Module\$($moduleName).psd1" }
  $Version = (Get-Module -Name $moduleName |Select-Object -Property Version).Version.ToString()
  git tag -a v$version -m "$($moduleName) Version $($Version)"
  git push origin v$version
