@@ -1,6 +1,10 @@
 Task default -depends UpdateReadme
 
-Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles
+Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
+ $settings = Get-Content .\ConnectionSettings
+ Import-Module .\Module\PoshMongo.psd1 -Force
+ Connect-MongoDBInstance -ConnectionString $settings
+}
 
 Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush
 
