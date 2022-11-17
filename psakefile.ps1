@@ -1,8 +1,8 @@
-Task default -depends UpdateReadme, RemoveModuleDirectory
+Task default -depends UpdateReadme
 
 Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles
 
-Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush, RemoveModuleDirectory
+Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush
 
 Task UpdateReadme -Description "Update the README file" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $moduleName =  'PoshMongo'
@@ -44,20 +44,12 @@ Task BuildProject -Description "Build the project" -Action {
 }
 
 Task CreateModuleDirectory -Description "Create the module directory" -Action {
- if (Test-Path .\Module)
- {
-  Remove-Item .\Module -Recurse -Force
- }
- New-Item Module -ItemType Directory
-}
-
-Task RemoveModuleDirectory -Description "Remove module directory" -Action {
- Remove-Item Module -Recurse -Force
+ New-Item Module -ItemType Directory -Force
 }
 
 Task CopyModuleFiles -Description "Copy files for the module" -Action {
- Copy-Item .\PoshMongo\bin\Release\net6.0\*.dll Module
- Copy-Item .\PoshMongo.psd1 Module
+ Copy-Item .\PoshMongo\bin\Release\net6.0\*.dll Module -Force
+ Copy-Item .\PoshMongo.psd1 Module -Force
 }
 
 Task CreateExternalHelp -Description "Create external help file" -Action {
