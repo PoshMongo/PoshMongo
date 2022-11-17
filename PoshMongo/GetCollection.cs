@@ -14,19 +14,24 @@ namespace PoshMongo.Collection
         protected override void BeginProcessing()
         {
             MongoDatabaseBase Database = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
-            MongoCollectionSettings settings = new();
             if (!(string.IsNullOrEmpty(CollectionName)))
             {
-                SessionState.PSVariable.Set("Collection", Database.GetCollection<BsonDocument>(CollectionName, settings));
+                SessionState.PSVariable.Set("Collection", DefaultCollection(CollectionName));
                 WriteObject(SessionState.PSVariable.Get("Collection").Value);
             }
             else
             {
                 foreach (string collectionName in Database.ListCollectionNames().ToEnumerable())
                 {
-                    WriteObject(Database.GetCollection<BsonDocument>(collectionName, settings));
+                    WriteObject(DefaultCollection(collectionName));
                 }
             }
+        }
+        private IMongoCollection<BsonDocument> DefaultCollection(string collectionName)
+        {
+            MongoDatabaseBase Database = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
+            MongoCollectionSettings settings = new();
+            return Database.GetCollection<BsonDocument>(collectionName, settings);
         }
     }
 }
