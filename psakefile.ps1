@@ -10,8 +10,6 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  $Columns = "|-----------------|-----------------|----------------|----------------|----------------|----------------|"
  $VersionBadge = "[![Latest Version](https://img.shields.io/github/v/tag/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/tags)"
  $GalleryBadge = "[![Powershell Gallery](https://img.shields.io/powershellgallery/dt/PoshMongo)](https://www.powershellgallery.com/packages/PoshMongo)"
- $StatusBadge = "[![Build Status](https://dev.azure.com/patton-tech/SchemaModule/_apis/build/status/SchemaModule.PowerShell?repoName=SchemaModule%2FPowerShell&branchName=master)](https://dev.azure.com/patton-tech/SchemaModule/_build/latest?definitionId=9&repoName=SchemaModule%2FPowerShell&branchName=master)"
- $BoardBadge = "[![Board Status](https://dev.azure.com/patton-tech/cbaf64d2-5310-475c-8874-fb2b809e3f3b/1138b36a-5cb9-4d7d-8163-32041295538f/_apis/work/boardbadge/d9f5bd6d-43e7-45ac-a1aa-f1afc7f0cb17?columnOptions=1)](https://dev.azure.com/patton-tech/cbaf64d2-5310-475c-8874-fb2b809e3f3b/_boards/board/t/1138b36a-5cb9-4d7d-8163-32041295538f/Microsoft.RequirementCategory/)"
  $IssueBadge = "[![GitHub issues](https://img.shields.io/github/issues/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/issues)"
  $LicenseBadge = "[![GitHub license](https://img.shields.io/github/license/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/blob/master/LICENSE)"
 
@@ -19,7 +17,7 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
 
  Write-Output $TableHeaders |Out-File $readMe.FullName -Force
  Write-Output $Columns |Out-File $readMe.FullName -Append
- Write-Output "| $($VersionBadge) | $($GalleryBadge) | $($StatusBadge) | $($BoardBadge) | $($IssueBadge) | $($LicenseBadge) |" |Out-File $readMe.FullName -Append
+ Write-Output "| $($VersionBadge) | $($GalleryBadge) | $($IssueBadge) | $($LicenseBadge) |" |Out-File $readMe.FullName -Append
 
  Get-Content .\Docs\PoshMongo.md |Select-Object -Skip 8 |ForEach-Object {$_.Replace('(','(docs/')} |Out-File $readMe.FullName -Append
  Write-Output "" |Out-File $readMe.FullName -Append
