@@ -11,14 +11,14 @@ namespace PoshMongo.Collection
     {
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Collection")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database")]
+        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Database")]
         public string? CollectionName { get; set; }
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DatabaseName")]
         public string? DatabaseName { get; set; }
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Database", ValueFromPipeline = true)]
+        public MongoDatabaseBase? MongoDatabase { get; set; }
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNamespace")]
         public string? CollectionNamespace { get; set; }
-        public MongoDatabaseBase? MongoDatabase { get; set; }
         protected override void ProcessRecord()
         {
             WriteVerbose("ParameterSetName: " + ParameterSetName);
@@ -32,10 +32,22 @@ namespace PoshMongo.Collection
                     }
                     break;
                 case "Database":
-                    if (!(string.IsNullOrEmpty(CollectionName) || MongoDatabase == null))
+                    if (!(MongoDatabase == null))
                     {
-                        SetVariable("Collection", DatabaseCollection(CollectionName, MongoDatabase));
-                        WriteObject(SessionState.PSVariable.Get("Collection").Value);
+                        WriteVerbose("Database Switch");
+                        if (string.IsNullOrEmpty(CollectionName))
+                        {
+                            WriteVerbose("No ColectionName");
+                            foreach (string collectionName in MongoDatabase.ListCollectionNames().ToEnumerable())
+                            {
+                                WriteObject(DatabaseCollection(collectionName, MongoDatabase));
+                            }
+                        }
+                        else
+                        {
+                            SetVariable("Collection", DatabaseCollection(CollectionName, MongoDatabase));
+                            WriteObject(SessionState.PSVariable.Get("Collection").Value);
+                        }
                     }
                     break;
                 case "DatabaseName":
