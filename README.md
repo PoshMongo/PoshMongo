@@ -9,43 +9,43 @@ A collection of PowerShell Cmdlets for working with MongoDB
 
 ## PoshMongo Cmdlets
 
-### [Add-MongoDBDocument](docs/Add-MongoDBDocument.md)
+### [Add-MongoDBDocument](Docs/Add-MongoDBDocument.md)
 
 Add a document to a MongoDB Collection
 
-### [Connect-MongoDBInstance](docs/Connect-MongoDBInstance.md)
+### [Connect-MongoDBInstance](Docs/Connect-MongoDBInstance.md)
 
 Connect to a MongoDB Instance
 
-### [Get-MongoDBCollection](docs/Get-MongoDBCollection.md)
+### [Get-MongoDBCollection](Docs/Get-MongoDBCollection.md)
 
 Get a MongoDB Collection
 
-### [Get-MongoDBDatabase](docs/Get-MongoDBDatabase.md)
+### [Get-MongoDBDatabase](Docs/Get-MongoDBDatabase.md)
 
 Get a MongoDB Database
 
-### [Get-MongoDBDocument](docs/Get-MongoDBDocument.md)
+### [Get-MongoDBDocument](Docs/Get-MongoDBDocument.md)
 
 Get a MongoDB Document
 
-### [New-MongoDBCollection](docs/New-MongoDBCollection.md)
+### [New-MongoDBCollection](Docs/New-MongoDBCollection.md)
 
 Create a MongoDB Collection
 
-### [New-MongoDBDatabase](docs/New-MongoDBDatabase.md)
+### [New-MongoDBDatabase](Docs/New-MongoDBDatabase.md)
 
 Create a MongoDB Database
 
-### [Remove-MongoDBCollection](docs/Remove-MongoDBCollection.md)
+### [Remove-MongoDBCollection](Docs/Remove-MongoDBCollection.md)
 
 Remove a MongoDB Collection
 
-### [Remove-MongoDBDatabase](docs/Remove-MongoDBDatabase.md)
+### [Remove-MongoDBDatabase](Docs/Remove-MongoDBDatabase.md)
 
 Remove a MongoDB Database
 
-### [Remove-MongoDBDocument](docs/Remove-MongoDBDocument.md)
+### [Remove-MongoDBDocument](Docs/Remove-MongoDBDocument.md)
 
 Remove a MongoDB Document
 
