@@ -1,3 +1,10 @@
+Properties {
+ $moduleName = "PoshMongo"
+ $version = ""
+ $Github = "https://github.com/PoshMongo/PoshMongo"
+ $PoshGallery = "https://www.powershellgallery.com/packages/PoshMongo"
+ $Nuget = ""
+}
 Task default -depends UpdateReadme
 
 Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
@@ -42,6 +49,13 @@ Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModu
  $Version = (Get-Module -Name $moduleName |Select-Object -Property Version).Version.ToString()
  git tag -a v$version -m "$($moduleName) Version $($Version)"
  git push origin v$version
+}
+
+Task Post2Discord -Description "Post a message to discord" -Action {
+ $moduleName =  'PoshMongo'
+ $Discord = Get-Content .\discord.poshmongo |ConvertFrom-Json
+ $Discord.message.content = "Version $($version) of $($moduleName) released. Please visit Github ($($Github)) or PowershellGallery ($($PoshGallery)) to download."
+ Invoke-RestMethod -Uri $Discord.uri -Body ($Discord.message |ConvertTo-Json -Compress) -Method Post -ContentType 'application/json; charset=UTF-8'
 }
 
 Task CleanProject -Description "Clean the project before building" -Action {
