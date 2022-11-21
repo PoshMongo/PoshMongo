@@ -4,6 +4,7 @@ Properties {
  $Github = "https://github.com/PoshMongo/PoshMongo"
  $PoshGallery = "https://www.powershellgallery.com/packages/PoshMongo"
  $Nuget = ""
+ $DiscordChannel = "https://discord.com/channels/1044305359021555793/1044305460729225227"
 }
 Task default -depends UpdateReadme
 
@@ -22,18 +23,19 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  $moduleName =  'PoshMongo'
  $readMe = Get-Item .\README.md
 
- $TableHeaders = "| Latest Version | PowerShell Gallery | Issues | License |"
- $Columns = "|-----------------|----------------|----------------|----------------|"
+ $TableHeaders = "| Latest Version | PowerShell Gallery | Issues | License | Discord |"
+ $Columns = "|-----------------|----------------|----------------|----------------|----------------|"
  $VersionBadge = "[![Latest Version](https://img.shields.io/github/v/tag/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/tags)"
  $GalleryBadge = "[![Powershell Gallery](https://img.shields.io/powershellgallery/dt/PoshMongo)](https://www.powershellgallery.com/packages/PoshMongo)"
  $IssueBadge = "[![GitHub issues](https://img.shields.io/github/issues/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/issues)"
  $LicenseBadge = "[![GitHub license](https://img.shields.io/github/license/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/blob/master/LICENSE)"
+ $DiscordBadge = "[![Discord Server](https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b5493894cf60b300587_full_logo_white_RGB.svg)]($($DiscordChannel))"
 
  if (!(Get-Module -Name $moduleName )) {Import-Module -Name ".\Module\$($moduleName).psd1" }
 
  Write-Output $TableHeaders |Out-File $readMe.FullName -Force
  Write-Output $Columns |Out-File $readMe.FullName -Append
- Write-Output "| $($VersionBadge) | $($GalleryBadge) | $($IssueBadge) | $($LicenseBadge) |" |Out-File $readMe.FullName -Append
+ Write-Output "| $($VersionBadge) | $($GalleryBadge) | $($IssueBadge) | $($LicenseBadge) | $($DiscordBadge) |" |Out-File $readMe.FullName -Append
 
  Get-Content .\Docs\PoshMongo.md |Select-Object -Skip 8 |ForEach-Object {$_.Replace('(','(Docs/')} |Out-File $readMe.FullName -Append
  Write-Output "" |Out-File $readMe.FullName -Append
