@@ -7,7 +7,7 @@ namespace PoshMongo.Collection
     [Cmdlet(VerbsCommon.Get, "Collection")]
     [OutputType("MongoDB.Driver.IMongoCollection")]
     [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBCollection.md#get-mongodbcollection", PositionalBinding = true)]
-    public class GetCollection : PSCmdlet
+    public class GetCollectionCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Collection")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
@@ -27,68 +27,68 @@ namespace PoshMongo.Collection
                 case "CollectionNamespace":
                     if (!(string.IsNullOrEmpty(CollectionNamespace)))
                     {
-                        SetVariable("Collection", DatabaseNameCollection(CollectionNamespace.Split('.')[1], CollectionNamespace.Split('.')[0]));
                         WriteObject(SessionState.PSVariable.Get("Collection").Value);
                     }
                     break;
                 case "Database":
                     if (!(MongoDatabase == null))
                     {
-                        WriteVerbose("Database Switch");
                         if (string.IsNullOrEmpty(CollectionName))
                         {
-                            WriteVerbose("No ColectionName");
                             foreach (string collectionName in MongoDatabase.ListCollectionNames().ToEnumerable())
                             {
-                                WriteObject(DatabaseCollection(collectionName, MongoDatabase));
+                                WriteObject(GetCollection(collectionName, MongoDatabase));
                             }
                         }
                         else
                         {
-                            SetVariable("Collection", DatabaseCollection(CollectionName, MongoDatabase));
-                            WriteObject(SessionState.PSVariable.Get("Collection").Value);
+                            WriteObject(GetCollection(CollectionName, MongoDatabase));
                         }
                     }
                     break;
                 case "DatabaseName":
                     if (!(string.IsNullOrEmpty(CollectionName) || DatabaseName == null))
                     {
-                        SetVariable("Collection", DatabaseNameCollection(CollectionName, DatabaseName));
-                        WriteObject(SessionState.PSVariable.Get("Collection").Value);
+                        WriteObject(GetCollection(CollectionName, DatabaseName));
                     }
                     break;
                 case "Collection":
                     if (!(string.IsNullOrEmpty(CollectionName)))
                     {
-                        SetVariable("Collection", DefaultCollection(CollectionName));
-                        WriteObject(SessionState.PSVariable.Get("Collection").Value);
+                        WriteObject(GetCollection(CollectionName));
                     }
                     else
                     {
                         MongoDatabaseBase Database = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
                         foreach (string collectionName in Database.ListCollectionNames().ToEnumerable())
                         {
-                            WriteObject(DefaultCollection(collectionName));
+                            WriteObject(GetCollection(collectionName));
                         }
                     }
                     break;
             }
         }
-        private IMongoCollection<BsonDocument> DatabaseCollection(string collectionName, MongoDatabaseBase Database)
-        {
-            return Database.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
-        }
-        private IMongoCollection<BsonDocument> DefaultCollection(string collectionName)
+        private IMongoCollection<BsonDocument> GetCollection(string collectionName)
         {
             MongoDatabaseBase Database = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
-            return Database.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
+            IMongoCollection<BsonDocument> Collection = Database.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
+            SetVariable("Collection", Collection);
+            return Collection;
         }
-        private IMongoCollection<BsonDocument> DatabaseNameCollection(string collectionName, string DatabaseName)
+        private IMongoCollection<BsonDocument> GetCollection(string collectionName, string DatabaseName)
         {
             MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
             IMongoDatabase Database = Client.GetDatabase(DatabaseName);
             SetVariable("Database", Database);
-            return Database.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
+            IMongoCollection<BsonDocument> Collection = Database.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
+            SetVariable("Collection", Collection);
+            return Collection;
+        }
+        private IMongoCollection<BsonDocument> GetCollection(string collectionName, MongoDatabaseBase mongoDatabase)
+        {
+            IMongoCollection<BsonDocument> Collection = mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
+            SetVariable("Collection", Collection);
+            return Collection;
         }
         private void SetVariable(string VariableName, object Value)
         {
