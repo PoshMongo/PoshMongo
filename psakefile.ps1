@@ -28,7 +28,7 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  Write-Output $Columns |Out-File $readMe.FullName -Append
  Write-Output "| $($VersionBadge) | $($GalleryBadge) | $($IssueBadge) | $($LicenseBadge) |" |Out-File $readMe.FullName -Append
 
- Get-Content .\Docs\PoshMongo.md |Select-Object -Skip 8 |ForEach-Object {$_.Replace('(','(docs/')} |Out-File $readMe.FullName -Append
+ Get-Content .\Docs\PoshMongo.md |Select-Object -Skip 8 |ForEach-Object {$_.Replace('(','(Docs/')} |Out-File $readMe.FullName -Append
  Write-Output "" |Out-File $readMe.FullName -Append
  Get-Content .\Build.md |Out-File $readMe.FullName -Append
 }
