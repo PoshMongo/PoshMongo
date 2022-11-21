@@ -4,7 +4,12 @@ Task LocalUse -Description "Setup for local use and testing" -depends CreateModu
  $Global:settings = Get-Content .\ConnectionSettings
 }
 
-Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush
+Task UpdateHelp -Description "Update the help files" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
+ $moduleName =  'PoshMongo'
+ Import-Module -Name ".\Module\$($moduleName).psd1" -force;
+ New-MarkdownHelp -Module PoshMongo -AlphabeticParamsOrder -UseFullTypeName -WithModulePage -OutputFolder .\Docs\ -ErrorAction SilentlyContinue
+ Update-MarkdownHelp -Path .\Docs\ -AlphabeticParamsOrder -UseFullTypeName
+}
 
 Task UpdateReadme -Description "Update the README file" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $moduleName =  'PoshMongo'
@@ -28,12 +33,7 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  Get-Content .\Build.md |Out-File $readMe.FullName -Append
 }
 
-Task UpdateHelp -Description "Update the help files" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
- $moduleName =  'PoshMongo'
- Import-Module -Name ".\Module\$($moduleName).psd1" -force;
- New-MarkdownHelp -Module PoshMongo -AlphabeticParamsOrder -UseFullTypeName -WithModulePage -OutputFolder .\Docs\ -ErrorAction SilentlyContinue
- Update-MarkdownHelp -Path .\Docs\ -AlphabeticParamsOrder -UseFullTypeName
-}
+Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush
 
 Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $moduleName =  'PoshMongo'
