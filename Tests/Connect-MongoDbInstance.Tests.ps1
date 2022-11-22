@@ -3,7 +3,7 @@ BeforeAll {
  $RootPath = (Get-Item -Path .).FullName;
  Import-Module "$($RootPath)\Module\$($Module).psd1" -Force
 }
-Describe "Connect-MongoDBInstance" -Tag $Module, "ConnectCmdlet" {
+Describe "Connect-MongoDBInstance" -Tag $Module, "ConnectCmdlet", "Connection" {
  Context "Testing Parameters" {
   Context "ConnectionString parameter" {
    It "Should be String" {
