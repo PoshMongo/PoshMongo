@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Collections;
 using System.Management.Automation;
 
@@ -10,10 +11,13 @@ namespace PoshMongo.Document
     [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBDocument.md#get-mongodbdocument", PositionalBinding = true)]
     public class GetDocumentCmdlet : PSCmdlet
     {
-        [Parameter(Mandatory = false, Position = 0)]
+        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "DocumentId")]
+        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Collection")]
         public string? DocumentId { get; set; }
-        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Filter")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Filter")]
         public Hashtable? Filter { get; set; }
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection")]
+        public string? CollectionName { get; set; }
         protected override void ProcessRecord()
         {
             IMongoCollection<BsonDocument> Collection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
@@ -25,7 +29,7 @@ namespace PoshMongo.Document
                         WriteObject(GetDocument(Collection, Filter));
                     }
                     break;
-                default:
+                case "DocumentId":
                     if (!(string.IsNullOrEmpty(DocumentId)))
                     {
                         WriteObject(GetDocument(Collection, DocumentId));
@@ -33,6 +37,24 @@ namespace PoshMongo.Document
                     else
                     {
                         WriteObject(GetDocument(Collection));
+                    }
+                    break;
+                case "Collection":
+                    MongoDatabaseBase Database = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
+                    if (!(string.IsNullOrEmpty(DocumentId)))
+                    {
+                        ObjectId objectId;
+                        if (ObjectId.TryParse(DocumentId, out objectId))
+                        {
+                            WriteObject(GetDocument(Database.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings()), objectId));
+                        } else
+                        {
+                            WriteObject(GetDocument(Database.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings()), DocumentId));
+                        }
+                    }
+                    else
+                    {
+                        WriteObject(GetDocument(Database.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings())));
                     }
                     break;
             }
@@ -44,6 +66,11 @@ namespace PoshMongo.Document
         private string GetDocument(IMongoCollection<BsonDocument> Collection, string Id)
         {
             FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", Id);
+            return Collection.Find(id).FirstOrDefault().ToJson();
+        }
+        private string GetDocument(IMongoCollection<BsonDocument> Collection, ObjectId Id)
+        {
+            FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(Id.ToString()));            
             return Collection.Find(id).FirstOrDefault().ToJson();
         }
         private string GetDocument(IMongoCollection<BsonDocument> Collection,Hashtable filter)
