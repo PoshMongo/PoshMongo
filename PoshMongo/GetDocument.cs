@@ -2,8 +2,6 @@
 using MongoDB.Driver;
 using System.Collections;
 using System.Management.Automation;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace PoshMongo.Document
 {
