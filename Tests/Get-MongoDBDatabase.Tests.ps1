@@ -3,6 +3,12 @@ BeforeAll {
  $RootPath = (Get-Item -Path .).FullName;
  Import-Module "$($RootPath)\Module\$($Module).psd1" -Force
  Connect-MongoDBInstance -ConnectionString (Get-Content .\ConnectionSettings) | Out-Null
+ New-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
+ New-MongoDBCollection -CollectionName 'myCollection1' | Out-Null
+ New-MongoDBCollection -CollectionName 'myCollection2' | Out-Null
+}
+AfterAll {
+ Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
 }
 Describe "Get-MongoDBDatabase" -Tag $Module, "GetDatabaseCmdlet", "Database" {
  Context "Testing Parameters" {
@@ -16,15 +22,14 @@ Describe "Get-MongoDBDatabase" -Tag $Module, "GetDatabaseCmdlet", "Database" {
   }
  }
  Context "Get-MongoDBDatabase Usage" {
-  Context "With a DatabaseName" {
-   It "Should Return MongoDB.Driver.MongoDatabaseBase" {
-    $dbName = (Get-MongoDBDatabase)[0].DatabaseNamespace.DatabaseName;
-    Get-MongoDBDatabase -DatabaseName $dbName | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
-   }
-  }
   Context "Without a DatabaseName" {
    It "Should Return MongoDB.Driver.MongoDatabaseBase" {
     Get-MongoDBDatabase | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
+   }
+  }
+  Context "With a DatabaseName" {
+   It "Should Return MongoDB.Driver.MongoDatabaseBase" {
+    Get-MongoDBDatabase -DatabaseName 'MyDB' | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
    }
   }
   Context "With an invalid DatabaseName" {

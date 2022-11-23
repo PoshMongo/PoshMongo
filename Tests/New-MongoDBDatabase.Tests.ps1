@@ -2,7 +2,10 @@ BeforeAll {
  $Module = "PoshMongo";
  $RootPath = (Get-Item -Path .).FullName;
  Import-Module "$($RootPath)\Module\$($Module).psd1" -Force
-	Connect-MongoDBInstance -ConnectionString (Get-Content .\ConnectionSettings) | Out-Null
+ Connect-MongoDBInstance -ConnectionString (Get-Content .\ConnectionSettings) | Out-Null
+}
+AfterAll {
+ Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
 }
 Describe "New-MongoDBDatabase" -Tag $Module, "NewDatabaseCmdlet", "Database" {
  Context "Testing Parameters" {
@@ -15,15 +18,15 @@ Describe "New-MongoDBDatabase" -Tag $Module, "NewDatabaseCmdlet", "Database" {
    }
   }
  }
+ Context "Without a DatabaseName" {
+  It "Should throw an error: Cannot bind argument to parameter 'DatabaseName' because it is null." {
+   { New-MongoDBDatabase -DatabaseName $null } | Should -Throw
+  }
+ }
  Context "New-MongoDBDatabase Usage" {
   Context "With a DatabaseName" {
    It "Should Return MongoDB.Driver.MongoDatabaseBase" {
     New-MongoDBDatabase -DatabaseName 'MyDB' | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
-   }
-  }
-  Context "Without a DatabaseName" {
-   It "Should throw an error: Cannot bind argument to parameter 'DatabaseName' because it is null." {
-    { New-MongoDBDatabase -DatabaseName $null } | Should -Throw
    }
   }
   Context "With an invalid DatabaseName" {
