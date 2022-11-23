@@ -11,13 +11,49 @@ AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
 }
 Describe "Get-MongoDBCollection" -Tag $Module, "GetCollectionCmdlet", "Collection" {
- Context "Testing Parameters" {
-  Context "CollectionName parameter" {
-   It "Should be String" {
+ Context "Testing ParameterSets" {
+  Context "CollectionName ParameterSet" {
+   It "CollectionName should be String" {
     Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -Type String
    }
-   It "Should be Mandatory" {
+   It "CollectionName should not be Mandatory" {
     Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -not -Mandatory
+   }
+  }
+  Context "CollectionNamespace ParameterSet" {
+   It "CollectionNamespace should be String" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionNamespace -Type String
+   }
+   It "CollectionNamespace should be Mandatory" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionNamespace -Mandatory
+   }
+  }
+  Context "DatabaseName ParameterSet" {
+   It "CollectionName should be String" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -Type String
+   }
+   It "CollectionName should not be Mandatory" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -not -Mandatory
+   }
+   It "DatabaseName should be String" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter DatabaseName -Type String
+   }
+   It "DatabaseName should be Mandatory" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter DatabaseName -Mandatory
+   }
+  }
+  Context "Database ParameterSet" {
+   It "CollectionName should be String" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -Type String
+   }
+   It "CollectionName should not be Mandatory" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -not -Mandatory
+   }
+   It "MongoDatabase should be String" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter MongoDatabase -Type MongoDB.Driver.MongoDatabaseBase
+   }
+   It "MongoDatabase should be Mandatory" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter MongoDatabase -Mandatory
    }
   }
  }
