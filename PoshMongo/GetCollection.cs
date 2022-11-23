@@ -10,12 +10,12 @@ namespace PoshMongo.Collection
     public class GetCollectionCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Collection")]
-        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "DatabaseName")]
-        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Database")]
+        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "DatabaseName")]
+        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Database")]
         public string? CollectionName { get; set; }
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DatabaseName")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
         public string? DatabaseName { get; set; }
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Database", ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
         public MongoDatabaseBase? MongoDatabase { get; set; }
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNamespace")]
         public string? CollectionNamespace { get; set; }
@@ -66,7 +66,7 @@ namespace PoshMongo.Collection
                         } else
                         {
                             // Get-MongoDbCollection -DatabaseName foo -CollectionName bar
-                            WriteObject(GetCollection(CollectionName, DatabaseName));
+                            WriteObject(GetCollection(MongoDatabase, CollectionName));
                         }
                     }
                     break;
