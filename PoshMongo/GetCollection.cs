@@ -10,7 +10,7 @@ namespace PoshMongo.Collection
     public class GetCollectionCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Collection")]
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
+        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "DatabaseName")]
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Database")]
         public string? CollectionName { get; set; }
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DatabaseName")]
