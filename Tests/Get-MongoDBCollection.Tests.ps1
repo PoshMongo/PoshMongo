@@ -24,12 +24,17 @@ Describe "Get-MongoDBCollection" -Tag $Module, "GetCollectionCmdlet", "Collectio
  Context "Get-MongoDBCollection Usage" {
   Context "Without a CollectionName" {
    It "Should Return MongoDB.Driver.MongoCollectionImpl`1[MongoDB.Bson.BsonDocument]" {
-    (Get-MongoDBCollection).GetType().FullName | Should -Be 'System.Object[]'
+    (Get-MongoDBCollection).GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
    }
   }
   Context "With a CollectionName" {
    It "Should Return MongoDB.Driver.IMongoCollection" {
     (Get-MongoDBCollection -CollectionName 'myCollection').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+   }
+  }
+  Context "With a DatabaseName" {
+   It "Should Return MongoDB.Driver.IMongoCollection" {
+    (Get-MongoDBCollection -DatabaseName 'MyDB').GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
    }
   }
   Context "With an invalid CollectionName" {
