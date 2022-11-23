@@ -32,6 +32,16 @@ Describe "Get-MongoDBCollection" -Tag $Module, "GetCollectionCmdlet", "Collectio
     (Get-MongoDBCollection -CollectionName 'myCollection').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
    }
   }
+  Context "With a CollectionNamespace" {
+   It "Should Return MongoDB.Driver.IMongoCollection" {
+    (Get-MongoDBCollection -CollectionNamespace 'MyDB.myCollection').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+   }
+  }
+  Context "Without a CollectionNamespace" {
+   It "Should throw an error: Missing an argument for parameter 'CollectionNamespace'." {
+    { Get-MongoDBCollection -CollectionNamespace '' } | Should -Throw "Cannot bind argument to parameter 'CollectionNamespace' because it is an empty string."
+   }
+  }
   Context "With a DatabaseName" {
    It "Should Return MongoDB.Driver.IMongoCollection" {
     (Get-MongoDBCollection -DatabaseName 'MyDB').GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
