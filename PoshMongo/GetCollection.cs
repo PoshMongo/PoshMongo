@@ -35,23 +35,24 @@ namespace PoshMongo.Collection
                 case "CollectionNamespace":
                     if (!(string.IsNullOrEmpty(CollectionNamespace)))
                     {
-                        WriteVerbose(CollectionNamespace);
+                        // Get-MongoDbCollection -CollectionNameSpace foo.bar
                         WriteObject(GetCollection(CollectionNamespace.Split('.')[0], CollectionNamespace.Split('.')[1]));
                     }
                     break;
                 case "Database":
                     if (!(MongoDatabase == null))
                     {
+                        // Get-MongoDbCollection -MongoDatabase $DB
+                        // $DB |Get-MongoDbCollection
                         if (string.IsNullOrEmpty(CollectionName))
                         {
-                            foreach (string collectionName in MongoDatabase.ListCollectionNames().ToEnumerable())
-                            {
-                                WriteObject(GetCollection(collectionName, MongoDatabase));
-                            }
+                            WriteObject(GetCollection(MongoDatabase));
                         }
                         else
                         {
-                            WriteObject(GetCollection(CollectionName, MongoDatabase));
+                            // Get-MongoDbCollection -MongoDatabase $DB -CollectionName bar
+                            // $DB |Get-MongoDbCollection -CollectionName bar
+                            WriteObject(GetCollection(MongoDatabase, CollectionName));
                         }
                     }
                     break;
@@ -104,12 +105,6 @@ namespace PoshMongo.Collection
             IMongoDatabase Database = Client.GetDatabase(DatabaseName);
             SetVariable("Database", Database);
             IMongoCollection<BsonDocument> Collection = Database.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
-            SetVariable("Collection", Collection);
-            return Collection;
-        }
-        private IMongoCollection<BsonDocument> GetCollection(string collectionName, MongoDatabaseBase mongoDatabase)
-        {
-            IMongoCollection<BsonDocument> Collection = mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
             SetVariable("Collection", Collection);
             return Collection;
         }
