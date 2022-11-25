@@ -8,30 +8,41 @@ namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Get, "Document")]
     [OutputType("System.Text.Json")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBDocument.md#get-mongodbdocument", PositionalBinding = true)]
+    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBDocument.md#get-mongodbdocument", PositionalBinding = true, DefaultParameterSetName = "Default")]
     public class GetDocumentCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentId")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionId")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameId")]
         public string? DocumentId { get; set; }
+
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Filter")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionFilter")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameFilter")]
         public Hashtable? Filter { get; set; }
+
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameFilter")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameId")]
         public string? CollectionName { get; set; }
+
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionId", ValueFromPipeline = true)]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionFilter", ValueFromPipeline = true)]
         public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
+
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "DocumentId")]
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Filter")]
+        [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionId")]
+        [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionFilter")]
+        [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionNameId")]
+        [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionNameFilter")]
+        public SwitchParameter HideId { get; set; }
+        
+        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]
         [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionId")]
         [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionFilter")]
         [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionNameId")]
         [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionNameFilter")]
-        public SwitchParameter HideId { get; set; }
+        public SwitchParameter List { get; set; }
         protected override void ProcessRecord()
         {
             if (MongoCollection == null)
@@ -97,6 +108,7 @@ namespace PoshMongo.Document
                     WriteObject(GetDocument(MongoCollection, Filter, HideId));
                     break;
                 default:
+                    WriteObject(GetDocument(MongoCollection, HideId));
                     break;
             }
         }
