@@ -37,11 +37,14 @@ namespace PoshMongo.Document
         [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionFilter")]
         [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionNameId")]
         [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionNameFilter")]
+        [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionList")]
+        [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionNameList")]
+        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")] 
         public SwitchParameter HideId { get; set; }
         
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionList")]
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameList")]
+        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "CollectionList")]
+        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "CollectionNameList")]
         public SwitchParameter List { get; set; }
         protected override void ProcessRecord()
         {
