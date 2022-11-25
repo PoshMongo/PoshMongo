@@ -12,12 +12,12 @@ namespace PoshMongo.Document
     public class GetDocumentCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentId")]
-        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "CollectionId")]
-        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "CollectionNameId")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionId")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameId")]
         public string? DocumentId { get; set; }
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Filter")]
-        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "CollectionFilter")]
-        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "CollectionNameFilter")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionFilter")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameFilter")]
         public Hashtable? Filter { get; set; }
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameFilter")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameId")]
@@ -69,42 +69,28 @@ namespace PoshMongo.Document
                     break;
                 case "CollectionNameId":
                     WriteVerbose(HideId.ToString());
-                    if (string.IsNullOrEmpty(DocumentId))
+                    // Get-MongoDBDocument -CollectionName bar -DocumentId 1
+                    if (ObjectId.TryParse(DocumentId, out objectId))
                     {
-                        // Get-MongoDBDocument -CollectionName bar 
-                        WriteObject(GetDocument(MongoCollection, HideId));
+                        WriteObject(GetDocument(MongoCollection, objectId, HideId));
                     }
                     else
                     {
-                        // Get-MongoDBDocument -CollectionName bar -DocumentId 1
-                        if (ObjectId.TryParse(DocumentId, out objectId))
-                        {
-                            WriteObject(GetDocument(MongoCollection, objectId, HideId));
-                        }
-                        else
-                        {
-                            WriteObject(GetDocument(MongoCollection, DocumentId, HideId));
-                        }
+                        WriteObject(GetDocument(MongoCollection, DocumentId, HideId));
                     }
                     break;
                 case "CollectionNameFilter":
                     WriteVerbose(HideId.ToString());
-                    if (string.IsNullOrEmpty(DocumentId))
+                    WriteObject(GetDocument(MongoCollection, Filter, HideId));
+                    break;
+                case "CollectionId":
+                    if (ObjectId.TryParse(DocumentId, out objectId))
                     {
-                        // Get-MongoDBDocument -Collection $MyCollection
-                        WriteObject(GetDocument(MongoCollection, HideId));
+                        WriteObject(GetDocument(MongoCollection, objectId, HideId));
                     }
                     else
                     {
-                        // Get-MongoDBDocument -Collection $MyCollection -DocumentId 1
-                        if (ObjectId.TryParse(DocumentId, out objectId))
-                        {
-                            WriteObject(GetDocument(MongoCollection, objectId, HideId));
-                        }
-                        else
-                        {
-                            WriteObject(GetDocument(MongoCollection, DocumentId, HideId));
-                        }
+                        WriteObject(GetDocument(MongoCollection, DocumentId, HideId));
                     }
                     break;
                 default:
