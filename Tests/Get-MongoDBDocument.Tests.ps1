@@ -16,14 +16,47 @@ AfterAll {
 Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
  Context "Testing ParameterSets" {
   Context "DocumentId ParameterSet" {
+   It "ParameterSet should contain, DocumentId, HideId" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.DocumentId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.DocumentId | Should -Be $true
+   }
    It "DocumentId should be String" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Type String
    }
-   It "DocumentId should not be Mandatory" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Not -Mandatory
+   It "DocumentId should be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.DocumentId.IsMandatory | Should -Be $true
+   }
+   It "HideId should be a SwitchParameter" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
+   }
+   It "HideId should not be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.DocumentId.IsMandatory | Should -Not -Be $true
    }
   }
-  Context "CollectionName ParameterSet" {
+  Context "Filter ParameterSet" {
+   It "ParameterSet should contain, Filter, HideId" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.Filter | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.Filter | Should -Be $true
+   }
+   It "Filter should be Hashtable" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
+   }
+   It "Filter should be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.Filter.IsMandatory | Should -Be $true
+   }
+   It "HideId should be a SwitchParameter" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
+   }
+   It "HideId should not be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.Filter.IsMandatory | Should -Not -Be $true
+   }
+  }
+  Context "CollectionNameId ParameterSet" {
+   It "ParameterSet should contain, CollectionName, DocumentId, HideId" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionNameId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionNameId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameId | Should -Be $true
+   }
    It "CollectionName should be String" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter CollectionName -Type String
    }
@@ -34,21 +67,88 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Type String
    }
    It "DocumentId should not be Mandatory" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Not -Mandatory
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionNameId.IsMandatory | Should -Not -Be $true
+   }
+   It "HideId should be a SwitchParameter" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
+   }
+   It "HideId should not be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameId.IsMandatory | Should -Not -Be $true
    }
   }
-  Context "Collection ParameterSet" {
-   It "Collection should be String" {
+  Context "CollectionNameFilter ParameterSet" {
+   It "ParameterSet should contain, CollectionName, DocumentId, HideId" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionNameFilter | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameFilter | Should -Be $true
+   }
+   It "CollectionName should be String" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter CollectionName -Type String
+   }
+   It "CollectionName should be Mandatory" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter CollectionName -Mandatory
+   }
+   It "Filter should be a HashTable" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
+   }
+   It "Filter should not be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter.IsMandatory | Should -Not -Be $true
+   }
+   It "HideId should be a SwitchParameter" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
+   }
+   It "HideId should not be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameFilter.IsMandatory | Should -Not -Be $true
+   }
+  }
+  Context "CollectionId ParameterSet" {
+   It "ParameterSet should contain, MongoCollection, DocumentId, HideId" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionId | Should -Be $true
+   }
+   It "Collection should be IMongoCollection" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter MongoCollection -Type 'MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]'
    }
    It "Collection should be Mandatory" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter MongoCollection -Mandatory
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionId.IsMandatory | Should -Be $true
    }
    It "DocumentId should be String" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Type String
    }
    It "DocumentId should not be Mandatory" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Not -Mandatory
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionId.IsMandatory | Should -Not -Be $true
+   }
+   It "HideId should be a SwitchParameter" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
+   }
+   It "HideId should not be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameId.IsMandatory | Should -Not -Be $true
+   }
+  }
+  Context "CollectionFilter ParameterSet" {
+   It "ParameterSet should contain, MongoCollection, DocumentId, HideId" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionFilter | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionFilter | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionFilter | Should -Be $true
+   }
+   It "Collection should be IMongoCollection" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter MongoCollection -Type 'MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]'
+   }
+   It "Collection should be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionFilter.IsMandatory | Should -Be $true
+   }
+   It "Filter should be Hashtable" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
+   }
+   It "Filter should not be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionFilter.IsMandatory | Should -Not -Be $true
+   }
+   It "HideId should be a SwitchParameter" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
+   }
+   It "HideId should not be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameId.IsMandatory | Should -Not -Be $true
    }
   }
  }
