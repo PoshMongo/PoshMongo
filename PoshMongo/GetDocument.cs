@@ -93,6 +93,9 @@ namespace PoshMongo.Document
                         WriteObject(GetDocument(MongoCollection, DocumentId, HideId));
                     }
                     break;
+                case "CollectionFilter":
+                    WriteObject(GetDocument(MongoCollection, Filter, HideId));
+                    break;
                 default:
                     break;
             }
