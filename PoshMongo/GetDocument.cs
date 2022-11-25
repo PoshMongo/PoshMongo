@@ -23,10 +23,12 @@ namespace PoshMongo.Document
 
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameFilter")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameId")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameList")]
         public string? CollectionName { get; set; }
 
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionId", ValueFromPipeline = true)]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionFilter", ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionList", ValueFromPipeline = true)]
         public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
 
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "DocumentId")]
@@ -38,10 +40,8 @@ namespace PoshMongo.Document
         public SwitchParameter HideId { get; set; }
         
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]
-        [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionId")]
-        [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionFilter")]
-        [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionNameId")]
-        [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionNameFilter")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionList")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameList")]
         public SwitchParameter List { get; set; }
         protected override void ProcessRecord()
         {
