@@ -66,8 +66,8 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
    It "DocumentId should be String" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Type String
    }
-   It "DocumentId should not be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionNameId.IsMandatory | Should -Not -Be $true
+   It "DocumentId should be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionNameId.IsMandatory | Should -Be $true
    }
    It "HideId should be a SwitchParameter" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
@@ -91,8 +91,8 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
    It "Filter should be a HashTable" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
    }
-   It "Filter should not be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter.IsMandatory | Should -Not -Be $true
+   It "Filter should be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter.IsMandatory | Should -Be $true
    }
    It "HideId should be a SwitchParameter" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
@@ -116,8 +116,8 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
    It "DocumentId should be String" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Type String
    }
-   It "DocumentId should not be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionId.IsMandatory | Should -Not -Be $true
+   It "DocumentId should be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionId.IsMandatory | Should -Be $true
    }
    It "HideId should be a SwitchParameter" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
@@ -141,8 +141,8 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
    It "Filter should be Hashtable" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
    }
-   It "Filter should not be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionFilter.IsMandatory | Should -Not -Be $true
+   It "Filter should be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionFilter.IsMandatory | Should -Be $true
    }
    It "HideId should be a SwitchParameter" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
@@ -155,8 +155,8 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
  Context "Get-MongoDBDocument Usage" {
   Context "Get-MongoDBDocument DocumentId ParameterSet" {
    Context "Without a DocumentId" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument | Should -BeOfType 'System.Collections.Generic.List[string]'
+    It "Should throw an error: Parameter set cannot be resolved using the specified named parameters" {
+     { Get-MongoDBDocument } | Should -Throw -ErrorId 'AmbiguousParameterSet,PoshMongo.Document.GetDocumentCmdlet'
     }
    }
    Context "With a DocumentId" {
@@ -167,6 +167,23 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
    Context "With an invalid DocumentId" {
     It "Should throw an error: Value cannot be null. (Parameter 'source')." {
      { Get-MongoDBDocument -DocumentId '3' } | Should -Throw "Value cannot be null. (Parameter 'source')"
+    }
+   }
+  }
+  Context "Get-MongoDBDocument Filter ParameterSet" {
+   Context "Without a Filter" {
+    It "Should throw an error: Parameter set cannot be resolved using the specified named parameters" {
+     { Get-MongoDBDocument } | Should -Throw -ErrorId 'AmbiguousParameterSet,PoshMongo.Document.GetDocumentCmdlet'
+    }
+   }
+   Context "With a Filter" {
+    It "Should Return System.String" {
+     Get-MongoDBDocument -Filter @{'_id'= '1' } | Should -BeOfType System.String
+    }
+   }
+   Context "With an invalid Filter" {
+    It "Should throw an error: C# null values of type 'BsonDocument' cannot be serialized" {
+     { Get-MongoDBDocument -Filter @{'_id'= '3' } } | Should -Throw "C# null values of type 'BsonDocument' cannot be serialized using a serializer of type 'BsonDocumentSerializer'."
     }
    }
   }
