@@ -155,8 +155,8 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
  Context "Get-MongoDBDocument Usage" {
   Context "Get-MongoDBDocument DocumentId ParameterSet" {
    Context "Without a DocumentId" {
-    It "Should throw an error: Parameter set cannot be resolved using the specified named parameters" {
-     { Get-MongoDBDocument } | Should -Throw -ErrorId 'AmbiguousParameterSet,PoshMongo.Document.GetDocumentCmdlet'
+    It "Should Return System.Collections.Generic.List[string]" {
+     Get-MongoDBDocument | Should -BeOfType 'System.Collections.Generic.List[string]'
     }
    }
    Context "With a DocumentId" {
@@ -172,8 +172,8 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
   }
   Context "Get-MongoDBDocument Filter ParameterSet" {
    Context "Without a Filter" {
-    It "Should throw an error: Parameter set cannot be resolved using the specified named parameters" {
-     { Get-MongoDBDocument } | Should -Throw -ErrorId 'AmbiguousParameterSet,PoshMongo.Document.GetDocumentCmdlet'
+    It "Should Return System.Collections.Generic.List[string]" {
+     Get-MongoDBDocument | Should -BeOfType 'System.Collections.Generic.List[string]'
     }
    }
    Context "With a Filter" {
