@@ -215,8 +215,8 @@ Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
     }
    }
    Context "With an invalid DocumentId" {
-    It "Should throw an error: Value cannot be null. (Parameter 'source')." {
-     { Get-MongoDBDocument -DocumentId '3' } | Should -Throw "Value cannot be null. (Parameter 'source')"
+    It "Should throw an error: C# null values of type 'BsonDocument' cannot be serialized" {
+     { Get-MongoDBDocument -DocumentId '3' } | Should -Throw "C# null values of type 'BsonDocument' cannot be serialized using a serializer of type 'BsonDocumentSerializer'."
     }
    }
   }
