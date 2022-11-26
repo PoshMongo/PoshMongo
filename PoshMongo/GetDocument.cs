@@ -66,10 +66,8 @@ namespace PoshMongo.Document
             switch (ParameterSetName)
             {
                 case "Filter":
-                    // Get-MongoDBDocument -Filter @{}
                     WriteObject(GetDocument(MongoCollection, Filter, HideId)); break;
                 case "DocumentId":
-                    // Get-MongoDBDocument -DocumentId 1
                     if (ObjectId.TryParse(DocumentId, out objectId))
                     {
                         WriteObject(GetDocument(MongoCollection, objectId, HideId));
@@ -80,7 +78,6 @@ namespace PoshMongo.Document
                     }
                     break;
                 case "CollectionNameId":
-                    // Get-MongoDBDocument -CollectionName bar -DocumentId 1
                     if (ObjectId.TryParse(DocumentId, out objectId))
                     {
                         WriteObject(GetDocument(MongoCollection, objectId, HideId));
@@ -111,9 +108,9 @@ namespace PoshMongo.Document
                     break;
             }
         }
-        private List<string> GetDocument(IMongoCollection<BsonDocument> Collection, bool noId)
+        private static List<string> GetDocument(IMongoCollection<BsonDocument> Collection, bool noId)
         {
-            List<string>Documents = new List<string>();
+            List<string>Documents = new();
             if (noId == true)
             {
                 ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
@@ -131,7 +128,7 @@ namespace PoshMongo.Document
             }
             return Documents;
         }
-        private string GetDocument(IMongoCollection<BsonDocument> Collection, string Id, bool noId)
+        private static string GetDocument(IMongoCollection<BsonDocument> Collection, string Id, bool noId)
         {
             FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", Id);
             if (noId == true)
@@ -144,7 +141,7 @@ namespace PoshMongo.Document
                 return Collection.Find(id).FirstOrDefault().ToJson();
             }
         }
-        private string GetDocument(IMongoCollection<BsonDocument> Collection, ObjectId Id, bool noId)
+        private static string GetDocument(IMongoCollection<BsonDocument> Collection, ObjectId Id, bool noId)
         {
             FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(Id.ToString()));
             if (noId == true)
@@ -157,7 +154,7 @@ namespace PoshMongo.Document
                 return Collection.Find(id).FirstOrDefault().ToJson();
             }
         }
-        private string GetDocument(IMongoCollection<BsonDocument> Collection,Hashtable filter, bool noId)
+        private static string GetDocument(IMongoCollection<BsonDocument> Collection,Hashtable filter, bool noId)
         {
             List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
             foreach (string key in filter.Keys)
