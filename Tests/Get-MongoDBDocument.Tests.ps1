@@ -14,6 +14,11 @@ AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
 }
 Describe "Get-MongoDBDocument" -Tag $Module, "GetDocumentCmdlet", "Document" {
+ Context "Cmdlet Tests" {
+  It "Should have HelpUri defined in Cmdlet() declaration" {
+   [System.Uri]::new((Get-Command Get-MongoDBDocument |Select-Object -ExpandProperty HelpUri)).GetType().FullName | Should -Be 'System.Uri'
+  }
+ }
  Context "Testing ParameterSets" {
   Context "DocumentId ParameterSet" {
    It "ParameterSet should contain, DocumentId, HideId" {
