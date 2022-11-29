@@ -5,15 +5,15 @@ using System.Management.Automation;
 
 namespace PoshMongo.Document
 {
-    [Cmdlet(VerbsCommon.Remove, "Document")]
+    [Cmdlet(VerbsCommon.Remove, "Document", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBDocument.md#remove-mongodbdocument")]
     [OutputType("System.Text.Json")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBDocument.md#remove-mongodbdocument", PositionalBinding = true)]
+    [CmdletBinding(PositionalBinding = true, DefaultParameterSetName = "DocumentId")]
     public class RemoveDocumentCmdlet : PSCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0)]
-        public string? DocumentId { get; set; }
-        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Filter")]
-        public Hashtable? Filter { get; set; }
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentId")]
+        public string DocumentId { get; set; } = string.Empty;
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Filter")]
+        public Hashtable Filter { get; set; } = new Hashtable();
         protected override void ProcessRecord()
         {
             IMongoCollection<BsonDocument> Collection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
@@ -33,12 +33,12 @@ namespace PoshMongo.Document
                     break;
             }
         }
-        private void RemoveDocument(IMongoCollection<BsonDocument> Collection, string documentID)
+        private static void RemoveDocument(IMongoCollection<BsonDocument> Collection, string documentID)
         {
             FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", documentID);
             Collection.DeleteOne(id);
         }
-        private void RemoveDocument(IMongoCollection<BsonDocument> Collection, Hashtable filter)
+        private static void RemoveDocument(IMongoCollection<BsonDocument> Collection, Hashtable filter)
         {
             List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
             foreach (string key in filter.Keys)
@@ -46,7 +46,7 @@ namespace PoshMongo.Document
                 filters.Add(Builders<BsonDocument>.Filter.Eq(key, filter[key]));
             }
             FilterDefinition<BsonDocument> result = Builders<BsonDocument>.Filter.And(filters);
-            Collection.Find(result).FirstOrDefault().ToJson();
+            Collection.DeleteOne(result);
         }
     }
 }
