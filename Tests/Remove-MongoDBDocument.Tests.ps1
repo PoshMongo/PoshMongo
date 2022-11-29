@@ -6,8 +6,8 @@ BeforeAll {
  New-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
  New-MongoDBCollection -CollectionName 'myCollection1' | Out-Null
  New-MongoDBCollection -CollectionName 'myCollection2' | Out-Null
- Add-MongoDBDocument -Document '{"_id":"123","FirstName":"Joe","LastName":"Friday"}' -CollectionName 'myCollection1' | Out-Null
- Add-MongoDBDocument -Document '{"_id":"456","FirstName":"Ben","LastName":"Romero"}' -CollectionName 'myCollection1' | Out-Null
+ Add-MongoDBDocument -Document '{"_id":"19511","FirstName":"Joe","LastName":"Friday"}' -CollectionName 'myCollection1' | Out-Null
+ Add-MongoDBDocument -Document '{"_id":"19512","FirstName":"Ben","LastName":"Romero"}' -CollectionName 'myCollection1' | Out-Null
  Add-MongoDBDocument -Document '{"_id":"19751","FirstName":"David","LastName":"Starsky"}' -CollectionName 'myCollection1' | Out-Null
  Add-MongoDBDocument -Document '{"_id":"19752","FirstName":"Kenneth","Hutchinson":"Friday"}' -CollectionName 'myCollection1' | Out-Null
  Add-MongoDBDocument -Document '{"_id":"19791","Bo":"Joe","LastName":"Duke"}' -CollectionName 'myCollection2' | Out-Null
@@ -88,7 +88,7 @@ Describe "Remove-MongoDBDocument" -Tag $Module, "RemoveDocumentCmdlet", "Documen
   Context "Remove-MongoDBDocument DocumentId ParameterSet" {
    Context "With a DocumentId" {
     It "Should Return System.String" {
-     Remove-MongoDBDocument -DocumentId '123' | Should -Be $null
+     Remove-MongoDBDocument -DocumentId '19511' | Should -Be $null
     }
    }
    Context "With a null DocumentId" {
@@ -115,7 +115,7 @@ Describe "Remove-MongoDBDocument" -Tag $Module, "RemoveDocumentCmdlet", "Documen
   Context "Remove-MongoDBDocument Filter ParameterSet" {
    Context "With a Filter" {
     It "Should Return System.String" {
-     Remove-MongoDBDocument -Filter @{'_id'='123'} | Should -Be $null
+     Remove-MongoDBDocument -Filter @{'_id'='19511'} | Should -Be $null
     }
    }
    Context "With a null Filter" {
@@ -137,12 +137,12 @@ Describe "Remove-MongoDBDocument" -Tag $Module, "RemoveDocumentCmdlet", "Documen
   Context "Remove-MongoDBDocument CollectionNameId ParameterSet" {
    Context "With a CollectionName" {
     It "Should Return System.String" {
-     Remove-MongoDBDocument -DocumentId '123' -CollectionName 'myCollection1' | Should -Be $null
+     Remove-MongoDBDocument -DocumentId '19511' -CollectionName 'myCollection1' | Should -Be $null
     }
    }
    Context "With a null CollectionName" {
     It "Should throw an error: ParameterBindingValidationException" {
-     { Remove-MongoDBDocument -DocumentId '123' -CollectionName $null } | Should -throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.RemoveDocumentCmdlet'
+     { Remove-MongoDBDocument -DocumentId '19511' -CollectionName $null } | Should -throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.RemoveDocumentCmdlet'
     }
    }
    Context "Without a CollectionName" {
@@ -154,12 +154,12 @@ Describe "Remove-MongoDBDocument" -Tag $Module, "RemoveDocumentCmdlet", "Documen
   Context "Remove-MongoDBDocument CollectionNameFilter ParameterSet" {
    Context "With a CollectionName" {
     It "Should Return System.String" {
-     Remove-MongoDBDocument -Filter @{'_id'='123'} -CollectionName 'myCollection1'| Should -Be $null
+     Remove-MongoDBDocument -Filter @{'_id'='19511'} -CollectionName 'myCollection1'| Should -Be $null
     }
    }
    Context "With a null Filter" {
     It "Should throw an error: ParameterBindingValidationException" {
-     { Remove-MongoDBDocument -Filter @{'_id'='123'} -CollectionName  $null } | Should -throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.RemoveDocumentCmdlet'
+     { Remove-MongoDBDocument -Filter @{'_id'='19511'} -CollectionName  $null } | Should -throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.RemoveDocumentCmdlet'
     }
    }
    Context "Without a CollectionName" {
