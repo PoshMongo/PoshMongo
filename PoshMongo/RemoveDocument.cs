@@ -11,24 +11,50 @@ namespace PoshMongo.Document
     public class RemoveDocumentCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentId")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameId")]
         public string DocumentId { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Filter")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameFilter")]
         public Hashtable Filter { get; set; } = new Hashtable();
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameId")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameFilter")]
+        public string CollectionName { get; set; } = string.Empty;
         protected override void ProcessRecord()
         {
-            IMongoCollection<BsonDocument> Collection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
+            IMongoCollection<BsonDocument> MongoCollection = null;
+            if (string.IsNullOrEmpty(CollectionName))
+            {
+                MongoCollection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
+            }
+            else
+            {
+                MongoDatabaseBase MongoDatabase = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
+                MongoCollection = MongoDatabase.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings());
+            }
             switch (ParameterSetName)
             {
                 case "Filter":
                     if (!(Filter == null))
                     {
-                        RemoveDocument(Collection, Filter);
+                        RemoveDocument(MongoCollection, Filter);
+                    }
+                    break;
+                case "CollectionNameId":
+                    if (!(string.IsNullOrEmpty(DocumentId)))
+                    {
+                        RemoveDocument(MongoCollection, DocumentId);
+                    }
+                    break;
+                case "CollectionNameFilter":
+                    if (!(Filter == null))
+                    {
+                        RemoveDocument(MongoCollection, Filter);
                     }
                     break;
                 default:
                     if (!(string.IsNullOrEmpty(DocumentId)))
                     {
-                        RemoveDocument(Collection, DocumentId);
+                        RemoveDocument(MongoCollection, DocumentId);
                     }
                     break;
             }
