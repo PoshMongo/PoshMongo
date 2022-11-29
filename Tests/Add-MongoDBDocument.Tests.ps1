@@ -13,7 +13,7 @@ AfterAll {
 Describe "Add-MongoDBDocument" -Tag $Module, "AddDocumentCmdlet", "Document" {
  Context "Cmdlet Tests" {
   It "Should have HelpUri defined in Cmdlet() declaration" {
-   [System.Uri]::new((Get-Command Get-MongoDBDocument | Select-Object -ExpandProperty HelpUri)).GetType().FullName | Should -Be 'System.Uri'
+   [System.Uri]::new((Get-Command Add-MongoDBDocument | Select-Object -ExpandProperty HelpUri)).GetType().FullName | Should -Be 'System.Uri'
   }
  }
  Context "Testing ParameterSets" {
@@ -58,44 +58,44 @@ Describe "Add-MongoDBDocument" -Tag $Module, "AddDocumentCmdlet", "Document" {
   Context "CollectionName ParameterSet" {
    Context "With a Document" {
     It "Should Return System.String" {
-     Add-MongoDBDocument -Document '{"_id":"123","FirstName":"Joe","LastName":"Friday"}' | Should -BeOfType System.String
+     Add-MongoDBDocument -Document '{"_id":"19511","FirstName":"Joe","LastName":"Friday"}' | Should -BeOfType System.String
     }
    }
    Context "With a Document and CollectionName" {
     It "Should Return System.String" {
-     Add-MongoDBDocument -Document '{"_id":"456","FirstName":"Joe","LastName":"Friday"}' -CollectionName 'myCollection1' | Should -BeOfType System.String
+     Add-MongoDBDocument -Document '{"_id":"19512","FirstName":"Ben","LastName":"Romero"}' -CollectionName 'myCollection1' | Should -BeOfType System.String
     }
    }
    Context "Without a CollectionName" {
     It "Should throw an error: ParameterArgumentValidationErrorEmptyStringNotAllowed" {
-     { Add-MongoDBDocument -Document '{"_id":"789","FirstName":"Joe","LastName":"Friday"}' -CollectionName '' } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorEmptyStringNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
+     { Add-MongoDBDocument -Document '{"_id":"19751","FirstName":"David","LastName":"Starsky"}' -CollectionName '' } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorEmptyStringNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
     }
    }
    Context "Without a CollectionName" {
     It "Should throw an error: ParameterArgumentValidationErrorNullNotAllowed" {
-     { Add-MongoDBDocument -Document '{"_id":"101","FirstName":"Joe","LastName":"Friday"}' -CollectionName $null } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
+     { Add-MongoDBDocument -Document '{"_id":"19752","FirstName":"Kenneth","Hutchinson":"Friday"}' -CollectionName $null } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
     }
    }
   }
   Context "Collection ParameterSet" {
    Context "With a Document" {
     It "Should Return System.String" {
-     Add-MongoDBDocument -Document '{"_id":"112","FirstName":"Joe","LastName":"Friday"}' | Should -BeOfType System.String
+     Add-MongoDBDocument -Document '{"_id":"19791","Bo":"Joe","LastName":"Duke"}' | Should -BeOfType System.String
     }
    }
    Context "With a Document and Collection" {
     It "Should Return System.String" {
-     $Collection | Add-MongoDBDocument -Document '{"_id":"131","FirstName":"Joe","LastName":"Friday"}' | Should -BeOfType System.String
+     $Collection | Add-MongoDBDocument -Document '{"_id":"19792","Luke":"Joe","LastName":"Duke"}' | Should -BeOfType System.String
     }
    }
    Context "Without a Collection" {
     It "Should throw an error: CannotConvertArgumentNoMessage" {
-     { Add-MongoDBDocument -Document '{"_id":"415","FirstName":"Joe","LastName":"Friday"}' -MongoCollection '' } | Should -Throw -ErrorId 'CannotConvertArgumentNoMessage,PoshMongo.Document.AddDocumentCmdlet'
+     { Add-MongoDBDocument -Document '{"_id":"19811","FirstName":"Rick","LastName":"Simon"}' -MongoCollection '' } | Should -Throw -ErrorId 'CannotConvertArgumentNoMessage,PoshMongo.Document.AddDocumentCmdlet'
     }
    }
    Context "Without a Collection" {
     It "Should throw an error: ParameterArgumentValidationErrorNullNotAllowed" {
-     { Add-MongoDBDocument -Document '{"_id":"167","FirstName":"Joe","LastName":"Friday"}' -MongoCollection $null } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
+     { Add-MongoDBDocument -Document '{"_id":"19812","FirstName":"Andrew","LastName":"Simon"}' -MongoCollection $null } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
     }
    }
   }
