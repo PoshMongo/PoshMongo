@@ -1,6 +1,6 @@
 Properties {
  $moduleName = "PoshMongo"
- $version = ""
+ $version = (Get-Module -Name $moduleName |Select-Object -Property Version).Version.ToString()
  $Github = "https://github.com/PoshMongo/PoshMongo"
  $PoshGallery = "https://www.powershellgallery.com/packages/PoshMongo"
  $Nuget = ""
