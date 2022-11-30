@@ -20,6 +20,14 @@ Describe "Get-MongoDBDatabase" -Tag $Module, "GetDatabaseCmdlet", "Database" {
     Get-Command Get-MongoDBDatabase | Should -HaveParameter DatabaseName -not -Mandatory
    }
   }
+  Context "Client parameter" {
+   It "Should be MongoClient" {
+    Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
+   }
+   It "Should be Mandatory" {
+    Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory
+   }
+  }
  }
  Context "Get-MongoDBDatabase Usage" {
   Context "Without a DatabaseName" {
@@ -35,6 +43,11 @@ Describe "Get-MongoDBDatabase" -Tag $Module, "GetDatabaseCmdlet", "Database" {
   Context "With an invalid DatabaseName" {
    It "Should throw an error: Database names must be non-empty and not contain '.' or the null character." {
     { Get-MongoDBDatabase -DatabaseName "my.db" } | Should -Throw
+   }
+  }
+  Context "With an invalid MongoClient" {
+   It "Should throw an error: Must be connected to a MongoDB instance." {
+    { Get-MongoDBDatabase -DatabaseName "mydb" -Client (New-Object -TypeName MongoDB.Driver.MongoClient) } | Should -Throw "Must be connected to a MongoDB instance."
    }
   }
  }
