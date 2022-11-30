@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using MongoDB.Driver.Core.Servers;
 using System.Management.Automation;
 
 namespace PoshMongo.Database
@@ -17,9 +18,14 @@ namespace PoshMongo.Database
             if (Client == null)
             {
                 Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
-            } else
+            }
+            else
             {
-                throw new PSArgumentNullException("Client", "Must be connected to a MongoDB instance.");
+                ServerDescription? server = Client.Cluster.Description.Servers.FirstOrDefault();
+                if (server != null)
+                {
+                    throw new MongoConnectionException(new MongoDB.Driver.Core.Connections.ConnectionId(server.ServerId), "Must be connected to a MongoDB instance.");
+                }
             }
             SessionState.PSVariable.Set("Database", Client.GetDatabase(DatabaseName));
             WriteObject(SessionState.PSVariable.Get("Database").Value);
