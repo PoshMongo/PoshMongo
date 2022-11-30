@@ -66,7 +66,7 @@ Describe "Remove-MongoDBDocument" -Tag $Module, "RemoveDocumentCmdlet", "Documen
    }
   }
   Context "CollectionNameFilter ParameterSet" {
-   It "ParameterSet should contain, CollectionNameFilter, Filter" {
+   It "ParameterSet should contain, CollectionName, Filter" {
     (Get-Command -Name 'Remove-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionNameFilter | Should -Be $true
     (Get-Command -Name 'Remove-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter | Should -Be $true
    }
@@ -81,6 +81,42 @@ Describe "Remove-MongoDBDocument" -Tag $Module, "RemoveDocumentCmdlet", "Documen
    }
    It "Filter should be Mandatory" {
     (Get-Command -Name 'Remove-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter.IsMandatory | Should -Be $true
+   }
+  }
+  Context "CollectionId ParameterSet" {
+   It "ParameterSet should contain, MongoCollection, DocumentId" {
+    (Get-Command -Name 'Remove-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionId | Should -Be $true
+    (Get-Command -Name 'Remove-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionId | Should -Be $true
+   }
+   It "MongoCollection should be IMongoCollection" {
+    Get-Command Remove-MongoDBDocument | Should -HaveParameter MongoCollection -Type 'MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]'
+   }
+   It "MongoCollection should be Mandatory" {
+    (Get-Command -Name 'Remove-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionId.IsMandatory | Should -Be $true
+   }
+   It "DocumentId should be String" {
+    Get-Command Remove-MongoDBDocument | Should -HaveParameter DocumentId -Type String
+   }
+   It "DocumentId should be Mandatory" {
+    (Get-Command -Name 'Remove-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionId.IsMandatory | Should -Be $true
+   }
+  }
+  Context "CollectionFilter ParameterSet" {
+   It "ParameterSet should contain, MongoCollection, Filter" {
+    (Get-Command -Name 'Remove-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionFilter | Should -Be $true
+    (Get-Command -Name 'Remove-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionFilter | Should -Be $true
+   }
+   It "MongoCollection should be IMongoCollection" {
+    Get-Command Remove-MongoDBDocument | Should -HaveParameter MongoCollection -Type 'MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]'
+   }
+   It "MongoCollection should be Mandatory" {
+    (Get-Command -Name 'Remove-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionFilter.IsMandatory | Should -Be $true
+   }
+   It "Filter should be Hashtable" {
+    Get-Command Remove-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
+   }
+   It "Filter should be Mandatory" {
+    (Get-Command -Name 'Remove-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionFilter.IsMandatory | Should -Be $true
    }
   }
  }
@@ -165,6 +201,40 @@ Describe "Remove-MongoDBDocument" -Tag $Module, "RemoveDocumentCmdlet", "Documen
    Context "Without a CollectionName" {
     It "Should throw an error: MissingArgument" {
      { Remove-MongoDBDocument -DocumentId -CollectionName } | Should -throw -ErrorId 'MissingArgument,PoshMongo.Document.RemoveDocumentCmdlet'
+    }
+   }
+  }
+  Context "Remove-MongoDBDocument CollectionId ParameterSet" {
+   Context "With a MongoCollection" {
+    It "Should Return System.String" {
+     Remove-MongoDBDocument -DocumentId '19511' -MongoCollection $Collection | Should -Be $null
+    }
+   }
+   Context "With a null MongoCollection" {
+    It "Should throw an error: ParameterBindingValidationException" {
+     { Remove-MongoDBDocument -DocumentId '19511' -MongoCollection $null } | Should -throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.RemoveDocumentCmdlet'
+    }
+   }
+   Context "Without a MongoCollection" {
+    It "Should throw an error: MissingArgument" {
+     { Remove-MongoDBDocument -DocumentId -MongoCollection } | Should -throw -ErrorId 'MissingArgument,PoshMongo.Document.RemoveDocumentCmdlet'
+    }
+   }
+  }
+  Context "Remove-MongoDBDocument CollectionNameFilter ParameterSet" {
+   Context "With a MongoCollection" {
+    It "Should Return System.String" {
+     Remove-MongoDBDocument -Filter @{'_id'='19511'}  -MongoCollection $Collection| Should -Be $null
+    }
+   }
+   Context "With a null Filter" {
+    It "Should throw an error: ParameterBindingValidationException" {
+     { Remove-MongoDBDocument -Filter @{'_id'='19511'} -MongoCollection  $null } | Should -throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Document.RemoveDocumentCmdlet'
+    }
+   }
+   Context "Without a MongoCollection" {
+    It "Should throw an error: MissingArgument" {
+     { Remove-MongoDBDocument -DocumentId -MongoCollection } | Should -throw -ErrorId 'MissingArgument,PoshMongo.Document.RemoveDocumentCmdlet'
     }
    }
   }
