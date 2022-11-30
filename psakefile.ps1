@@ -1,6 +1,5 @@
 Properties {
  $moduleName = "PoshMongo"
- $version = (Get-Module -Name $moduleName |Select-Object -Property Version).Version.ToString()
  $Github = "https://github.com/PoshMongo/PoshMongo"
  $PoshGallery = "https://www.powershellgallery.com/packages/PoshMongo"
  $Nuget = ""
@@ -55,6 +54,7 @@ Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModu
 
 Task Post2Discord -Description "Post a message to discord" -Action {
  $moduleName =  'PoshMongo'
+	$version = (Get-Module -Name $moduleName |Select-Object -Property Version).Version.ToString()
  $Discord = Get-Content .\discord.poshmongo |ConvertFrom-Json
  $Discord.message.content = "Version $($version) of $($moduleName) released. Please visit Github ($($Github)) or PowershellGallery ($($PoshGallery)) to download."
  Invoke-RestMethod -Uri $Discord.uri -Body ($Discord.message |ConvertTo-Json -Compress) -Method Post -ContentType 'application/json; charset=UTF-8'
