@@ -12,24 +12,31 @@ namespace PoshMongo.Document
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentId")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameId")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionId")]
         public string DocumentId { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Filter")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameFilter")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionFilter")]
         public Hashtable Filter { get; set; } = new Hashtable();
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameId")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameFilter")]
         public string CollectionName { get; set; } = string.Empty;
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionId")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionFilter")]
+        public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
         protected override void ProcessRecord()
         {
-            IMongoCollection<BsonDocument> MongoCollection = null;
-            if (string.IsNullOrEmpty(CollectionName))
+            if (MongoCollection == null)
             {
-                MongoCollection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
-            }
-            else
-            {
-                MongoDatabaseBase MongoDatabase = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
-                MongoCollection = MongoDatabase.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings());
+                if (string.IsNullOrEmpty(CollectionName))
+                {
+                    MongoCollection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
+                }
+                else
+                {
+                    MongoDatabaseBase MongoDatabase = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
+                    MongoCollection = MongoDatabase.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings());
+                }
             }
             switch (ParameterSetName)
             {
@@ -46,6 +53,18 @@ namespace PoshMongo.Document
                     }
                     break;
                 case "CollectionNameFilter":
+                    if (!(Filter == null))
+                    {
+                        RemoveDocument(MongoCollection, Filter);
+                    }
+                    break;
+                case "CollectionId":
+                    if (!(string.IsNullOrEmpty(DocumentId)))
+                    {
+                        RemoveDocument(MongoCollection, DocumentId);
+                    }
+                    break;
+                case "CollectionFilter":
                     if (!(Filter == null))
                     {
                         RemoveDocument(MongoCollection, Filter);
