@@ -14,7 +14,7 @@ Create a MongoDB Database
 ## SYNTAX
 
 ```powershell
-New-MongoDBDatabase [-DatabaseName] <String> [<CommonParameters>]
+New-MongoDBDatabase [-DatabaseName] <String> [[-Client] <MongoClient>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,6 +37,22 @@ Settings          : GuidRepresentation=CSharpLegacy;ReadConcern={ };ReadEncoding
 Create a new database
 
 ## PARAMETERS
+
+### -Client
+
+The MongoClient to use for a connection
+
+```yaml
+Type: MongoDB.Driver.MongoClient
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -DatabaseName
 
