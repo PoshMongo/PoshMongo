@@ -11,6 +11,11 @@ AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
 }
 Describe "Get-MongoDBDatabase" -Tag $Module, "GetDatabaseCmdlet", "Database" {
+ Context "Cmdlet Tests" {
+  It "Should have HelpUri defined in Cmdlet() declaration" {
+   [System.Uri]::new((Get-Command Get-MongoDBDatabase | Select-Object -ExpandProperty HelpUri)).GetType().FullName | Should -Be 'System.Uri'
+  }
+ }
  Context "Testing Parameters" {
   Context "DatabaseName parameter" {
    It "Should be String" {
@@ -18,6 +23,14 @@ Describe "Get-MongoDBDatabase" -Tag $Module, "GetDatabaseCmdlet", "Database" {
    }
    It "Should be Mandatory" {
     Get-Command Get-MongoDBDatabase | Should -HaveParameter DatabaseName -not -Mandatory
+   }
+  }
+  Context "Client parameter" {
+   It "Should be MongoClient" {
+    Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
+   }
+   It "Should be Mandatory" {
+    Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory
    }
   }
  }
@@ -35,6 +48,11 @@ Describe "Get-MongoDBDatabase" -Tag $Module, "GetDatabaseCmdlet", "Database" {
   Context "With an invalid DatabaseName" {
    It "Should throw an error: Database names must be non-empty and not contain '.' or the null character." {
     { Get-MongoDBDatabase -DatabaseName "my.db" } | Should -Throw
+   }
+  }
+  Context "With an invalid MongoClient" {
+   It "Should throw an error: Must be connected to a MongoDB instance." {
+    { Get-MongoDBDatabase -DatabaseName "mydb" -Client (New-Object -TypeName MongoDB.Driver.MongoClient) } | Should -Throw "Must be connected to a MongoDB instance."
    }
   }
  }
