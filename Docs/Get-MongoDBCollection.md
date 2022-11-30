@@ -22,7 +22,7 @@ Get-MongoDBCollection [[-CollectionName] <String>] [<CommonParameters>]
 ### DatabaseName
 
 ```powershell
-Get-MongoDBCollection [-CollectionName] <String> [-DatabaseName] <String> [<CommonParameters>]
+Get-MongoDBCollection [[-CollectionName] <String>] [-DatabaseName] <String> [<CommonParameters>]
 ```
 
 ### Database
@@ -128,22 +128,10 @@ The name of the collection to retrieve from the Database
 
 ```yaml
 Type: System.String
-Parameter Sets: Collection, Database
+Parameter Sets: Collection, DatabaseName, Database
 Aliases:
 
 Required: False
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: System.String
-Parameter Sets: DatabaseName
-Aliases:
-
-Required: True
 Position: 0
 Default value: None
 Accept pipeline input: False
@@ -180,7 +168,7 @@ Parameter Sets: DatabaseName
 Aliases:
 
 Required: True
-Position: 1
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -196,7 +184,7 @@ Parameter Sets: Database
 Aliases:
 
 Required: True
-Position: 1
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
