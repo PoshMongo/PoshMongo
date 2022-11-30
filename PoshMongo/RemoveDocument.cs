@@ -2,6 +2,8 @@
 using MongoDB.Driver;
 using System.Collections;
 using System.Management.Automation;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
 
 namespace PoshMongo.Document
 {
@@ -20,10 +22,15 @@ namespace PoshMongo.Document
         public Hashtable Filter { get; set; } = new Hashtable();
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameId")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameFilter")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DocumentCollectionName")]
         public string CollectionName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionId")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionFilter")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DocumentCollection")]
         public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentCollection", ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentCollectionName", ValueFromPipeline = true)]
+        public string Document { get; set; } = string.Empty;
         protected override void ProcessRecord()
         {
             if (MongoCollection == null)
@@ -37,6 +44,12 @@ namespace PoshMongo.Document
                     MongoDatabaseBase MongoDatabase = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
                     MongoCollection = MongoDatabase.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings());
                 }
+            }
+            BsonDocument bsonDocument;
+            if (!(string.IsNullOrEmpty(Document)))
+            {
+                bsonDocument = BsonDocument.Parse(Document);
+                DocumentId = (string)bsonDocument.GetValue("_id");
             }
             switch (ParameterSetName)
             {
