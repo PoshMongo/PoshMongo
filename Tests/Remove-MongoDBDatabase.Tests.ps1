@@ -11,43 +11,95 @@ AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
 }
 Describe "Remove-MongoDBDatabase" -Tag $Module, "RemoveDatabaseCmdlet", "Database" {
- Context "Testing Parameters" {
-  Context "DatabaseName parameter" {
-   It "Should be String" {
-    Get-Command Remove-MongoDBDatabase | Should -HaveParameter DatabaseName -Type String
-   }
-   It "Should be Mandatory" {
-    Get-Command Remove-MongoDBDatabase | Should -HaveParameter DatabaseName -Mandatory
-   }
-  }
-  Context "Client parameter" {
-   It "Should be MongoClient" {
-    Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
-   }
-   It "Should be Mandatory" {
-    Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory
-   }
+ Context "Cmdlet Tests" {
+  It "Should have HelpUri defined in Cmdlet() declaration" {
+   [System.Uri]::new((Get-Command Remove-MongoDBDatabase | Select-Object -ExpandProperty HelpUri)).GetType().FullName | Should -Be 'System.Uri'
   }
  }
- Context "Without a DatabaseName" {
-  It "Should throw an error: Cannot bind argument to parameter 'DatabaseName' because it is null." {
-   { Remove-MongoDBDatabase -DatabaseName $null } | Should -Throw
+ Context "Testing ParameterSets" {
+  Context "Default ParameterSet" {
+   It "ParameterSet should contain, DatabaseName, Client" {
+    (Get-Command -Name 'Remove-MongoDBDatabase').Parameters['DatabaseName'].ParameterSets.Default | Should -Be $true
+    (Get-Command -Name 'Remove-MongoDBDatabase').Parameters['Client'].ParameterSets.Default | Should -Be $true
+   }
+   Context "DatabaseName parameter" {
+    It "Should be String" {
+     Get-Command Remove-MongoDBDatabase | Should -HaveParameter DatabaseName -Type String
+    }
+    It "Should be Mandatory" {
+     Get-Command Remove-MongoDBDatabase | Should -HaveParameter DatabaseName -Mandatory
+    }
+   }
+   Context "Client parameter" {
+    It "Should be MongoClient" {
+     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
+    }
+    It "Should be Mandatory" {
+     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory
+    }
+   }
+  }
+  Context "Database ParameterSet" {
+   It "ParameterSet should contain, Database, Client" {
+    (Get-Command -Name 'Remove-MongoDBDatabase').Parameters['Database'].ParameterSets.Database | Should -Be $true
+    (Get-Command -Name 'Remove-MongoDBDatabase').Parameters['Client'].ParameterSets.Database | Should -Be $true
+   }
+   Context "Database parameter" {
+    It "Should be MongoDatabase" {
+     Get-Command Remove-MongoDBDatabase | Should -HaveParameter Database -Type MongoDB.Driver.MongoDatabaseBase
+    }
+    It "Should be Mandatory" {
+     Get-Command Remove-MongoDBDatabase | Should -HaveParameter Database -Mandatory
+    }
+   }
+   Context "Client parameter" {
+    It "Should be MongoClient" {
+     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
+    }
+    It "Should be Mandatory" {
+     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory
+    }
+   }
   }
  }
  Context "Remove-MongoDBDatabase Usage" {
-  Context "With a DatabaseName" {
-   It "Should Return MongoDB.Driver.MongoDatabaseBase" {
-    Remove-MongoDBDatabase -DatabaseName 'MyDB' | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
+  Context "Remove-MongoDBDatabase Default ParameterSet"{
+   Context "Without a DatabaseName" {
+    It "Should throw an error: Cannot bind argument to parameter 'DatabaseName' because it is null." {
+     { Remove-MongoDBDatabase -DatabaseName $null } | Should -Throw
+    }
+   }
+   Context "With a DatabaseName" {
+    It "Should Return MongoDB.Driver.MongoDatabaseBase" {
+     Remove-MongoDBDatabase -DatabaseName 'MyDB' | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
+    }
+   }
+   Context "With an invalid DatabaseName" {
+    It "Should throw an error: Database names must be non-empty and not contain '.' or the null character." {
+     { Remove-MongoDBDatabase -DatabaseName "my.db" } | Should -Throw
+    }
+   }
+   Context "With an invalid MongoClient" {
+    It "Should throw an error: Must be connected to a MongoDB instance." {
+     { Get-MongoDBDatabase -DatabaseName "MyDB" -Client (New-Object -TypeName MongoDB.Driver.MongoClient) } | Should -Throw "Must be connected to a MongoDB instance."
+    }
    }
   }
-  Context "With an invalid DatabaseName" {
-   It "Should throw an error: Database names must be non-empty and not contain '.' or the null character." {
-    { Remove-MongoDBDatabase -DatabaseName "my.db" } | Should -Throw
+  Context "Remove-MongoDBDatabase Database ParameterSet"{
+   Context "Without a Database" {
+    It "Should throw an error: Cannot bind argument to parameter 'Database' because it is null." {
+     { Remove-MongoDBDatabase -Database $null } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Database.RemoveDatabase'
+    }
    }
-  }
-  Context "With an invalid MongoClient" {
-   It "Should throw an error: Must be connected to a MongoDB instance." {
-    { Get-MongoDBDatabase -DatabaseName "MyDB" -Client (New-Object -TypeName MongoDB.Driver.MongoClient) } | Should -Throw "Must be connected to a MongoDB instance."
+   Context "With a Database" {
+    It "Should Return MongoDB.Driver.MongoDatabaseBase" {
+     Remove-MongoDBDatabase -Database $Database | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
+    }
+   }
+   Context "With an invalid MongoClient" {
+    It "Should throw an error: Must be connected to a MongoDB instance." {
+     { Get-MongoDBDatabase -Database $Database -Client (New-Object -TypeName MongoDB.Driver.MongoClient) } | Should -Throw "Must be connected to a MongoDB instance."
+    }
    }
   }
  }
