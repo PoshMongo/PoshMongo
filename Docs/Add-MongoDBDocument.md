@@ -13,8 +13,23 @@ This cmdlet adds a document (JSON) to a MongoDB Collection.
 
 ## SYNTAX
 
+### Default
+
 ```powershell
 Add-MongoDBDocument [-Document] <String> [<CommonParameters>]
+```
+
+### CollectionName
+
+```powershell
+Add-MongoDBDocument [-Document] <String> [-CollectionName] <String> [<CommonParameters>]
+```
+
+### Collection
+
+```powershell
+Add-MongoDBDocument [-Document] <String>
+ [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,6 +57,22 @@ An example showing how to add a more complex document to the collection
 
 ## PARAMETERS
 
+### -CollectionName
+
+The name of the collection to add the Document to
+
+```yaml
+Type: System.String
+Parameter Sets: CollectionName
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Document
 
 This is a JSON string object. It can be a complex object that is converted to
@@ -56,6 +87,22 @@ Required: True
 Position: 0
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MongoCollection
+
+A Collection object to add the Document to
+
+```yaml
+Type: MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]
+Parameter Sets: Collection
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 

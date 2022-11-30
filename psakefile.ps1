@@ -8,13 +8,13 @@ Properties {
 }
 Task default -depends UpdateReadme
 
-Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
+Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $Global:settings = Get-Content .\ConnectionSettings
 }
 
 Task UpdateHelp -Description "Update the help files" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $moduleName =  'PoshMongo'
- Import-Module -Name ".\Module\$($moduleName).psd1" -force;
+ Import-Module -Name ".\Module\$($moduleName).psd1" -Scope Global -force;
  New-MarkdownHelp -Module PoshMongo -AlphabeticParamsOrder -UseFullTypeName -WithModulePage -OutputFolder .\Docs\ -ErrorAction SilentlyContinue
  Update-MarkdownHelp -Path .\Docs\ -AlphabeticParamsOrder -UseFullTypeName
 }
@@ -42,7 +42,7 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  Get-Content .\Build.md |Out-File $readMe.FullName -Append
 }
 
-Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush
+Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush
 
 Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $moduleName =  'PoshMongo'
@@ -70,6 +70,10 @@ Task BuildProject -Description "Build the project" -Action {
 
 Task CreateModuleDirectory -Description "Create the module directory" -Action {
  New-Item Module -ItemType Directory -Force
+}
+
+Task CleanModuleDirectory -Description "Clean the module directory" -Action {
+ Get-ChildItem .\Module\ |Remove-Item
 }
 
 Task CopyModuleFiles -Description "Copy files for the module" -Action {

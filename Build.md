@@ -1,13 +1,34 @@
 # PoshMongo
+
 A PowerShell module for working with MongoDB, it provides cmdlets that cover the basic [CRUD](https://www.mongodb.com/developer/languages/csharp/csharp-crud-tutorial/) operations for MongoDb.
 
 ## Setup
+
 In order to build this project on your own you will need to download the [.Net SDK](https://dotnet.microsoft.com/en-us/download), this will install the [dotnet](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet) command. This project was built with .Net 6.0 LTS, but that shouldn't impact which SDK you install.
 
 1. Clone this repo
 2. Download SDK
 3. Enter the directory that contains the SLN or CSPROJ files
-4. Build project
+4. Create the program.cs file
+5. Build project
+
+> **Warning**
+> This file is required to build the project, it is not used outside of the build process. The executable that gets created can be ignored.
+
+```csharp
+namespace PoshMongo
+{
+    class Program
+    {
+        /// <summary>
+        /// This file is only required to build the DLL
+        /// it is not used in any other way, ignore
+        /// the .exe output.
+        /// </summary>
+        static void Main() { }
+    }
+}
+```
 
 ```powershell
 # build the project file
@@ -17,6 +38,7 @@ dotnet build .\PoshMongo.sln
 ```
 
 ## Usage
+
 Once you have built the dll, you will need to load into powershell
 
 ```powershell
@@ -39,4 +61,5 @@ Cmdlet          Remove-Document                                    1.0.0.0    Po
 ```
 
 ## Notes
+
 If you are using AzureCosmos with MongoDB API you will want to connect using the -ForceTls12 switch for the Connect-Instance
