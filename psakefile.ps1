@@ -14,7 +14,7 @@ Task LocalUse -Description "Setup for local use and testing" -depends CreateModu
 
 Task UpdateHelp -Description "Update the help files" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
  $moduleName =  'PoshMongo'
- Import-Module -Name ".\Module\$($moduleName).psd1" -force;
+ Import-Module -Name ".\Module\$($moduleName).psd1" -Scope Global -force;
  New-MarkdownHelp -Module PoshMongo -AlphabeticParamsOrder -UseFullTypeName -WithModulePage -OutputFolder .\Docs\ -ErrorAction SilentlyContinue
  Update-MarkdownHelp -Path .\Docs\ -AlphabeticParamsOrder -UseFullTypeName
 }
