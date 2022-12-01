@@ -4,9 +4,9 @@ using System.Management.Automation;
 
 namespace PoshMongo.Collection
 {
-    [Cmdlet(VerbsCommon.Get, "Collection")]
+    [Cmdlet(VerbsCommon.Get, "Collection", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBCollection.md#get-mongodbcollection")]
     [OutputType("MongoDB.Driver.IMongoCollection")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Get-MongoDBCollection.md#get-mongodbcollection", PositionalBinding = true)]
+    [CmdletBinding(PositionalBinding = true)]
     public class GetCollectionCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Collection")]

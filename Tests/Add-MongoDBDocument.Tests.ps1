@@ -10,7 +10,7 @@ BeforeAll {
 AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
 }
-Describe "Add-MongoDBDocument" -Tag $Module, "AddDocumentCmdlet", "Document" {
+Describe "Add-MongoDBDocument" -Tag "PoshMongo", "AddDocumentCmdlet", "Document" {
  Context "Cmdlet Tests" {
   It "Should have HelpUri defined in Cmdlet() declaration" {
    [System.Uri]::new((Get-Command Add-MongoDBDocument | Select-Object -ExpandProperty HelpUri)).GetType().FullName | Should -Be 'System.Uri'

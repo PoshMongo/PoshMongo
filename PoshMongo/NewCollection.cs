@@ -4,18 +4,18 @@ using System.Management.Automation;
 
 namespace PoshMongo.Collection
 {
-    [Cmdlet(VerbsCommon.New, "Collection")]
+    [Cmdlet(VerbsCommon.New, "Collection", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/New-MongoDBCollection.md#new-mongodbcollection")]
     [OutputType("MongoDB.Driver.IMongoCollection")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/New-MongoDBCollection.md#new-mongodbcollection", PositionalBinding = true)]
+    [CmdletBinding(PositionalBinding = true)]
     public class NewCollectionCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionName")]
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database")]
-        public string? CollectionName { get; set; }
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DatabaseName")]
-        public string? DatabaseName { get; set; }
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Database", ValueFromPipeline = true)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Database")]
+        public string CollectionName { get; set; } = string.Empty;
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
+        public string DatabaseName { get; set; } = string.Empty;
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
         public MongoDatabaseBase? MongoDatabase { get; set; }
         protected override void ProcessRecord()
         {
