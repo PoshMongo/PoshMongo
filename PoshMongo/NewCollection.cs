@@ -14,7 +14,7 @@ namespace PoshMongo.Collection
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Database")]
         public string CollectionName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
-        public string? DatabaseName { get; set; }
+        public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
         public MongoDatabaseBase? MongoDatabase { get; set; }
         protected override void ProcessRecord()
