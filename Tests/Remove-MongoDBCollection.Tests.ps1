@@ -52,8 +52,8 @@ Describe "Remove-MongoDBCollection" -Tag "PoshMongo", "RemoveCollectionCmdlet", 
  Context "Remove-MongoDBCollection Usage" {
   Context "Remove-MongoDBCollection CollectionName ParameterSet" {
    Context "With a CollectionName" {
-    It "Should Return MongoDB.Driver.IMongoCollection" {
-     (Remove-MongoDBCollection -CollectionName 'myCollection1').GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+    It "Should Return null" {
+     Remove-MongoDBCollection -CollectionName 'myCollection1' | Should -Be $null
     }
    }
    Context "Without a CollectionName" {
@@ -79,8 +79,8 @@ Describe "Remove-MongoDBCollection" -Tag "PoshMongo", "RemoveCollectionCmdlet", 
   }
   Context "Remove-MongoDBCollection DatabaseName ParameterSet" {
    Context "With a DatabaseName" {
-    It "Should Return MongoDB.Driver.IMongoCollection" {
-     (Remove-MongoDBCollection -DatabaseName 'MyDB1' -CollectionName 'myCollection2').GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+    It "Should Return null" {
+     Remove-MongoDBCollection -DatabaseName 'MyDB1' -CollectionName 'myCollection2' | Should -Be $null
     }
    }
    Context "Without a DatabaseName" {
@@ -106,8 +106,8 @@ Describe "Remove-MongoDBCollection" -Tag "PoshMongo", "RemoveCollectionCmdlet", 
   }
   Context "Remove-MongoDBCollection Collection ParameterSet" {
    Context "With a Collection" {
-    It "Should Return MongoDB.Driver.IMongoCollection" {
-     (Remove-MongoDBCollection -Collection (Get-MongoDBCollection -CollectionName 'myCollection3') ).GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+    It "Should Return null" {
+     Remove-MongoDBCollection -Collection (Get-MongoDBCollection -CollectionName 'myCollection3') | Should -Be $null
     }
    }
    Context "Without a Collection" {
