@@ -19,17 +19,17 @@ Describe "New-MongoDBCollection" -Tag $Module, "NewCollectionCmdlet", "Collectio
  Context "Testing ParameterSets" {
   Context "CollectionName ParameterSet" {
    It "CollectionName should be String" {
-    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -Type String
+    Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Type String
    }
    It "CollectionName should not be Mandatory" {
-    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -not -Mandatory
+    Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Mandatory
    }
   }
   Context "DatabaseName ParameterSet" {
    It "CollectionName should be String" {
     Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Type String
    }
-   It "CollectionName should not be Mandatory" {
+   It "CollectionName should  be Mandatory" {
     Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Mandatory
    }
    It "DatabaseName should be String" {
@@ -43,7 +43,7 @@ Describe "New-MongoDBCollection" -Tag $Module, "NewCollectionCmdlet", "Collectio
    It "CollectionName should be String" {
     Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Type String
    }
-   It "CollectionName should not be Mandatory" {
+   It "CollectionName should  be Mandatory" {
     Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Mandatory
    }
    It "MongoDatabase should be MongoDatabase" {
