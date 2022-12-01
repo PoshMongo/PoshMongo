@@ -5,9 +5,9 @@ using System.Management.Automation;
 
 namespace PoshMongo.Collection
 {
-    [Cmdlet(VerbsCommon.Remove, "Collection")]
+    [Cmdlet(VerbsCommon.Remove, "Collection", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBCollection.md#remove-mongodbcollection")]
     [OutputType("MongoDB.Driver.IMongoCollection")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBCollection.md#remove-mongodbcollection", PositionalBinding = true)]
+    [CmdletBinding(PositionalBinding = true)]
     public class RemoveCollectionCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionName")]
