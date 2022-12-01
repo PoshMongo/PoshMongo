@@ -12,9 +12,9 @@ namespace PoshMongo.Collection
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionName")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
-        public string? CollectionName { get; set; }
+        public string CollectionName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DatabaseName")]
-        public string? DatabaseName { get; set; }
+        public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection", ValueFromPipeline = true)]
         public IMongoCollection<BsonDocument>? Collection { get; set; }
         protected override void ProcessRecord()
