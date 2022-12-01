@@ -6,7 +6,7 @@ using System.Management.Automation;
 namespace PoshMongo.Collection
 {
     [Cmdlet(VerbsCommon.Remove, "Collection", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBCollection.md#remove-mongodbcollection")]
-    [OutputType("MongoDB.Driver.IMongoCollection")]
+    [OutputType("null")]
     [CmdletBinding(PositionalBinding = true)]
     public class RemoveCollectionCmdlet : PSCmdlet
     {
@@ -17,75 +17,55 @@ namespace PoshMongo.Collection
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection", ValueFromPipeline = true)]
         public IMongoCollection<BsonDocument>? Collection { get; set; }
+        private IMongoDatabase? MongoDatabase { get; set; }
         protected override void ProcessRecord()
         {
+            if (string.IsNullOrEmpty(DatabaseName))
+            {
+                MongoDatabase = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
+            } else
+            {
+                MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+                if (Client != null)
+                {
+                    MongoDatabase = Client.GetDatabase(DatabaseName);
+                }
+            }
+            if (Collection != null)
+            {
+                MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+                MongoDatabase = Client.GetDatabase(Collection.CollectionNamespace.DatabaseNamespace.DatabaseName);
+            }
             switch (ParameterSetName)
             {
                 case "CollectionName":
                     if (!(string.IsNullOrEmpty(CollectionName)))
                     {
-                        WriteObject(RemoveCollection(CollectionName));
+                        if (MongoDatabase != null)
+                        {
+                            MongoDatabase.DropCollection(CollectionName);
+                        }
                     }
                     break;
                 case "DatabaseName":
                     if (!(string.IsNullOrEmpty(CollectionName)) && !(string.IsNullOrEmpty(DatabaseName)))
                     {
-                        WriteObject(RemoveCollection(CollectionName, DatabaseName));
+                        if (MongoDatabase != null)
+                        {
+                            MongoDatabase.DropCollection(CollectionName);
+                        }
                     }
                     break;
                 case "Collection":
                     if (Collection != null)
                     {
-                        WriteObject(RemoveCollection(Collection, this.MyInvocation.ExpectingInput));
+                        if (MongoDatabase != null)
+                        {
+                            MongoDatabase.DropCollection(Collection.CollectionNamespace.CollectionName);
+                        }
                     }
                     break;
             }
-
-        }
-        private List<IMongoCollection<BsonDocument>> RemoveCollection(string collectionName)
-        {
-            MongoDatabaseBase Database = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
-            Database.DropCollection(collectionName);
-            List<IMongoCollection<BsonDocument>> Collection = new List<IMongoCollection<BsonDocument>>();
-            foreach (string collection in Database.ListCollectionNames().ToEnumerable())
-            {
-                Collection.Add(Database.GetCollection<BsonDocument>(collection, new MongoCollectionSettings()));
-            }
-            SetVariable("Collection", "");
-            return Collection;
-        }
-        private List<IMongoCollection<BsonDocument>> RemoveCollection(string collectionName, string databaseName)
-        {
-            MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
-            IMongoDatabase Database = Client.GetDatabase(databaseName);
-            SetVariable("Database", Database);
-            Database.DropCollection(collectionName);
-            List<IMongoCollection<BsonDocument>> Collection = new List<IMongoCollection<BsonDocument>>();
-            foreach (string collection in Database.ListCollectionNames().ToEnumerable())
-            {
-                Collection.Add(Database.GetCollection<BsonDocument>(collection, new MongoCollectionSettings()));
-            }
-            SetVariable("Collection", "");
-            return Collection;
-        }
-        private List<IMongoCollection<BsonDocument>> RemoveCollection(IMongoCollection<BsonDocument> collection, bool pipeline)
-        {
-            MongoDatabaseBase Database = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
-            Database.DropCollection(collection.CollectionNamespace.CollectionName);
-            List<IMongoCollection<BsonDocument>> Collection = new List<IMongoCollection<BsonDocument>>();
-            if (pipeline == false)
-            {
-                foreach (string collectionName in Database.ListCollectionNames().ToEnumerable())
-                {
-                    Collection.Add(Database.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings()));
-                }
-            }
-            SetVariable("Collection", "");
-            return Collection;
-        }
-        private void SetVariable(string VariableName, object Value)
-        {
-            SessionState.PSVariable.Set(VariableName, Value);
         }
     }
 }

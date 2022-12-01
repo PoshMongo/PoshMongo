@@ -122,7 +122,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### MongoDB.Driver.IMongoCollection
+### null
 
 ## NOTES
 
