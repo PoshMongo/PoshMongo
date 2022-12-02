@@ -5,7 +5,7 @@ using System.Management.Automation;
 namespace PoshMongo.Database
 {
     [Cmdlet(VerbsCommon.New, "Database", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/New-MongoDBDatabase0.md#new-mongodbdatabase")]
-    [OutputType("MongoDB.Driver.MongoDatabaseBase")]
+    [OutputType("MongoDB.Driver.IMongoDatabase")]
     [CmdletBinding(PositionalBinding = true)]
     public class NewDatabase : PSCmdlet
     {
@@ -27,8 +27,7 @@ namespace PoshMongo.Database
                     throw new MongoConnectionException(new MongoDB.Driver.Core.Connections.ConnectionId(server.ServerId), "Must be connected to a MongoDB instance.");
                 }
             }
-            SessionState.PSVariable.Set("Database", Client.GetDatabase(DatabaseName));
-            WriteObject(SessionState.PSVariable.Get("Database").Value);
+            WriteObject(Operations.NewDatabase(Client, DatabaseName));
         }
     }
 }
