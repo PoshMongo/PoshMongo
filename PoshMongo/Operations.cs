@@ -242,8 +242,4 @@ namespace PoshMongo
             Collection.DeleteOne(result);
         }
     }
-    public static class ClientConnection
-    {
-        public static MongoClient? Client { get; set; }
-    }
 }
