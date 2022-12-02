@@ -36,20 +36,13 @@ namespace PoshMongo.Document
             switch (ParameterSetName)
             {
                 case "CollectionName":
-                    WriteObject(AddDocument(MongoCollection, Document));
+                    WriteObject(Operations.AddDocument(MongoCollection, Document));
                     break;
                 default:
                     MongoCollection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
-                    WriteObject(AddDocument(MongoCollection, Document));
+                    WriteObject(Operations.AddDocument(MongoCollection, Document));
                     break;
             }
-        }
-        private static string AddDocument(IMongoCollection<BsonDocument> Collection, string document)
-        {
-            BsonDocument bsonDocument = BsonDocument.Parse(document);
-            Collection.InsertOne(bsonDocument);
-            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", bsonDocument["_id"]);
-            return Collection.Find(filter).FirstOrDefault().ToJson();
         }
     }
 }
