@@ -5,7 +5,7 @@ using System.Management.Automation;
 namespace PoshMongo.Database
 {
     [Cmdlet(VerbsCommon.Remove, "Database", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBDatabase0.md#remove-mongodbdatabase")]
-    [OutputType("MongoDB.Driver.MongoDatabaseBase")]
+    [OutputType("null")]
     [CmdletBinding(PositionalBinding = true)]
     public class RemoveDatabase : PSCmdlet
     {
@@ -32,14 +32,10 @@ namespace PoshMongo.Database
             }
             if (Database == null)
             {
-                Client.DropDatabase(DatabaseName);
+                Operations.RemoveDatabase(Client, DatabaseName);
             } else
             {
-                Client.DropDatabase(Database.DatabaseNamespace.DatabaseName);
-            }
-            foreach (string db in Client.ListDatabaseNames().ToEnumerable())
-            {
-                WriteObject(Client.GetDatabase(db));
+                Operations.RemoveDatabase(Client, Database.DatabaseNamespace.DatabaseName);
             }
         }
     }
