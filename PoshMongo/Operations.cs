@@ -123,5 +123,9 @@ namespace PoshMongo
         {
             mongoDatabase.DropCollection(collectionName);
         }
+        public static void RemoveDatabase(MongoClient Client, string DatabaseName)
+        {
+            Client.DropDatabase(DatabaseName);
+        }
     }
 }
