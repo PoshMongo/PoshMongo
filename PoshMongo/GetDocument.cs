@@ -66,110 +66,46 @@ namespace PoshMongo.Document
             switch (ParameterSetName)
             {
                 case "Filter":
-                    WriteObject(GetDocument(MongoCollection, Filter, HideId)); break;
+                    WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId)); break;
                 case "DocumentId":
                     if (ObjectId.TryParse(DocumentId, out objectId))
                     {
-                        WriteObject(GetDocument(MongoCollection, objectId, HideId));
+                        WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
                     }
                     else
                     {
-                        WriteObject(GetDocument(MongoCollection, DocumentId, HideId));
+                        WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
                     }
                     break;
                 case "CollectionNameId":
                     if (ObjectId.TryParse(DocumentId, out objectId))
                     {
-                        WriteObject(GetDocument(MongoCollection, objectId, HideId));
+                        WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
                     }
                     else
                     {
-                        WriteObject(GetDocument(MongoCollection, DocumentId, HideId));
+                        WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
                     }
                     break;
                 case "CollectionNameFilter":
-                    WriteObject(GetDocument(MongoCollection, Filter, HideId));
+                    WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId));
                     break;
                 case "CollectionId":
                     if (ObjectId.TryParse(DocumentId, out objectId))
                     {
-                        WriteObject(GetDocument(MongoCollection, objectId, HideId));
+                        WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
                     }
                     else
                     {
-                        WriteObject(GetDocument(MongoCollection, DocumentId, HideId));
+                        WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
                     }
                     break;
                 case "CollectionFilter":
-                    WriteObject(GetDocument(MongoCollection, Filter, HideId));
+                    WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId));
                     break;
                 default:
-                    WriteObject(GetDocument(MongoCollection, HideId));
+                    WriteObject(Operations.GetDocument(MongoCollection, HideId));
                     break;
-            }
-        }
-        private static List<string> GetDocument(IMongoCollection<BsonDocument> Collection, bool noId)
-        {
-            List<string>Documents = new();
-            if (noId == true)
-            {
-                ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                foreach (BsonDocument doc in Collection.Find(new BsonDocument()).Project(projection).ToList())
-                {
-                    Documents.Add(doc.ToJson());
-                }
-            }
-            else
-            {
-                foreach (BsonDocument doc in Collection.Find(new BsonDocument()).ToList())
-                {
-                    Documents.Add(doc.ToJson());
-                }
-            }
-            return Documents;
-        }
-        private static string GetDocument(IMongoCollection<BsonDocument> Collection, string Id, bool noId)
-        {
-            FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", Id);
-            if (noId == true)
-            {
-                ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                return Collection.Find(id).Project(projection).FirstOrDefault().ToJson();
-            }
-            else
-            {
-                return Collection.Find(id).FirstOrDefault().ToJson();
-            }
-        }
-        private static string GetDocument(IMongoCollection<BsonDocument> Collection, ObjectId Id, bool noId)
-        {
-            FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(Id.ToString()));
-            if (noId == true)
-            {
-                ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                return Collection.Find(id).Project(projection).FirstOrDefault().ToJson();
-            }
-            else
-            {
-                return Collection.Find(id).FirstOrDefault().ToJson();
-            }
-        }
-        private static string GetDocument(IMongoCollection<BsonDocument> Collection,Hashtable filter, bool noId)
-        {
-            List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
-            foreach (string key in filter.Keys)
-            {
-                filters.Add(Builders<BsonDocument>.Filter.Eq(key, filter[key]));
-            }
-            FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.And(filters);
-            if (noId == true)
-            {
-                ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                return Collection.Find(id).Project(projection).FirstOrDefault().ToJson();
-            }
-            else
-            {
-                return Collection.Find(id).FirstOrDefault().ToJson();
             }
         }
     }
