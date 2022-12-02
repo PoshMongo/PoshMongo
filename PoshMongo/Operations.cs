@@ -4,6 +4,7 @@ using System.Security.Authentication;
 using MongoDB.Bson;
 using System.Reflection.Metadata;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace PoshMongo
 {
@@ -18,7 +19,7 @@ namespace PoshMongo
         }
         public static List<IMongoCollection<BsonDocument>> GetCollection(MongoDatabaseBase mongoDatabase)
         {
-            List<IMongoCollection<BsonDocument>> Collections = new List<IMongoCollection<BsonDocument>>();
+            List<IMongoCollection<BsonDocument>> Collections = new();
             foreach (string collectionName in mongoDatabase.ListCollectionNames().ToEnumerable())
             {
                 Collections.Add(mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings()));
@@ -29,6 +30,19 @@ namespace PoshMongo
         {
             IMongoCollection<BsonDocument> Collection = mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
             return Collection;
+        }
+        public static IMongoDatabase GetDatabase(MongoClient Client, string DatabaseName)
+        {
+            return Client.GetDatabase(DatabaseName);
+        }
+        public static List<IMongoDatabase> GetDatabase(MongoClient Client)
+        {
+            List<IMongoDatabase> mongoDatabases = new();
+            foreach (string db in Client.ListDatabaseNames().ToEnumerable())
+            {
+                mongoDatabases.Add(Client.GetDatabase(db));
+            }
+            return mongoDatabases;
         }
     }
 }

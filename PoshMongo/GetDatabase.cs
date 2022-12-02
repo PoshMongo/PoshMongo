@@ -29,15 +29,11 @@ namespace PoshMongo.Database
             }
             if (!(string.IsNullOrEmpty(DatabaseName)))
             {
-                SessionState.PSVariable.Set("Database", Client.GetDatabase(DatabaseName));
-                WriteObject(SessionState.PSVariable.Get("Database").Value);
+                WriteObject(Operations.GetDatabase(Client, DatabaseName));
             }
             else
             {
-                foreach (string db in Client.ListDatabaseNames().ToEnumerable())
-                {
-                    WriteObject(Client.GetDatabase(db));
-                }
+                WriteObject(Operations.GetDatabase(Client));
             }
         }
     }
