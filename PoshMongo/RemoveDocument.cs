@@ -56,55 +56,40 @@ namespace PoshMongo.Document
                 case "Filter":
                     if (!(Filter == null))
                     {
-                        RemoveDocument(MongoCollection, Filter);
+                        Operations.RemoveDocument(MongoCollection, Filter);
                     }
                     break;
                 case "CollectionNameId":
                     if (!(string.IsNullOrEmpty(DocumentId)))
                     {
-                        RemoveDocument(MongoCollection, DocumentId);
+                        Operations.RemoveDocument(MongoCollection, DocumentId);
                     }
                     break;
                 case "CollectionNameFilter":
                     if (!(Filter == null))
                     {
-                        RemoveDocument(MongoCollection, Filter);
+                        Operations.RemoveDocument(MongoCollection, Filter);
                     }
                     break;
                 case "CollectionId":
                     if (!(string.IsNullOrEmpty(DocumentId)))
                     {
-                        RemoveDocument(MongoCollection, DocumentId);
+                        Operations.RemoveDocument(MongoCollection, DocumentId);
                     }
                     break;
                 case "CollectionFilter":
                     if (!(Filter == null))
                     {
-                        RemoveDocument(MongoCollection, Filter);
+                        Operations.RemoveDocument(MongoCollection, Filter);
                     }
                     break;
                 default:
                     if (!(string.IsNullOrEmpty(DocumentId)))
                     {
-                        RemoveDocument(MongoCollection, DocumentId);
+                        Operations.RemoveDocument(MongoCollection, DocumentId);
                     }
                     break;
             }
-        }
-        private static void RemoveDocument(IMongoCollection<BsonDocument> Collection, string documentID)
-        {
-            FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", documentID);
-            Collection.DeleteOne(id);
-        }
-        private static void RemoveDocument(IMongoCollection<BsonDocument> Collection, Hashtable filter)
-        {
-            List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
-            foreach (string key in filter.Keys)
-            {
-                filters.Add(Builders<BsonDocument>.Filter.Eq(key, filter[key]));
-            }
-            FilterDefinition<BsonDocument> result = Builders<BsonDocument>.Filter.And(filters);
-            Collection.DeleteOne(result);
         }
     }
 }

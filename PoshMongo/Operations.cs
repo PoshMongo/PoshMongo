@@ -127,5 +127,20 @@ namespace PoshMongo
         {
             Client.DropDatabase(DatabaseName);
         }
+        public static void RemoveDocument(IMongoCollection<BsonDocument> Collection, string documentID)
+        {
+            FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", documentID);
+            Collection.DeleteOne(id);
+        }
+        public static void RemoveDocument(IMongoCollection<BsonDocument> Collection, Hashtable filter)
+        {
+            List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
+            foreach (string key in filter.Keys)
+            {
+                filters.Add(Builders<BsonDocument>.Filter.Eq(key, filter[key]));
+            }
+            FilterDefinition<BsonDocument> result = Builders<BsonDocument>.Filter.And(filters);
+            Collection.DeleteOne(result);
+        }
     }
 }
