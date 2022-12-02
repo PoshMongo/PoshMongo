@@ -109,5 +109,11 @@ namespace PoshMongo
                 return Collection.Find(id).FirstOrDefault().ToJson();
             }
         }
+        public static IMongoCollection<BsonDocument> NewCollection(string collectionName, IMongoDatabase mongoDatabase)
+        {
+            mongoDatabase.CreateCollection(collectionName, new CreateCollectionOptions(), new CancellationToken());
+            IMongoCollection<BsonDocument> Collection = mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
+            return Collection;
+        }
     }
 }
