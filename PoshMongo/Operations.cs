@@ -115,5 +115,9 @@ namespace PoshMongo
             IMongoCollection<BsonDocument> Collection = mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
             return Collection;
         }
+        public static IMongoDatabase NewDatabase(MongoClient Client, string DatabaseName)
+        {
+            return Client.GetDatabase(DatabaseName);
+        }
     }
 }
