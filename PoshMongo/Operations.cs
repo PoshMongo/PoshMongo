@@ -119,5 +119,9 @@ namespace PoshMongo
         {
             return Client.GetDatabase(DatabaseName);
         }
+        public static void RemoveCollection(IMongoDatabase mongoDatabase, string collectionName)
+        {
+            mongoDatabase.DropCollection(collectionName);
+        }
     }
 }

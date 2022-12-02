@@ -43,7 +43,7 @@ namespace PoshMongo.Collection
                     {
                         if (MongoDatabase != null)
                         {
-                            MongoDatabase.DropCollection(CollectionName);
+                            Operations.RemoveCollection(MongoDatabase, CollectionName);
                         }
                     }
                     break;
@@ -52,7 +52,7 @@ namespace PoshMongo.Collection
                     {
                         if (MongoDatabase != null)
                         {
-                            MongoDatabase.DropCollection(CollectionName);
+                            Operations.RemoveCollection(MongoDatabase, CollectionName);
                         }
                     }
                     break;
@@ -61,7 +61,7 @@ namespace PoshMongo.Collection
                     {
                         if (MongoDatabase != null)
                         {
-                            MongoDatabase.DropCollection(Collection.CollectionNamespace.CollectionName);
+                            Operations.RemoveCollection(MongoDatabase, CollectionName);
                         }
                     }
                     break;
