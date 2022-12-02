@@ -11,10 +11,10 @@ namespace PoshMongo
 {
     internal class Operations
     {
-        ///
+        /// <summary>
         /// Create
-        /// 
-        
+        /// </summary>
+
         /// <summary>
         /// This method adds a Document to a MongoCollection
         /// </summary>
@@ -50,9 +50,9 @@ namespace PoshMongo
         {
             return Client.GetDatabase(DatabaseName);
         }
-        ///
+        /// <summary>
         ///  Read
-        /// 
+        /// </summary>
 
         /// <summary>
         /// Return a list of Collection from a MongoDatabase
@@ -170,7 +170,7 @@ namespace PoshMongo
             }
         }
         /// <summary>
-        /// R\eEturn a Document from a Collection using a Filter
+        /// Return a Document from a Collection using a Filter
         /// </summary>
         /// <param name="Collection">The Collection to get the Document from</param>
         /// <param name="filter">A filter for Documents</param>
@@ -194,10 +194,10 @@ namespace PoshMongo
                 return Collection.Find(id).FirstOrDefault().ToJson();
             }
         }
-        ///
+        /// <summary>
         /// Delete
-        /// 
-        
+        /// </summary>
+
         /// <summary>
         /// Remove a Collection from a MongoDatabase
         /// </summary>
@@ -241,5 +241,9 @@ namespace PoshMongo
             FilterDefinition<BsonDocument> result = Builders<BsonDocument>.Filter.And(filters);
             Collection.DeleteOne(result);
         }
+    }
+    public static class ClientConnection
+    {
+        public static MongoClient? Client { get; set; }
     }
 }
