@@ -4,8 +4,8 @@ BeforeAll {
  Import-Module "$($RootPath)\Module\$($Module).psd1" -Force
  Connect-MongoDBInstance -ConnectionString (Get-Content .\ConnectionSettings) | Out-Null
  New-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection1' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection2' | Out-Null
+ New-MongoDBCollection -CollectionName 'myCollection1' -DatabaseName 'MyDB' | Out-Null
+ New-MongoDBCollection -CollectionName 'myCollection2' -DatabaseName 'MyDB' | Out-Null
 }
 AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
@@ -17,14 +17,6 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
   }
  }
  Context "Testing ParameterSets" {
-  Context "CollectionName ParameterSet" {
-   It "CollectionName should be String" {
-    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -Type String
-   }
-   It "CollectionName should not be Mandatory" {
-    Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -not -Mandatory
-   }
-  }
   Context "CollectionNamespace ParameterSet" {
    It "CollectionNamespace should be String" {
     Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionNamespace -Type String
@@ -63,23 +55,6 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
   }
  }
  Context "Get-MongoDBCollection Usage" {
-  Context "Get-MongoDBCollection CollectionName ParameterSet" {
-   Context "Without a CollectionName" {
-    It "Should Return MongoDB.Driver.MongoCollectionImpl`1[MongoDB.Bson.BsonDocument]" {
-     (Get-MongoDBCollection).GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
-    }
-   }
-   Context "With a CollectionName" {
-    It "Should Return MongoDB.Driver.IMongoCollection" {
-     (Get-MongoDBCollection -CollectionName 'myCollection').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
-    }
-   }
-   Context "With an invalid CollectionName" {
-    It "Should throw an error: Database names must be non-empty and not contain '.' or the null character." {
-     { Get-MongoDBCollection -CollectionName " " } | Should -Throw
-    }
-   }
-  }
   Context "Get-MongoDBCollection CollectionNameSpace ParameterSet" {
    Context "With a CollectionNamespace" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
@@ -117,11 +92,13 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
   Context "Get-MongoDBCollection Database ParameterSet" {
    Context "With a Database" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
+     $Database = Get-MongoDBDatabase -DatabaseName 'MyDB';
      (Get-MongoDBCollection -MongoDatabase $Database).GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
     }
    }
    Context "With a Database and CollectionName" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
+     $Database = Get-MongoDBDatabase -DatabaseName 'MyDB';
      (Get-MongoDBCollection -MongoDatabase $Database -CollectionName 'myCollection2').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
     }
    }
@@ -132,6 +109,7 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
    }
    Context "Without a CollectionName" {
     It "Should Return MongoDB.Driver.MongoCollectionImpl`1[MongoDB.Bson.BsonDocument]" {
+     $Database = Get-MongoDBDatabase -DatabaseName 'MyDB';
      (Get-MongoDBCollection -MongoDatabase $Database -CollectionName '').GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
     }
    }
