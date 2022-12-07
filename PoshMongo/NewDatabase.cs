@@ -21,7 +21,7 @@ namespace PoshMongo.Database
             }
             else
             {
-                ServerDescription? server = Client.Cluster.Description.Servers.FirstOrDefault();
+                ServerDescription server = Client.Cluster.Description.Servers[0];
                 if (server != null)
                 {
                     throw new MongoConnectionException(new MongoDB.Driver.Core.Connections.ConnectionId(server.ServerId), "Must be connected to a MongoDB instance.");
