@@ -4,11 +4,13 @@ BeforeAll {
  Import-Module "$($RootPath)\Module\$($Module).psd1" -Force
  Connect-MongoDBInstance -ConnectionString (Get-Content .\ConnectionSettings) | Out-Null
  New-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection1' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection2' | Out-Null
+ New-MongoDBDatabase -DatabaseName 'MyDB1' | Out-Null
+ New-MongoDBCollection -CollectionName 'myCollection1' -DatabaseName 'MyDB'  | Out-Null
+ New-MongoDBCollection -CollectionName 'myCollection2' -DatabaseName 'MyDB'  | Out-Null
 }
 AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
+ Remove-MongoDBDatabase -DatabaseName 'MyDB1' | Out-Null
 }
 Describe "Remove-MongoDBDatabase" -Tag "PoshMongo", "RemoveDatabaseCmdlet", "Database" {
  Context "Cmdlet Tests" {
@@ -63,15 +65,15 @@ Describe "Remove-MongoDBDatabase" -Tag "PoshMongo", "RemoveDatabaseCmdlet", "Dat
   }
  }
  Context "Remove-MongoDBDatabase Usage" {
-  Context "Remove-MongoDBDatabase Default ParameterSet"{
+  Context "Remove-MongoDBDatabase Default ParameterSet" {
    Context "Without a DatabaseName" {
     It "Should throw an error: Cannot bind argument to parameter 'DatabaseName' because it is null." {
      { Remove-MongoDBDatabase -DatabaseName $null } | Should -Throw
     }
    }
    Context "With a DatabaseName" {
-    It "Should Return MongoDB.Driver.MongoDatabaseBase" {
-     Remove-MongoDBDatabase -DatabaseName 'MyDB' | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
+    It "Should Return null" {
+     Remove-MongoDBDatabase -DatabaseName 'MyDB' | Should -Be $null
     }
    }
    Context "With an invalid DatabaseName" {
@@ -85,15 +87,16 @@ Describe "Remove-MongoDBDatabase" -Tag "PoshMongo", "RemoveDatabaseCmdlet", "Dat
     }
    }
   }
-  Context "Remove-MongoDBDatabase Database ParameterSet"{
+  Context "Remove-MongoDBDatabase Database ParameterSet" {
    Context "Without a Database" {
     It "Should throw an error: Cannot bind argument to parameter 'Database' because it is null." {
      { Remove-MongoDBDatabase -Database $null } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Database.RemoveDatabase'
     }
    }
    Context "With a Database" {
-    It "Should Return MongoDB.Driver.MongoDatabaseBase" {
-     Remove-MongoDBDatabase -Database $Database | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
+    It "Should Return null" {
+     $Database = Get-MongoDBDatabase -DatabaseName 'MyDB1'
+     Remove-MongoDBDatabase -Database $Database | Should -Be $null
     }
    }
    Context "With an invalid MongoClient" {

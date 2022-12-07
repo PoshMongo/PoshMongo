@@ -4,8 +4,8 @@ BeforeAll {
  Import-Module "$($RootPath)\Module\$($Module).psd1" -Force
  Connect-MongoDBInstance -ConnectionString (Get-Content .\ConnectionSettings) | Out-Null
  New-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection1' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection2' | Out-Null
+ New-MongoDBCollection -CollectionName 'myCollection1' -DatabaseName 'MyDB'  | Out-Null
+ New-MongoDBCollection -CollectionName 'myCollection2' -DatabaseName 'MyDB'  | Out-Null
 }
 AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
@@ -37,7 +37,7 @@ Describe "Get-MongoDBDatabase" -Tag "PoshMongo", "GetDatabaseCmdlet", "Database"
  Context "Get-MongoDBDatabase Usage" {
   Context "Without a DatabaseName" {
    It "Should Return MongoDB.Driver.MongoDatabaseBase" {
-    Get-MongoDBDatabase | Should -BeOfType MongoDB.Driver.MongoDatabaseBase
+    (Get-MongoDBDatabase).GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoDatabase, MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
    }
   }
   Context "With a DatabaseName" {
