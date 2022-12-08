@@ -59,7 +59,7 @@ namespace PoshMongo
         /// </summary>
         /// <param name="mongoDatabase"> The MongoDatabase to get a list of Collections from</param>
         /// <returns></returns>
-        public static List<IMongoCollection<BsonDocument>> GetCollection(MongoDatabaseBase mongoDatabase)
+        public static List<IMongoCollection<BsonDocument>> GetCollection(IMongoDatabase mongoDatabase)
         {
             List<IMongoCollection<BsonDocument>> Collections = new();
             foreach (string collectionName in mongoDatabase.ListCollectionNames().ToEnumerable())
@@ -74,7 +74,7 @@ namespace PoshMongo
         /// <param name="mongoDatabase">The MongoDatabase to a get Collection from</param>
         /// <param name="collectionName">The Collection to get</param>
         /// <returns></returns>
-        public static IMongoCollection<BsonDocument> GetCollection(MongoDatabaseBase mongoDatabase, string collectionName)
+        public static IMongoCollection<BsonDocument> GetCollection(IMongoDatabase mongoDatabase, string collectionName)
         {
             IMongoCollection<BsonDocument> Collection = mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings());
             return Collection;
