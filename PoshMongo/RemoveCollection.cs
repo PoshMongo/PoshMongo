@@ -7,7 +7,7 @@ namespace PoshMongo.Collection
 {
     [Cmdlet(VerbsCommon.Remove, "Collection", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBCollection.md#remove-mongodbcollection")]
     [OutputType("null")]
-    [CmdletBinding(PositionalBinding = true, DefaultParameterSetName = "Collection")]
+    [CmdletBinding(PositionalBinding = true)]
     public class RemoveCollectionCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]

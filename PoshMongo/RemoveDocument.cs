@@ -9,7 +9,7 @@ namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Remove, "Document", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBDocument.md#remove-mongodbdocument")]
     [OutputType("System.Text.Json")]
-    [CmdletBinding(PositionalBinding = true, DefaultParameterSetName = "DocumentId")]
+    [CmdletBinding(PositionalBinding = true)]
     public class RemoveDocumentCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameId")]
