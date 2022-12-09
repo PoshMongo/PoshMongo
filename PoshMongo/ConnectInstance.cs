@@ -12,7 +12,7 @@ namespace PoshMongo.Connection
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]
         public string ConnectionString { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
-        public SwitchParameter ForceTls12 { get; set; }
+        public SwitchParameter ForceTls12 { get; set; } = false;
         protected override void BeginProcessing()
         {
             MongoClientSettings Settings = MongoClientSettings.FromConnectionString(ConnectionString);
