@@ -13,16 +13,11 @@ This cmdlet adds a document (JSON) to a MongoDB Collection.
 
 ## SYNTAX
 
-### Default
-
-```powershell
-Add-MongoDBDocument [-Document] <String> [<CommonParameters>]
-```
-
 ### CollectionName
 
 ```powershell
-Add-MongoDBDocument [-Document] <String> [-CollectionName] <String> [<CommonParameters>]
+Add-MongoDBDocument [-Document] <String> [-CollectionName] <String> [-DatabaseName] <String>
+ [<CommonParameters>]
 ```
 
 ### Collection
@@ -67,7 +62,23 @@ Parameter Sets: CollectionName
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatabaseName
+
+The name of the MongoDBDatabase to add the Document to
+
+```yaml
+Type: System.String
+Parameter Sets: CollectionName
+Aliases:
+
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -100,7 +111,7 @@ Parameter Sets: Collection
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

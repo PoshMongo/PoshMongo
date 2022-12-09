@@ -13,12 +13,6 @@ Create a MongoDB Collection
 
 ## SYNTAX
 
-### CollectionName
-
-```powershell
-New-MongoDBCollection [-CollectionName] <String> [<CommonParameters>]
-```
-
 ### DatabaseName
 
 ```powershell
@@ -28,7 +22,7 @@ New-MongoDBCollection [-CollectionName] <String> [-DatabaseName] <String> [<Comm
 ### Database
 
 ```powershell
-New-MongoDBCollection [-CollectionName] <String> [-MongoDatabase] <MongoDatabaseBase> [<CommonParameters>]
+New-MongoDBCollection [-CollectionName] <String> [-MongoDatabase] <IMongoDatabase> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -92,7 +86,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -108,7 +102,7 @@ Parameter Sets: DatabaseName
 Aliases:
 
 Required: True
-Position: 1
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -119,12 +113,12 @@ Accept wildcard characters: False
 A database object to create the collection in
 
 ```yaml
-Type: MongoDB.Driver.MongoDatabaseBase
+Type: MongoDB.Driver.IMongoDatabase
 Parameter Sets: Database
 Aliases:
 
 Required: True
-Position: 1
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

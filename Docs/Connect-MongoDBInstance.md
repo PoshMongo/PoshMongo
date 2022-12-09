@@ -76,7 +76,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### MongoDB.Driver.MongoClient
+### MongoDB.Driver.IMongoClient
 
 ## NOTES
 

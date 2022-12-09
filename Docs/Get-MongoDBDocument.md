@@ -13,10 +13,11 @@ Get a MongoDB Document
 
 ## SYNTAX
 
-### DocumentId
+### CollectionNameId
 
 ```powershell
-Get-MongoDBDocument [-DocumentId] <String> [-HideId] [<CommonParameters>]
+Get-MongoDBDocument [-DocumentId] <String> [-CollectionName] <String> [-DatabaseName] <String> [-HideId]
+ [<CommonParameters>]
 ```
 
 ### CollectionId
@@ -25,18 +26,6 @@ Get-MongoDBDocument [-DocumentId] <String> [-HideId] [<CommonParameters>]
 Get-MongoDBDocument [-DocumentId] <String>
  [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [-HideId]
  [<CommonParameters>]
-```
-
-### CollectionNameId
-
-```powershell
-Get-MongoDBDocument [-DocumentId] <String> [-CollectionName] <String> [-HideId] [<CommonParameters>]
-```
-
-### Filter
-
-```powershell
-Get-MongoDBDocument [-Filter] <Hashtable> [-HideId] [<CommonParameters>]
 ```
 
 ### CollectionFilter
@@ -50,13 +39,14 @@ Get-MongoDBDocument [-Filter] <Hashtable>
 ### CollectionNameFilter
 
 ```powershell
-Get-MongoDBDocument [-Filter] <Hashtable> [-CollectionName] <String> [-HideId] [<CommonParameters>]
+Get-MongoDBDocument [-Filter] <Hashtable> [-CollectionName] <String> [-DatabaseName] <String> [-HideId]
+ [<CommonParameters>]
 ```
 
 ### CollectionNameList
 
 ```powershell
-Get-MongoDBDocument [-CollectionName] <String> [-HideId] [-List] [<CommonParameters>]
+Get-MongoDBDocument [-CollectionName] <String> [-DatabaseName] <String> [-HideId] [-List] [<CommonParameters>]
 ```
 
 ### CollectionList
@@ -64,12 +54,6 @@ Get-MongoDBDocument [-CollectionName] <String> [-HideId] [-List] [<CommonParamet
 ```powershell
 Get-MongoDBDocument [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [-HideId]
  [-List] [<CommonParameters>]
-```
-
-### Default
-
-```powershell
-Get-MongoDBDocument [-HideId] [-List] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -129,7 +113,23 @@ Parameter Sets: CollectionNameId, CollectionNameFilter, CollectionNameList
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatabaseName
+
+The name of the MongoDBDatabase to get the Document from
+
+```yaml
+Type: System.String
+Parameter Sets: CollectionNameId, CollectionNameFilter, CollectionNameList
+Aliases:
+
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -141,7 +141,7 @@ This is the _id of the document
 
 ```yaml
 Type: System.String
-Parameter Sets: DocumentId, CollectionId, CollectionNameId
+Parameter Sets: CollectionNameId, CollectionId
 Aliases:
 
 Required: True
@@ -168,7 +168,7 @@ Filter.Eq(key, value));
 
 ```yaml
 Type: System.Collections.Hashtable
-Parameter Sets: Filter, CollectionFilter, CollectionNameFilter
+Parameter Sets: CollectionFilter, CollectionNameFilter
 Aliases:
 
 Required: True
@@ -188,7 +188,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -200,11 +200,11 @@ A switch to list all Documents
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: CollectionNameList, CollectionList, Default
+Parameter Sets: CollectionNameList, CollectionList
 Aliases:
 
 Required: False
-Position: 0
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -220,7 +220,7 @@ Parameter Sets: CollectionId, CollectionFilter, CollectionList
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False

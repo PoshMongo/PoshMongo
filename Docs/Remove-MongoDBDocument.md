@@ -13,16 +13,11 @@ Remove a MongoDB Document
 
 ## SYNTAX
 
-### DocumentId
-
-```powershell
-Remove-MongoDBDocument [-DocumentId] <String> [<CommonParameters>]
-```
-
 ### CollectionNameId
 
 ```powershell
-Remove-MongoDBDocument [-DocumentId] <String> [-CollectionName] <String> [<CommonParameters>]
+Remove-MongoDBDocument [-DocumentId] <String> [-CollectionName] <String> [-DatabaseName] <String>
+ [<CommonParameters>]
 ```
 
 ### CollectionId
@@ -32,16 +27,11 @@ Remove-MongoDBDocument [-DocumentId] <String>
  [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [<CommonParameters>]
 ```
 
-### Filter
-
-```powershell
-Remove-MongoDBDocument [-Filter] <Hashtable> [<CommonParameters>]
-```
-
 ### CollectionNameFilter
 
 ```powershell
-Remove-MongoDBDocument [-Filter] <Hashtable> [-CollectionName] <String> [<CommonParameters>]
+Remove-MongoDBDocument [-Filter] <Hashtable> [-CollectionName] <String> [-DatabaseName] <String>
+ [<CommonParameters>]
 ```
 
 ### CollectionFilter
@@ -54,7 +44,8 @@ Remove-MongoDBDocument [-Filter] <Hashtable>
 ### DocumentCollectionName
 
 ```powershell
-Remove-MongoDBDocument [-CollectionName] <String> [-Document] <String> [<CommonParameters>]
+Remove-MongoDBDocument [-CollectionName] <String> [-DatabaseName] <String> [-Document] <String>
+ [<CommonParameters>]
 ```
 
 ### DocumentCollection
@@ -98,7 +89,23 @@ Parameter Sets: CollectionNameId, CollectionNameFilter, DocumentCollectionName
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatabaseName
+
+The name of the MongoDBDatabase to remove the Document from
+
+```yaml
+Type: System.String
+Parameter Sets: CollectionNameId, CollectionNameFilter, DocumentCollectionName
+Aliases:
+
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -126,7 +133,7 @@ The Id of the Document to remove
 
 ```yaml
 Type: System.String
-Parameter Sets: DocumentId, CollectionNameId, CollectionId
+Parameter Sets: CollectionNameId, CollectionId
 Aliases:
 
 Required: True
@@ -141,19 +148,15 @@ Accept wildcard characters: False
 This is a hashtable of values that are converted into a simple equality type
 filter. For example:
 
-```powershell
 @{'Name'='FirstName'}
-```
 
 Is translated into a FilterDefinition object
 
-```csharp
 Filter.Eq(key, value));
-```
 
 ```yaml
 Type: System.Collections.Hashtable
-Parameter Sets: Filter, CollectionNameFilter, CollectionFilter
+Parameter Sets: CollectionNameFilter, CollectionFilter
 Aliases:
 
 Required: True
@@ -173,7 +176,7 @@ Parameter Sets: CollectionId, CollectionFilter, DocumentCollection
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
