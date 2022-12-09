@@ -18,19 +18,25 @@ namespace PoshMongo.Document
         [Parameter(Mandatory = true, Position = 2, ParameterSetName = "CollectionName")] 
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection", ValueFromPipeline = true)]
-        public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
-        private IMongoDatabase? MongoDatabase { get; set; }
-        private IMongoClient? Client { get; set; }
+        public IMongoCollection<BsonDocument>? MongoCollection { get; set; } = null;
+        private IMongoDatabase? MongoDatabase { get; set; } = null;
+        private IMongoClient? Client { get; set; } = null;
         protected override void ProcessRecord()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
+            if (!(string.IsNullOrEmpty(DatabaseName)) && !(string.IsNullOrEmpty(CollectionName)))
+            {
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
+                MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
+            }
             WriteVerbose(ParameterSetName);
             switch (ParameterSetName)
             {
                 case "CollectionName":
-                    MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
-                    MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
-                    WriteObject(Operations.AddDocument(MongoCollection, Document));
+                    if (MongoCollection != null)
+                    {
+                        WriteObject(Operations.AddDocument(MongoCollection, Document));
+                    }
                     break;
                 case "Collection":
                     if (MongoCollection != null)
