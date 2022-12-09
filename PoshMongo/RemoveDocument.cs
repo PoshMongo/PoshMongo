@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Remove, "Document", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBDocument.md#remove-mongodbdocument")]
-    [OutputType("System.Text.Json")]
+    [OutputType("null")]
     [CmdletBinding(PositionalBinding = true)]
     public class RemoveDocumentCmdlet : PSCmdlet
     {
