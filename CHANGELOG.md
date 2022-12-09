@@ -49,3 +49,127 @@ The following changes have been applied:
 - Corrected ordering of each ParameterSet
 - Added Private properties to clean up instantiating the objects
 - Updated Tests to accomodate all the changes to the Cmdlets
+
+---
+
+## [2.4.2] - 2022-12-01
+
+This change applies an update to how the RemoveCollectionCmdlet works, it should now use the Namespace for deletes.
+
+The following cahnges have been applied:
+
+- RemoveCollectionCmdlet
+  - CollectionNamespace is used for delete operations
+  - Return null
+
+---
+
+## [2.4.1] - 2022-12-01
+
+This change applies minor updates to have the Cmdlets work.
+
+The following changes have been applied:
+
+- Project Changes
+  - Updates to psake file for working locally
+  - Updated Documentation
+- Updated Cmdlets
+  - Adjusted ordering of Parameters
+  - Resolved some null reference issues
+  - Moved HelpUri to the correct location
+- Added remaining Tests
+
+
+---
+
+## [2.4.0] - 2022-11-30
+
+This change continues adding support for the pipeline.
+
+The following changes have been applied:
+
+- Project Changes
+  - Updates to psake file for working locally
+  - Updated Documentation
+- Added Pipeline Support
+  - NewDatabaseCmdlet supports a Client on the pipeline
+  - GetDatabaseCmdlet supports a Client on the pipeline
+  - RemoveDatabaseCmdlet support a Database the pipeline
+- Updated Tests for pipelines
+
+---
+
+## [2.3.0] - 2022-11-21
+
+This change continues adding support for pipeline to cmdlets. Pester tests have been added to validate Cmdlet functionality. Fixed up the Document Cmdlets with additional options for ID's.
+
+The following changes have been applied:
+
+- Project Changes
+  - Updates to psake file for working locally
+  - Updated Documentation
+- Added Pipeline Support
+  - AddDocumentCmdlet supports a Document on the pipeline
+  - GetDocumentCmdlet supports a Colletion on the pipeline
+  - RemoveDocumentCmdlet support a Document on the pipeline
+- DocumentCmdlet updates
+  - Added the ability to pass an ObjectID
+  - Added a switch to supress the ID field
+  - Added a switch to list all documents
+- Pester Tests have been added
+
+---
+
+## [2.2.0] - 2022-11-17
+
+This change adds pipeline support for the Collection Cmdlets.
+
+The following changes have been applied:
+
+- Project Changes
+  - Updates to psake file for working locally
+  - Updated Documentation
+- Added Pipeline Support
+  - RemoveCollectionCmdlet supports a Collection on the pipeline
+  - NewCollectionCmdlet supports a Database on the pipeline
+  - GetCollectionCmdlet supports a Database on the pipeline
+
+---
+
+## [1.1.0] - 2022-11-16
+
+Minor Release
+
+The following changes have been applied:
+
+- Project Changes
+  - Changes to psake file
+  - Added local directories to .gitignore
+  - Corrected issues with README.md
+- Needed to include all the DLLs for the module to work
+- Added Online Help Support
+
+---
+
+## [1.0.0] - 2022-11-16
+
+First release of PowerShell Module for MongoDB, this module provides basic CRUD operations against a MongoDB or Azure CosmosDB with the MongoDB API backend.
+
+The following changes have been applied:
+
+- Project Setup
+  - Added .gitignore
+  - Added README.md
+  - Added Module Manifest
+  - Added several local files to .gitignore
+- Added Cmdlets
+  - ConnectInstanceCmdlet
+  - NewDatabaseCmdlet
+  - GetDatabaseCmdlet
+  - RemoveDatabaseCmdlet
+  - NewCollectionCmdlet
+  - GetCollectionCmdlet
+  - RemoveCollectionCmdlet
+  - AddDocumentCmdlet
+  - GetDocumentCmdlet
+  - RemoveDocumentCmdlet
