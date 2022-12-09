@@ -20,7 +20,8 @@ namespace PoshMongo.Connection
             {
                 Settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
             }
-            SessionState.PSVariable.Set("Client", new MongoClient(Settings));
+            IMongoClient Client = new MongoClient(Settings);
+            SessionState.PSVariable.Set("Client", Client);
             WriteObject(SessionState.PSVariable.Get("Client").Value);
         }
     }

@@ -13,14 +13,14 @@ namespace PoshMongo.Database
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Database")]
-        public MongoClient? Client { get; set; }
+        public IMongoClient? Client { get; set; }
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
-        public MongoDatabaseBase? Database { get; set; }
+        public IMongoDatabase? Database { get; set; }
         protected override void ProcessRecord()
         {
             if (Client == null)
             {
-                Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+                Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             }
             else
             {

@@ -12,12 +12,12 @@ namespace PoshMongo.Database
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
-        public MongoClient? Client { get; set; }
+        public IMongoClient? Client { get; set; }
         protected override void BeginProcessing()
         {
             if (Client == null)
             {
-                Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+                Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             }
             else
             {

@@ -15,24 +15,24 @@ namespace PoshMongo.Collection
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
-        public MongoDatabaseBase? MongoDatabase { get; set; }
+        public IMongoDatabase? MongoDatabase { get; set; }
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNamespace")]
         public string CollectionNamespace { get; set; } = string.Empty;
+        private IMongoClient? Client { get; set; }
         protected override void ProcessRecord()
         {
+            Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             WriteVerbose("ParameterSet: " + ParameterSetName);
             if (!(string.IsNullOrEmpty(DatabaseName)))
             {
                 WriteVerbose("DatabaseName: " + DatabaseName);
-                MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
-                MongoDatabase = (MongoDatabaseBase)Client.GetDatabase(DatabaseName);
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
             }
             if (!(string.IsNullOrEmpty(CollectionNamespace)))
             {
-                MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
                 DatabaseName = CollectionNamespace.Split('.')[0];
                 CollectionName = CollectionNamespace.Split('.')[1];
-                MongoDatabase = (MongoDatabaseBase)Client.GetDatabase(DatabaseName);
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
             }
             switch (ParameterSetName)
             {

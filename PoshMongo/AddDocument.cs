@@ -7,7 +7,7 @@ namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Add, "Document", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Add-MongoDBDocument.md#add-mongodbdocument")]
     [OutputType("System.Text.Json")]
-    [CmdletBinding(PositionalBinding = true, DefaultParameterSetName = "Default")]
+    [CmdletBinding(PositionalBinding = true)]
     public class AddDocumentCmdlet : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionName")]
@@ -20,10 +20,10 @@ namespace PoshMongo.Document
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection", ValueFromPipeline = true)]
         public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
         private IMongoDatabase? MongoDatabase { get; set; }
-        private MongoClient? Client { get; set; }
+        private IMongoClient? Client { get; set; }
         protected override void ProcessRecord()
         {
-            Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+            Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             WriteVerbose(ParameterSetName);
             switch (ParameterSetName)
             {

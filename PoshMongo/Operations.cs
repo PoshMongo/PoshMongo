@@ -46,7 +46,7 @@ namespace PoshMongo
         /// <param name="Client">A Connected MongoClient</param>
         /// <param name="DatabaseName">The name of the Database to create</param>
         /// <returns></returns>
-        public static IMongoDatabase NewDatabase(MongoClient Client, string DatabaseName)
+        public static IMongoDatabase NewDatabase(IMongoClient Client, string DatabaseName)
         {
             return Client.GetDatabase(DatabaseName);
         }
@@ -85,7 +85,7 @@ namespace PoshMongo
         /// <param name="Client">A Connected MongoClient</param>
         /// <param name="DatabaseName">The name of the Database to return</param>
         /// <returns></returns>
-        public static IMongoDatabase GetDatabase(MongoClient Client, string DatabaseName)
+        public static IMongoDatabase GetDatabase(IMongoClient Client, string DatabaseName)
         {
             return Client.GetDatabase(DatabaseName);
         }
@@ -94,7 +94,7 @@ namespace PoshMongo
         /// </summary>
         /// <param name="Client">A Connected MongoClient</param>
         /// <returns></returns>
-        public static List<IMongoDatabase> GetDatabase(MongoClient Client)
+        public static List<IMongoDatabase> GetDatabase(IMongoClient Client)
         {
             List<IMongoDatabase> mongoDatabases = new();
             foreach (string db in Client.ListDatabaseNames().ToEnumerable())
@@ -212,7 +212,7 @@ namespace PoshMongo
         /// </summary>
         /// <param name="Client">A Connected MongoClient</param>
         /// <param name="DatabaseName">The name of the MongoDatabase to remove</param>
-        public static void RemoveDatabase(MongoClient Client, string DatabaseName)
+        public static void RemoveDatabase(IMongoClient Client, string DatabaseName)
         {
             Client.DropDatabase(DatabaseName);
         }

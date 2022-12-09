@@ -17,16 +17,17 @@ namespace PoshMongo.Collection
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
         public IMongoDatabase? MongoDatabase { get; set; }
+        private IMongoClient? Client { get; set; } = null;
         protected override void ProcessRecord()
         {
+            Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             WriteVerbose("ParameterSetName: " + ParameterSetName);
             switch (ParameterSetName)
             {
                 case "DatabaseName":
                     if (!(string.IsNullOrEmpty(CollectionName)))
                     {
-                        MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
-                        MongoDatabase = Client.GetDatabase(DatabaseName);
+                        MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
                         WriteObject(Operations.NewCollection(CollectionName, MongoDatabase));
                     }
                     break;
@@ -39,10 +40,6 @@ namespace PoshMongo.Collection
                 default:
                     break;
             }
-        }
-        private void SetVariable(string VariableName, object Value)
-        {
-            SessionState.PSVariable.Set(VariableName, Value);
         }
     }
 }

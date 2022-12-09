@@ -33,12 +33,12 @@ namespace PoshMongo.Document
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentCollection", ValueFromPipeline = true)]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentCollectionName", ValueFromPipeline = true)]
         public string Document { get; set; } = string.Empty;
-        private MongoClient? Client { get; set; }
+        private IMongoClient? Client { get; set; }
         private IMongoDatabase? MongoDatabase { get; set; }
         private BsonDocument? bsonDocument { get; set; } = null;
         protected override void ProcessRecord()
         {
-            Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+            Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             if (!(string.IsNullOrEmpty(Document)))
             {
                 bsonDocument = BsonDocument.Parse(Document);

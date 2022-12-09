@@ -45,10 +45,10 @@ namespace PoshMongo.Document
         [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionNameList")]
         public SwitchParameter List { get; set; }
         private IMongoDatabase? MongoDatabase { get; set; }
-        private MongoClient? Client { get; set; } = null;
+        private IMongoClient? Client { get; set; } = null;
         protected override void ProcessRecord()
         {
-            Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+            Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             ObjectId objectId;
             switch (ParameterSetName)
             {
