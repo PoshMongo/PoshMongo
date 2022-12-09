@@ -33,8 +33,8 @@ Describe "Remove-MongoDBDatabase" -Tag "PoshMongo", "RemoveDatabaseCmdlet", "Dat
     }
    }
    Context "Client parameter" {
-    It "Should be MongoClient" {
-     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
+    It "Should be IMongoClient" {
+     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.IMongoClient
     }
     It "Should be Mandatory" {
      Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory
@@ -47,16 +47,16 @@ Describe "Remove-MongoDBDatabase" -Tag "PoshMongo", "RemoveDatabaseCmdlet", "Dat
     (Get-Command -Name 'Remove-MongoDBDatabase').Parameters['Client'].ParameterSets.Database | Should -Be $true
    }
    Context "Database parameter" {
-    It "Should be MongoDatabase" {
-     Get-Command Remove-MongoDBDatabase | Should -HaveParameter Database -Type MongoDB.Driver.MongoDatabaseBase
+    It "Should be IMongoDatabase" {
+     Get-Command Remove-MongoDBDatabase | Should -HaveParameter Database -Type MongoDB.Driver.IMongoDatabase
     }
     It "Should be Mandatory" {
      Get-Command Remove-MongoDBDatabase | Should -HaveParameter Database -Mandatory
     }
    }
    Context "Client parameter" {
-    It "Should be MongoClient" {
-     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
+    It "Should be IMongoClient" {
+     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.IMongoClient
     }
     It "Should be Mandatory" {
      Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory

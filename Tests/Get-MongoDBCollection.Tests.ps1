@@ -46,8 +46,8 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
    It "CollectionName should not be Mandatory" {
     Get-Command Get-MongoDBCollection | Should -HaveParameter CollectionName -not -Mandatory
    }
-   It "MongoDatabase should be String" {
-    Get-Command Get-MongoDBCollection | Should -HaveParameter MongoDatabase -Type MongoDB.Driver.MongoDatabaseBase
+   It "MongoDatabase should be IMongoDatabase" {
+    Get-Command Get-MongoDBCollection | Should -HaveParameter MongoDatabase -Type MongoDB.Driver.IMongoDatabase
    }
    It "MongoDatabase should be Mandatory" {
     Get-Command Get-MongoDBCollection | Should -HaveParameter MongoDatabase -Mandatory

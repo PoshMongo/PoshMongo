@@ -26,8 +26,8 @@ Describe "Get-MongoDBDatabase" -Tag "PoshMongo", "GetDatabaseCmdlet", "Database"
    }
   }
   Context "Client parameter" {
-   It "Should be MongoClient" {
-    Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
+   It "Should be IMongoClient" {
+    Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.IMongoClient
    }
    It "Should be Mandatory" {
     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory
