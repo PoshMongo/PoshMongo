@@ -15,17 +15,15 @@ namespace PoshMongo.Collection
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
-        public IMongoDatabase? MongoDatabase { get; set; }
+        public IMongoDatabase? MongoDatabase { get; set; } = null;
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNamespace")]
         public string CollectionNamespace { get; set; } = string.Empty;
-        private IMongoClient? Client { get; set; }
+        private IMongoClient? Client { get; set; } = null;
         protected override void ProcessRecord()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
-            WriteVerbose("ParameterSet: " + ParameterSetName);
             if (!(string.IsNullOrEmpty(DatabaseName)))
             {
-                WriteVerbose("DatabaseName: " + DatabaseName);
                 MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
             }
             if (!(string.IsNullOrEmpty(CollectionNamespace)))
@@ -63,15 +61,12 @@ namespace PoshMongo.Collection
                     {
                         if (!(string.IsNullOrEmpty(DatabaseName)))
                         {
-                            WriteVerbose("DatabaseName: " + DatabaseName);
                             if (string.IsNullOrEmpty(CollectionName))
                             {
-                                WriteVerbose("CollectionName: Null");
                                 WriteObject(Operations.GetCollection(MongoDatabase));
                             }
                             else
                             {
-                                WriteVerbose("CollectionName: " + CollectionName);
                                 WriteObject(Operations.GetCollection(MongoDatabase, CollectionName));
                             }
                         }
