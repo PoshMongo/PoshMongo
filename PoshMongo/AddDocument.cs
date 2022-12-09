@@ -29,7 +29,6 @@ namespace PoshMongo.Document
                 MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
                 MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
             }
-            WriteVerbose(ParameterSetName);
             switch (ParameterSetName)
             {
                 case "CollectionName":
