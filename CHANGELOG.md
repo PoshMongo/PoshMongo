@@ -44,6 +44,7 @@ The following changes have been applied:
   - MongoClient changed to IMongoClient
   - MongoCollection changed to IMongoCollection
 - HelpUri has been updated across Cmdlets which fixes the problem with Get-Help -Online
+- Updated Help
 - OutputType has been updated with correct Interface Types
 - DefaultParameterSet has been removed
 - Corrected ordering of each ParameterSet
