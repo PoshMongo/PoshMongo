@@ -80,7 +80,6 @@ The following changes have been applied:
   - Moved HelpUri to the correct location
 - Added remaining Tests
 
-
 ---
 
 ## [2.4.0] - 2022-11-30
