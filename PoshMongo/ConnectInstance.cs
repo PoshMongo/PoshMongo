@@ -5,7 +5,7 @@ using System.Security.Authentication;
 namespace PoshMongo.Connection
 {
     [Cmdlet(VerbsCommunications.Connect, "Instance", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Connect-MongoDBInstance.md#connect-mongodbinstance")]
-    [OutputType("MongoDB.Driver.MongoClient")]
+    [OutputType("MongoDB.Driver.IMongoClient")]
     [CmdletBinding(PositionalBinding = true)]
     public class ConnectInstance : PSCmdlet
     {
