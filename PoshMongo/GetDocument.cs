@@ -46,7 +46,7 @@ namespace PoshMongo.Document
         public SwitchParameter List { get; set; }
         private IMongoDatabase? MongoDatabase { get; set; } = null;
         private IMongoClient? Client { get; set; } = null;
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             if (!(string.IsNullOrEmpty(DatabaseName)) && !(string.IsNullOrEmpty(CollectionName)))
@@ -54,6 +54,9 @@ namespace PoshMongo.Document
                 MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
                 MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
             }
+        }
+        protected override void ProcessRecord()
+        {
             ObjectId objectId;
             switch (ParameterSetName)
             {
