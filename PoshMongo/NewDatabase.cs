@@ -12,7 +12,7 @@ namespace PoshMongo.Database
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
-        public IMongoClient? Client { get; set; }
+        public IMongoClient? Client { get; set; } = null;
         protected override void BeginProcessing()
         {
             if (Client == null)
