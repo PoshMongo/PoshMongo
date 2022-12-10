@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Core.Operations;
 using MongoDB.Driver.Core.Servers;
 using System.Collections;
+using System.Text.Json;
 using System.Management.Automation;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
@@ -38,7 +39,9 @@ namespace PoshMongo.Invoke
             MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
             if (!(string.IsNullOrEmpty(CommandString)))
             {
-                WriteObject(Operations.RunCommand(MongoDatabase, CommandString).ToHashtable());
+                BsonDocument Result = Operations.RunCommand(MongoDatabase, CommandString);
+                string JsonResult = JsonSerializer.Serialize(BsonTypeMapper.MapToDotNetValue(Result), new JsonSerializerOptions { WriteIndented = true });
+                WriteObject(JsonResult);
             }
         }
     }
