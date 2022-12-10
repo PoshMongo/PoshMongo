@@ -19,7 +19,7 @@ namespace PoshMongo.Collection
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNamespace")]
         public string CollectionNamespace { get; set; } = string.Empty;
         private IMongoClient? Client { get; set; } = null;
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             if (!(string.IsNullOrEmpty(DatabaseName)))
@@ -32,6 +32,9 @@ namespace PoshMongo.Collection
                 CollectionName = CollectionNamespace.Split('.')[1];
                 MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
             }
+        }
+        protected override void ProcessRecord()
+        {
             switch (ParameterSetName)
             {
                 case "CollectionNamespace":
