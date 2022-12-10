@@ -18,13 +18,16 @@ namespace PoshMongo.Collection
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
         public IMongoDatabase? MongoDatabase { get; set; } = null;
         private IMongoClient? Client { get; set; } = null;
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             if (!(string.IsNullOrEmpty(DatabaseName)))
             {
                 MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
             }
+        }
+        protected override void ProcessRecord()
+        {
             switch (ParameterSetName)
             {
                 case "DatabaseName":
