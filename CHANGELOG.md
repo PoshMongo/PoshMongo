@@ -5,7 +5,21 @@ All changes to this module should be reflected in this document.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.0] - 2022-12-08
+## [[3.1.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.1.0) - 2022-12-10
+
+This is release adds a new Cmdlet, Invoke-MongoDBRunCommand, which allows you to run [Commands](https://www.mongodb.com/docs/manual/reference/command/) against your MongoDB.
+
+The following changes have been applied:
+
+- InvokeRunCommand
+  - Added New Cmdlet
+  - Added Help
+  - Added Tests
+- Fixed null reference that I missed in the previous release
+
+--
+
+## [[3.0.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.0.0) - 2022-12-08
 
 This is a breaking change to the module all the cmdlets have been modified with most receiving new parameters. The Database and Collection global variables have been removed, so the cmdlets required some changes in their function.
 
