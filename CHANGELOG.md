@@ -50,6 +50,8 @@ The following changes have been applied:
 - Corrected ordering of each ParameterSet
 - Added Private properties to clean up instantiating the objects
 - Updated Tests to accomodate all the changes to the Cmdlets
+- Set defaults for parameters
+- Moved Database and Collection code into the BeginProcessing method
 
 ---
 
