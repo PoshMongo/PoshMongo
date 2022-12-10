@@ -60,15 +60,24 @@ namespace PoshMongo.Document
                 case "CollectionNameId":
                     if (ObjectId.TryParse(DocumentId, out objectId))
                     {
-                        WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
+                        if (MongoCollection != null)
+                        {
+                            WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
+                        }
                     }
                     else
                     {
-                        WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
+                        if (MongoCollection != null)
+                        {
+                            WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
+                        }
                     }
                     break;
                 case "CollectionNameFilter":
-                    WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId));
+                    if (MongoCollection != null)
+                    {
+                        WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId));
+                    }
                     break;
                 case "CollectionId":
                     if (MongoCollection != null)
