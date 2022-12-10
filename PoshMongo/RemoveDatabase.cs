@@ -16,7 +16,7 @@ namespace PoshMongo.Database
         public IMongoClient? Client { get; set; } = null;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
         public IMongoDatabase? Database { get; set; } = null;
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
             if (Client == null)
             {
@@ -30,6 +30,9 @@ namespace PoshMongo.Database
                     throw new MongoConnectionException(new MongoDB.Driver.Core.Connections.ConnectionId(server.ServerId), "Must be connected to a MongoDB instance.");
                 }
             }
+        }
+        protected override void ProcessRecord()
+        {
             if (Database == null)
             {
                 Operations.RemoveDatabase(Client, DatabaseName);
