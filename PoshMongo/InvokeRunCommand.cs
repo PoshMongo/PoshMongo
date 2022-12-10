@@ -38,8 +38,7 @@ namespace PoshMongo.Invoke
             MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
             if (!(string.IsNullOrEmpty(CommandString)))
             {
-                JsonCommand<BsonDocument> RunCommand = new JsonCommand<BsonDocument>(CommandString);
-                WriteObject(MongoDatabase.RunCommand(RunCommand).ToJson());
+                WriteObject(Operations.RunCommand(MongoDatabase, CommandString).ToHashtable());
             }
         }
     }
