@@ -29,12 +29,12 @@ namespace PoshMongo.Document
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionId")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionFilter")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DocumentCollection")]
-        public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
+        public IMongoCollection<BsonDocument>? MongoCollection { get; set; } = null;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentCollection", ValueFromPipeline = true)]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentCollectionName", ValueFromPipeline = true)]
         public string Document { get; set; } = string.Empty;
-        private IMongoClient? Client { get; set; }
-        private IMongoDatabase? MongoDatabase { get; set; }
+        private IMongoClient? Client { get; set; } = null;
+        private IMongoDatabase? MongoDatabase { get; set; } = null;
         private BsonDocument? bsonDocument { get; set; } = null;
         protected override void ProcessRecord()
         {
@@ -44,19 +44,20 @@ namespace PoshMongo.Document
                 bsonDocument = BsonDocument.Parse(Document);
                 DocumentId = (string)bsonDocument.GetValue("_id");
             }
+            if (!(string.IsNullOrEmpty(DatabaseName)) && !(string.IsNullOrEmpty(CollectionName)))
+            {
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
+                MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
+            }
             switch (ParameterSetName)
             {
                 case "CollectionNameId":
-                    MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
-                    MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
                     if (MongoCollection != null)
                     {
                         Operations.RemoveDocument(MongoCollection, DocumentId);
                     }
                     break;
                 case "CollectionNameFilter":
-                    MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
-                    MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
                     if (MongoCollection != null)
                     {
                         Operations.RemoveDocument(MongoCollection, Filter);
@@ -81,8 +82,6 @@ namespace PoshMongo.Document
                     }
                     break;
                 case "DocumentCollectionName":
-                    MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
-                    MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
                     if (MongoCollection != null)
                     {
                         Operations.RemoveDocument(MongoCollection, DocumentId);
