@@ -33,12 +33,16 @@ namespace PoshMongo.Database
         }
         protected override void ProcessRecord()
         {
-            if (Database == null)
+            if (Client != null)
             {
-                Operations.RemoveDatabase(Client, DatabaseName);
-            } else
-            {
-                Operations.RemoveDatabase(Client, Database.DatabaseNamespace.DatabaseName);
+                if (Database == null)
+                {
+                    Operations.RemoveDatabase(Client, DatabaseName);
+                }
+                else
+                {
+                    Operations.RemoveDatabase(Client, Database.DatabaseNamespace.DatabaseName);
+                }
             }
         }
     }
