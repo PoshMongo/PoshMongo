@@ -36,7 +36,7 @@ namespace PoshMongo.Document
         private IMongoClient? Client { get; set; } = null;
         private IMongoDatabase? MongoDatabase { get; set; } = null;
         private BsonDocument? bsonDocument { get; set; } = null;
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             if (!(string.IsNullOrEmpty(Document)))
@@ -49,6 +49,9 @@ namespace PoshMongo.Document
                 MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
                 MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
             }
+        }
+        protected override void ProcessRecord()
+        {
             switch (ParameterSetName)
             {
                 case "CollectionNameId":
