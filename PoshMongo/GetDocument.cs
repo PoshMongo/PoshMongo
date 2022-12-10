@@ -31,7 +31,7 @@ namespace PoshMongo.Document
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionId", ValueFromPipeline = true)]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionFilter", ValueFromPipeline = true)]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionList", ValueFromPipeline = true)]
-        public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
+        public IMongoCollection<BsonDocument>? MongoCollection { get; set; } = null;
 
         [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionId")]
         [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionFilter")]
@@ -44,18 +44,20 @@ namespace PoshMongo.Document
         [Parameter(Mandatory = false, Position = 2, ParameterSetName = "CollectionList")]
         [Parameter(Mandatory = false, Position = 3, ParameterSetName = "CollectionNameList")]
         public SwitchParameter List { get; set; }
-        private IMongoDatabase? MongoDatabase { get; set; }
+        private IMongoDatabase? MongoDatabase { get; set; } = null;
         private IMongoClient? Client { get; set; } = null;
         protected override void ProcessRecord()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
+            if (!(string.IsNullOrEmpty(DatabaseName)) && !(string.IsNullOrEmpty(CollectionName)))
+            {
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
+                MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
+            }
             ObjectId objectId;
             switch (ParameterSetName)
             {
                 case "CollectionNameId":
-                    //Get-MongoDBDocument [-DocumentId] <string> [-CollectionName] <string> [-DatabaseName] <string> [[-HideId]] [<CommonParameters>]
-                    MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
-                    MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
                     if (ObjectId.TryParse(DocumentId, out objectId))
                     {
                         WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
@@ -66,13 +68,9 @@ namespace PoshMongo.Document
                     }
                     break;
                 case "CollectionNameFilter":
-                    //Get-MongoDBDocument [-Filter] <hashtable> [-CollectionName] <string> [-DatabaseName] <string> [[-HideId]] [<CommonParameters>]
-                    MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
-                    MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
                     WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId));
                     break;
                 case "CollectionId":
-                    //Get-MongoDBDocument [-DocumentId] <string> [-MongoCollection] <IMongoCollection[BsonDocument]> [[-HideId]] [<CommonParameters>]
                     if (MongoCollection != null)
                     {
                         if (ObjectId.TryParse(DocumentId, out objectId))
@@ -86,24 +84,22 @@ namespace PoshMongo.Document
                     }
                     break;
                 case "CollectionFilter":
-                    //Get-MongoDBDocument [-Filter] <hashtable> [-MongoCollection] <IMongoCollection[BsonDocument]> [[-HideId]] [<CommonParameters>]
                     if (MongoCollection != null)
                     {
                         WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId));
                     }
                     break;
                 case "CollectionList":
-                    //Get-MongoDBDocument [-MongoCollection] <IMongoCollection[BsonDocument]> [[-HideId]] [[-List]] [<CommonParameters>]
                     if (MongoCollection != null)
                     {
                         WriteObject(Operations.GetDocument(MongoCollection, HideId));
                     }
                     break;
                 case "CollectionNameList":
-                    //Get-MongoDBDocument [-CollectionName] <string> [-DatabaseName] <string> [[-HideId]] [[-List]] [<CommonParameters>]
-                    MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
-                    MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
-                    WriteObject(Operations.GetDocument(MongoCollection, HideId));
+                    if (MongoCollection != null)
+                    {
+                        WriteObject(Operations.GetDocument(MongoCollection, HideId));
+                    }
                     break;
                 default:
                     break;
