@@ -18,7 +18,7 @@ namespace PoshMongo.Collection
         public IMongoCollection<BsonDocument>? Collection { get; set; } = null;
         private IMongoDatabase? MongoDatabase { get; set; } = null;
         private IMongoClient? Client { get; set; } = null;
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             if (!(string.IsNullOrEmpty(CollectionName)))
@@ -29,6 +29,9 @@ namespace PoshMongo.Collection
             {
                 MongoDatabase = Operations.GetDatabase(Client, Collection.CollectionNamespace.DatabaseNamespace.DatabaseName);
             }
+        }
+        protected override void ProcessRecord()
+        {
             switch (ParameterSetName)
             {
                 case "DatabaseName":
