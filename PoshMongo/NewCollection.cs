@@ -28,7 +28,7 @@ namespace PoshMongo.Collection
             switch (ParameterSetName)
             {
                 case "DatabaseName":
-                    if (!(string.IsNullOrEmpty(CollectionName)))
+                    if (!(string.IsNullOrEmpty(CollectionName)) && MongoDatabase != null)
                     {
                         WriteObject(Operations.NewCollection(CollectionName, MongoDatabase));
                     }
