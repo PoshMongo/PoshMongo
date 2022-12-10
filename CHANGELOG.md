@@ -69,7 +69,7 @@ The following changes have been applied:
 
 ---
 
-## [2.4.2] - 2022-12-01
+## [[2.4.2]](https://github.com/PoshMongo/PoshMongo/releases/tag/v2.4.2) - 2022-12-01
 
 This change applies an update to how the RemoveCollectionCmdlet works, it should now use the Namespace for deletes.
 
@@ -81,7 +81,7 @@ The following cahnges have been applied:
 
 ---
 
-## [2.4.1] - 2022-12-01
+## [[2.4.1]](https://github.com/PoshMongo/PoshMongo/releases/tag/v2.4.1) - 2022-12-01
 
 This change applies minor updates to have the Cmdlets work.
 
@@ -98,7 +98,7 @@ The following changes have been applied:
 
 ---
 
-## [2.4.0] - 2022-11-30
+## [[2.4.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v2.4.0) - 2022-11-30
 
 This change continues adding support for the pipeline.
 
@@ -115,7 +115,7 @@ The following changes have been applied:
 
 ---
 
-## [2.3.0] - 2022-11-21
+## [[2.3.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v2.3.0) - 2022-11-21
 
 This change continues adding support for pipeline to cmdlets. Pester tests have been added to validate Cmdlet functionality. Fixed up the Document Cmdlets with additional options for ID's.
 
@@ -136,7 +136,7 @@ The following changes have been applied:
 
 ---
 
-## [2.2.0] - 2022-11-17
+## [[2.2.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v2.2.0) - 2022-11-17
 
 This change adds pipeline support for the Collection Cmdlets.
 
@@ -152,7 +152,7 @@ The following changes have been applied:
 
 ---
 
-## [1.1.0] - 2022-11-16
+## [[1.1.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v1.1.0) - 2022-11-16
 
 Minor Release
 
@@ -167,7 +167,7 @@ The following changes have been applied:
 
 ---
 
-## [1.0.0] - 2022-11-16
+## [[1.0.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v1.0.0) - 2022-11-16
 
 First release of PowerShell Module for MongoDB, this module provides basic CRUD operations against a MongoDB or Azure CosmosDB with the MongoDB API backend.
 
