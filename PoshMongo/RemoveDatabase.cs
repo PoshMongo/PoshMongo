@@ -13,9 +13,9 @@ namespace PoshMongo.Database
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Database")]
-        public IMongoClient? Client { get; set; }
+        public IMongoClient? Client { get; set; } = null;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
-        public IMongoDatabase? Database { get; set; }
+        public IMongoDatabase? Database { get; set; } = null;
         protected override void ProcessRecord()
         {
             if (Client == null)
