@@ -38,7 +38,7 @@ namespace PoshMongo.Collection
                     }
                     break;
                 case "Collection":
-                    if (MongoDatabase != null)
+                    if (MongoDatabase != null && Collection != null)
                     {
                         Operations.RemoveCollection(MongoDatabase, Collection.CollectionNamespace.CollectionName);
                     }
