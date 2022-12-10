@@ -16,13 +16,13 @@ Remove a MongoDB Database
 ### Default
 
 ```powershell
-Remove-MongoDBDatabase [-DatabaseName] <String> [[-Client] <MongoClient>] [<CommonParameters>]
+Remove-MongoDBDatabase [-DatabaseName] <String> [[-Client] <IMongoClient>] [<CommonParameters>]
 ```
 
 ### Database
 
 ```powershell
-Remove-MongoDBDatabase [[-Client] <MongoClient>] [-Database] <MongoDatabaseBase> [<CommonParameters>]
+Remove-MongoDBDatabase [[-Client] <IMongoClient>] [-Database] <IMongoDatabase> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,7 +46,7 @@ Remove a database from Mongo
 The MongoClient to use for a connection
 
 ```yaml
-Type: MongoDB.Driver.MongoClient
+Type: MongoDB.Driver.IMongoClient
 Parameter Sets: (All)
 Aliases:
 
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 The MongoDatabase to remove
 
 ```yaml
-Type: MongoDB.Driver.MongoDatabaseBase
+Type: MongoDB.Driver.IMongoDatabase
 Parameter Sets: Database
 Aliases:
 
@@ -99,7 +99,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### MongoDB.Driver.MongoDatabaseBase
+### null
 
 ## NOTES
 

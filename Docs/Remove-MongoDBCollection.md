@@ -13,12 +13,6 @@ Remove a MongoDB Collection
 
 ## SYNTAX
 
-### CollectionName
-
-```powershell
-Remove-MongoDBCollection [-CollectionName] <String> [<CommonParameters>]
-```
-
 ### DatabaseName
 
 ```powershell
@@ -74,7 +68,7 @@ Parameter Sets: Collection
 Aliases:
 
 Required: True
-Position: 1
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -86,7 +80,7 @@ The name of the collection to remove
 
 ```yaml
 Type: System.String
-Parameter Sets: CollectionName, DatabaseName
+Parameter Sets: DatabaseName
 Aliases:
 
 Required: True

@@ -4,8 +4,7 @@ BeforeAll {
  Import-Module "$($RootPath)\Module\$($Module).psd1" -Force
  Connect-MongoDBInstance -ConnectionString (Get-Content .\ConnectionSettings) | Out-Null
  New-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection1' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection2' | Out-Null
+ $Collection1 = New-MongoDBCollection -CollectionName 'myCollection1' -DatabaseName 'MyDB'
 }
 AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
@@ -18,9 +17,10 @@ Describe "Add-MongoDBDocument" -Tag "PoshMongo", "AddDocumentCmdlet", "Document"
  }
  Context "Testing ParameterSets" {
   Context "CollectionName ParameterSet" {
-   It "ParameterSet should contain, Document, CollectionName" {
+   It "ParameterSet should contain, Document, CollectionName, DatabaseName" {
     (Get-Command -Name 'Add-MongoDBDocument').Parameters['Document'].ParameterSets.CollectionName | Should -Be $true
     (Get-Command -Name 'Add-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionName | Should -Be $true
+    (Get-Command -Name 'Add-MongoDBDocument').Parameters['DatabaseName'].ParameterSets.CollectionName | Should -Be $true
    }
    It "Document should be String" {
     Get-Command Add-MongoDBDocument | Should -HaveParameter Document -Type String
@@ -33,6 +33,12 @@ Describe "Add-MongoDBDocument" -Tag "PoshMongo", "AddDocumentCmdlet", "Document"
    }
    It "CollectionName should be Mandatory" {
     (Get-Command -Name 'Add-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionName.IsMandatory | Should -Be $true
+   }
+   It "DatabaseName should be String" {
+    Get-Command Add-MongoDBDocument | Should -HaveParameter DatabaseName -Type String
+   }
+   It "DatabaseName should be Mandatory" {
+    (Get-Command -Name 'Add-MongoDBDocument').Parameters['DatabaseName'].ParameterSets.CollectionName.IsMandatory | Should -Be $true
    }
   }
   Context "Collection ParameterSet" {
@@ -58,17 +64,17 @@ Describe "Add-MongoDBDocument" -Tag "PoshMongo", "AddDocumentCmdlet", "Document"
   Context "CollectionName ParameterSet" {
    Context "With a Document" {
     It "Should Return System.String" {
-     Add-MongoDBDocument -Document '{"_id":"19511","FirstName":"Joe","LastName":"Friday"}' | Should -BeOfType System.String
-    }
-   }
-   Context "With a Document and CollectionName" {
-    It "Should Return System.String" {
-     Add-MongoDBDocument -Document '{"_id":"19512","FirstName":"Ben","LastName":"Romero"}' -CollectionName 'myCollection1' | Should -BeOfType System.String
+     Add-MongoDBDocument -Document '{"_id":"19511","FirstName":"Joe","LastName":"Friday"}' -CollectionName 'myCollection1' -DatabaseName 'MyDB' | Should -BeOfType System.String
     }
    }
    Context "Without a CollectionName" {
     It "Should throw an error: ParameterArgumentValidationErrorEmptyStringNotAllowed" {
-     { Add-MongoDBDocument -Document '{"_id":"19751","FirstName":"David","LastName":"Starsky"}' -CollectionName '' } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorEmptyStringNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
+     { Add-MongoDBDocument -Document '{"_id":"19751","FirstName":"David","LastName":"Starsky"}' -CollectionName '' -DatabaseName 'MyDB' } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorEmptyStringNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
+    }
+   }
+   Context "Without a DatabaseName" {
+    It "Should throw an error: ParameterArgumentValidationErrorEmptyStringNotAllowed" {
+     { Add-MongoDBDocument -Document '{"_id":"19751","FirstName":"David","LastName":"Starsky"}' -CollectionName 'myCollection1' -DatabaseName '' } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorEmptyStringNotAllowed,PoshMongo.Document.AddDocumentCmdlet'
     }
    }
    Context "Without a CollectionName" {
@@ -78,14 +84,9 @@ Describe "Add-MongoDBDocument" -Tag "PoshMongo", "AddDocumentCmdlet", "Document"
    }
   }
   Context "Collection ParameterSet" {
-   Context "With a Document" {
-    It "Should Return System.String" {
-     Add-MongoDBDocument -Document '{"_id":"19791","Bo":"Joe","LastName":"Duke"}' | Should -BeOfType System.String
-    }
-   }
    Context "With a Document and Collection" {
     It "Should Return System.String" {
-     $Collection | Add-MongoDBDocument -Document '{"_id":"19792","Luke":"Joe","LastName":"Duke"}' | Should -BeOfType System.String
+     $Collection1 | Add-MongoDBDocument -Document '{"_id":"19792","Luke":"Joe","LastName":"Duke"}' | Should -BeOfType System.String
     }
    }
    Context "Without a Collection" {

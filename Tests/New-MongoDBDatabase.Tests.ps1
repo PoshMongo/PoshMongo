@@ -23,8 +23,8 @@ Describe "New-MongoDBDatabase" -Tag "PoshMongo", "NewDatabaseCmdlet", "Database"
    }
   }
   Context "Client parameter" {
-   It "Should be MongoClient" {
-    Get-Command New-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.MongoClient
+   It "Should be IMongoClient" {
+    Get-Command New-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.IMongoClient
    }
    It "Should be Mandatory" {
     Get-Command New-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory

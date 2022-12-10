@@ -5,30 +5,29 @@ using System.Management.Automation;
 namespace PoshMongo.Database
 {
     [Cmdlet(VerbsCommon.New, "Database", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/New-MongoDBDatabase0.md#new-mongodbdatabase")]
-    [OutputType("MongoDB.Driver.MongoDatabaseBase")]
+    [OutputType("MongoDB.Driver.IMongoDatabase")]
     [CmdletBinding(PositionalBinding = true)]
     public class NewDatabase : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
-        public MongoClient? Client { get; set; }
+        public IMongoClient? Client { get; set; } = null;
         protected override void BeginProcessing()
         {
             if (Client == null)
             {
-                Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+                Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             }
             else
             {
-                ServerDescription? server = Client.Cluster.Description.Servers.FirstOrDefault();
+                ServerDescription server = Client.Cluster.Description.Servers[0];
                 if (server != null)
                 {
                     throw new MongoConnectionException(new MongoDB.Driver.Core.Connections.ConnectionId(server.ServerId), "Must be connected to a MongoDB instance.");
                 }
             }
-            SessionState.PSVariable.Set("Database", Client.GetDatabase(DatabaseName));
-            WriteObject(SessionState.PSVariable.Get("Database").Value);
+            WriteObject(Operations.NewDatabase(Client, DatabaseName));
         }
     }
 }

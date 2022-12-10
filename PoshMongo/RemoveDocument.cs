@@ -8,103 +8,89 @@ using System.Xml.Linq;
 namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Remove, "Document", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBDocument.md#remove-mongodbdocument")]
-    [OutputType("System.Text.Json")]
-    [CmdletBinding(PositionalBinding = true, DefaultParameterSetName = "DocumentId")]
+    [OutputType("null")]
+    [CmdletBinding(PositionalBinding = true)]
     public class RemoveDocumentCmdlet : PSCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentId")]
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameId")]
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionId")]
-        public string DocumentId { get; set; } = string.Empty;
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Filter")]
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameFilter")]
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionFilter")]
-        public Hashtable Filter { get; set; } = new Hashtable();
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameId")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionId")]
+        public string DocumentId { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameFilter")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionFilter")]
+        public Hashtable Filter { get; set; } = new Hashtable();
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameId")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameFilter")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DocumentCollectionName")]
         public string CollectionName { get; set; } = string.Empty;
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionId")]
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionFilter")]
+        [Parameter(Mandatory = true, Position = 2, ParameterSetName = "CollectionNameId")]
+        [Parameter(Mandatory = true, Position = 2, ParameterSetName = "CollectionNameFilter")]
+        [Parameter(Mandatory = true, Position = 2, ParameterSetName = "DocumentCollectionName")]
+        public string DatabaseName { get; set; } = string.Empty;
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionId")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionFilter")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DocumentCollection")]
-        public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
+        public IMongoCollection<BsonDocument>? MongoCollection { get; set; } = null;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentCollection", ValueFromPipeline = true)]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DocumentCollectionName", ValueFromPipeline = true)]
         public string Document { get; set; } = string.Empty;
-        protected override void ProcessRecord()
+        private IMongoClient? Client { get; set; } = null;
+        private IMongoDatabase? MongoDatabase { get; set; } = null;
+        private BsonDocument? bsonDocument { get; set; } = null;
+        protected override void BeginProcessing()
         {
-            if (MongoCollection == null)
-            {
-                if (string.IsNullOrEmpty(CollectionName))
-                {
-                    MongoCollection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
-                }
-                else
-                {
-                    MongoDatabaseBase MongoDatabase = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
-                    MongoCollection = MongoDatabase.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings());
-                }
-            }
-            BsonDocument bsonDocument;
+            Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             if (!(string.IsNullOrEmpty(Document)))
             {
                 bsonDocument = BsonDocument.Parse(Document);
                 DocumentId = (string)bsonDocument.GetValue("_id");
             }
+            if (!(string.IsNullOrEmpty(DatabaseName)) && !(string.IsNullOrEmpty(CollectionName)))
+            {
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
+                MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
+            }
+        }
+        protected override void ProcessRecord()
+        {
             switch (ParameterSetName)
             {
-                case "Filter":
-                    if (!(Filter == null))
-                    {
-                        RemoveDocument(MongoCollection, Filter);
-                    }
-                    break;
                 case "CollectionNameId":
-                    if (!(string.IsNullOrEmpty(DocumentId)))
+                    if (MongoCollection != null)
                     {
-                        RemoveDocument(MongoCollection, DocumentId);
+                        Operations.RemoveDocument(MongoCollection, DocumentId);
                     }
                     break;
                 case "CollectionNameFilter":
-                    if (!(Filter == null))
+                    if (MongoCollection != null)
                     {
-                        RemoveDocument(MongoCollection, Filter);
+                        Operations.RemoveDocument(MongoCollection, Filter);
                     }
                     break;
                 case "CollectionId":
-                    if (!(string.IsNullOrEmpty(DocumentId)))
+                    if (MongoCollection != null)
                     {
-                        RemoveDocument(MongoCollection, DocumentId);
+                        Operations.RemoveDocument(MongoCollection, DocumentId);
                     }
                     break;
                 case "CollectionFilter":
-                    if (!(Filter == null))
+                    if (MongoCollection != null)
                     {
-                        RemoveDocument(MongoCollection, Filter);
+                        Operations.RemoveDocument(MongoCollection, Filter);
                     }
                     break;
-                default:
-                    if (!(string.IsNullOrEmpty(DocumentId)))
+                case "DocumentCollection":
+                    if (MongoCollection != null)
                     {
-                        RemoveDocument(MongoCollection, DocumentId);
+                        Operations.RemoveDocument(MongoCollection, DocumentId);
+                    }
+                    break;
+                case "DocumentCollectionName":
+                    if (MongoCollection != null)
+                    {
+                        Operations.RemoveDocument(MongoCollection, DocumentId);
                     }
                     break;
             }
-        }
-        private static void RemoveDocument(IMongoCollection<BsonDocument> Collection, string documentID)
-        {
-            FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", documentID);
-            Collection.DeleteOne(id);
-        }
-        private static void RemoveDocument(IMongoCollection<BsonDocument> Collection, Hashtable filter)
-        {
-            List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
-            foreach (string key in filter.Keys)
-            {
-                filters.Add(Builders<BsonDocument>.Filter.Eq(key, filter[key]));
-            }
-            FilterDefinition<BsonDocument> result = Builders<BsonDocument>.Filter.And(filters);
-            Collection.DeleteOne(result);
         }
     }
 }

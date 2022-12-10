@@ -12,16 +12,16 @@ namespace PoshMongo.Database
         [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
-        public MongoClient? Client { get; set; }
+        public IMongoClient? Client { get; set; } = null;
         protected override void BeginProcessing()
         {
             if (Client == null)
             {
-                Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+                Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             }
             else
             {
-                ServerDescription? server = Client.Cluster.Description.Servers.FirstOrDefault();
+                ServerDescription server = Client.Cluster.Description.Servers[0];
                 if (server != null)
                 {
                     throw new MongoConnectionException(new MongoDB.Driver.Core.Connections.ConnectionId(server.ServerId), "Must be connected to a MongoDB instance.");
@@ -29,15 +29,11 @@ namespace PoshMongo.Database
             }
             if (!(string.IsNullOrEmpty(DatabaseName)))
             {
-                SessionState.PSVariable.Set("Database", Client.GetDatabase(DatabaseName));
-                WriteObject(SessionState.PSVariable.Get("Database").Value);
+                WriteObject(Operations.GetDatabase(Client, DatabaseName));
             }
             else
             {
-                foreach (string db in Client.ListDatabaseNames().ToEnumerable())
-                {
-                    WriteObject(Client.GetDatabase(db));
-                }
+                WriteObject(Operations.GetDatabase(Client));
             }
         }
     }

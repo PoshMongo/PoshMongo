@@ -17,14 +17,6 @@ Describe "New-MongoDBCollection" -Tag "PoshMongo", "NewCollectionCmdlet", "Colle
   }
  }
  Context "Testing ParameterSets" {
-  Context "CollectionName ParameterSet" {
-   It "CollectionName should be String" {
-    Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Type String
-   }
-   It "CollectionName should not be Mandatory" {
-    Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Mandatory
-   }
-  }
   Context "DatabaseName ParameterSet" {
    It "CollectionName should be String" {
     Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Type String
@@ -46,8 +38,8 @@ Describe "New-MongoDBCollection" -Tag "PoshMongo", "NewCollectionCmdlet", "Colle
    It "CollectionName should  be Mandatory" {
     Get-Command New-MongoDBCollection | Should -HaveParameter CollectionName -Mandatory
    }
-   It "MongoDatabase should be MongoDatabase" {
-    Get-Command New-MongoDBCollection | Should -HaveParameter MongoDatabase -Type MongoDB.Driver.MongoDatabaseBase
+   It "MongoDatabase should be IMongoDatabase" {
+    Get-Command New-MongoDBCollection | Should -HaveParameter MongoDatabase -Type MongoDB.Driver.IMongoDatabase
    }
    It "MongoDatabase should be Mandatory" {
     Get-Command New-MongoDBCollection | Should -HaveParameter MongoDatabase -Mandatory
@@ -55,33 +47,6 @@ Describe "New-MongoDBCollection" -Tag "PoshMongo", "NewCollectionCmdlet", "Colle
   }
  }
  Context "New-MongoDBCollection Usage" {
-  Context "New-MongoDBCollection CollectionName ParameterSet" {
-   Context "With a CollectionName" {
-    It "Should Return MongoDB.Driver.IMongoCollection" {
-     (New-MongoDBCollection -CollectionName 'myCollection1').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
-    }
-   }
-   Context "Without a CollectionName" {
-    It "Should throw an error: MissingArgument" {
-     { New-MongoDBCollection -CollectionName } | Should -Throw -ErrorId 'MissingArgument,PoshMongo.Collection.NewCollectionCmdlet'
-    }
-   }
-   Context "With an empty CollectionName" {
-    It "Should throw an error: MissingArgument" {
-     { New-MongoDBCollection -CollectionName '' } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorEmptyStringNotAllowed,PoshMongo.Collection.NewCollectionCmdlet'
-    }
-   }
-   Context "With a null CollectionName" {
-    It "Should throw an error: ParameterArgumentValidationErrorNullNotAllowed" {
-     { New-MongoDBCollection -CollectionName $null } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Collection.NewCollectionCmdlet'
-    }
-   }
-   Context "With an invalid CollectionName" {
-    It "Should throw an error: InvalidNamespace" {
-     { New-MongoDBCollection -CollectionName 'this$collection' } | Should -Throw -ErrorId 'MongoDB.Driver.MongoCommandException,PoshMongo.Collection.NewCollectionCmdlet'
-    }
-   }
-  }
   Context "New-MongoDBCollection DatabaseName ParameterSet" {
    Context "With a DatabaseName" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
@@ -109,23 +74,24 @@ Describe "New-MongoDBCollection" -Tag "PoshMongo", "NewCollectionCmdlet", "Colle
     }
    }
   }
-  Context "New-MongoDBCollection DatabaseName ParameterSet" {
+  Context "New-MongoDBCollection Database ParameterSet" {
    Context "With a Database" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
+     $Database = Get-MongoDBDatabase -DatabaseName 'MyDB1';
      (New-MongoDBCollection -MongoDatabase $Database -CollectionName 'myCollection3').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
     }
    }
-   Context "Without a DatabaseName" {
+   Context "Without a Database" {
     It "Should throw an error: MissingArgument" {
      { New-MongoDBCollection -MongoDatabase -CollectionName 'myCollection' } | Should -Throw -ErrorId 'MissingArgument,PoshMongo.Collection.NewCollectionCmdlet'
     }
    }
-   Context "With an empty DatabaseName" {
+   Context "With an empty Database" {
     It "Should throw an error: CannotConvertArgumentNoMessage" {
      { New-MongoDBCollection -MongoDatabase '' -CollectionName 'myCollection' } | Should -Throw -ErrorId 'CannotConvertArgumentNoMessage,PoshMongo.Collection.NewCollectionCmdlet'
     }
    }
-   Context "With a null DatabaseName" {
+   Context "With a null Database" {
     It "Should throw an error: ParameterArgumentValidationErrorNullNotAllowed" {
      { New-MongoDBCollection -MongoDatabase $null -CollectionName 'myCollection' } | Should -Throw -ErrorId 'ParameterArgumentValidationErrorNullNotAllowed,PoshMongo.Collection.NewCollectionCmdlet'
     }

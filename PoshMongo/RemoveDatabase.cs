@@ -5,7 +5,7 @@ using System.Management.Automation;
 namespace PoshMongo.Database
 {
     [Cmdlet(VerbsCommon.Remove, "Database", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Remove-MongoDBDatabase0.md#remove-mongodbdatabase")]
-    [OutputType("MongoDB.Driver.MongoDatabaseBase")]
+    [OutputType("null")]
     [CmdletBinding(PositionalBinding = true)]
     public class RemoveDatabase : PSCmdlet
     {
@@ -13,33 +13,32 @@ namespace PoshMongo.Database
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Database")]
-        public MongoClient? Client { get; set; }
+        public IMongoClient? Client { get; set; } = null;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
-        public MongoDatabaseBase? Database { get; set; }
-        protected override void ProcessRecord()
+        public IMongoDatabase? Database { get; set; } = null;
+        protected override void BeginProcessing()
         {
             if (Client == null)
             {
-                Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
+                Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
             }
             else
             {
-                ServerDescription? server = Client.Cluster.Description.Servers.FirstOrDefault();
+                ServerDescription server = Client.Cluster.Description.Servers[0];
                 if (server != null)
                 {
                     throw new MongoConnectionException(new MongoDB.Driver.Core.Connections.ConnectionId(server.ServerId), "Must be connected to a MongoDB instance.");
                 }
             }
+        }
+        protected override void ProcessRecord()
+        {
             if (Database == null)
             {
-                Client.DropDatabase(DatabaseName);
+                Operations.RemoveDatabase(Client, DatabaseName);
             } else
             {
-                Client.DropDatabase(Database.DatabaseNamespace.DatabaseName);
-            }
-            foreach (string db in Client.ListDatabaseNames().ToEnumerable())
-            {
-                WriteObject(Client.GetDatabase(db));
+                Operations.RemoveDatabase(Client, Database.DatabaseNamespace.DatabaseName);
             }
         }
     }

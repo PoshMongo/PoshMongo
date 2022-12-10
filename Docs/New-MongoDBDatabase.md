@@ -14,7 +14,7 @@ Create a MongoDB Database
 ## SYNTAX
 
 ```powershell
-New-MongoDBDatabase [-DatabaseName] <String> [[-Client] <MongoClient>] [<CommonParameters>]
+New-MongoDBDatabase [-DatabaseName] <String> [[-Client] <IMongoClient>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Create a new database
 The MongoClient to use for a connection
 
 ```yaml
-Type: MongoDB.Driver.MongoClient
+Type: MongoDB.Driver.IMongoClient
 Parameter Sets: (All)
 Aliases:
 
@@ -80,7 +80,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### MongoDB.Driver.MongoDatabaseBase
+### MongoDB.Driver.IMongoDatabase
 
 ## NOTES
 

@@ -7,19 +7,19 @@ Properties {
 }
 Task default -depends UpdateReadme
 
-Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
+Task LocalUse -Description "Setup for local use and testing" -depends CreateModuleDirectory, CleanModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, PesterTest -Action {
  $Global:settings = Get-Content .\ConnectionSettings
 }
 
-Task UpdateHelp -Description "Update the help files" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
- $moduleName =  'PoshMongo'
+Task UpdateHelp -Description "Update the help files" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, PesterTest -Action {
+ $moduleName = 'PoshMongo'
  Import-Module -Name ".\Module\$($moduleName).psd1" -Scope Global -force;
  New-MarkdownHelp -Module PoshMongo -AlphabeticParamsOrder -UseFullTypeName -WithModulePage -OutputFolder .\Docs\ -ErrorAction SilentlyContinue
  Update-MarkdownHelp -Path .\Docs\ -AlphabeticParamsOrder -UseFullTypeName
 }
 
-Task UpdateReadme -Description "Update the README file" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
- $moduleName =  'PoshMongo'
+Task UpdateReadme -Description "Update the README file" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, PesterTest -Action {
+ $moduleName = 'PoshMongo'
  $readMe = Get-Item .\README.md
 
  $TableHeaders = "| Latest Version | PowerShell Gallery | Issues | License | Discord |"
@@ -30,34 +30,34 @@ Task UpdateReadme -Description "Update the README file" -depends CreateModuleDir
  $LicenseBadge = "[![GitHub license](https://img.shields.io/github/license/PoshMongo/PoshMongo)](https://github.com/PoshMongo/PoshMongo/blob/master/LICENSE)"
  $DiscordBadge = "[![Discord Server](https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b5493894cf60b300587_full_logo_white_RGB.svg)]($($DiscordChannel))"
 
- if (!(Get-Module -Name $moduleName )) {Import-Module -Name ".\Module\$($moduleName).psd1" }
+ if (!(Get-Module -Name $moduleName )) { Import-Module -Name ".\Module\$($moduleName).psd1" }
 
- Write-Output $TableHeaders |Out-File $readMe.FullName -Force
- Write-Output $Columns |Out-File $readMe.FullName -Append
- Write-Output "| $($VersionBadge) | $($GalleryBadge) | $($IssueBadge) | $($LicenseBadge) | $($DiscordBadge) |" |Out-File $readMe.FullName -Append
+ Write-Output $TableHeaders | Out-File $readMe.FullName -Force
+ Write-Output $Columns | Out-File $readMe.FullName -Append
+ Write-Output "| $($VersionBadge) | $($GalleryBadge) | $($IssueBadge) | $($LicenseBadge) | $($DiscordBadge) |" | Out-File $readMe.FullName -Append
 
- Get-Content .\Docs\PoshMongo.md |Select-Object -Skip 8 |ForEach-Object {$_.Replace('(','(Docs/')} |Out-File $readMe.FullName -Append
- Write-Output "" |Out-File $readMe.FullName -Append
- Get-Content .\Build.md |Out-File $readMe.FullName -Append
+ Get-Content .\Docs\PoshMongo.md | Select-Object -Skip 8 | ForEach-Object { $_.Replace('(', '(Docs/') } | Out-File $readMe.FullName -Append
+ Write-Output "" | Out-File $readMe.FullName -Append
+ Get-Content .\Build.md | Out-File $readMe.FullName -Append
 }
 
-Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush
+Task SetupModule -Description "Setup the PowerShell Module" -depends CreateModuleDirectory, CleanModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, PesterTest, CreateExternalHelp, CreateCabFile, CreateNuSpec, NugetPack, NugetPush
 
-Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles -Action {
- $moduleName =  'PoshMongo'
+Task NewTaggedRelease -Description "Create a tagged release" -depends CreateModuleDirectory, CleanProject, BuildProject, CopyModuleFiles, PesterTest -Action {
+ $moduleName = 'PoshMongo'
 
- if (!(Get-Module -Name $moduleName )) {Import-Module -Name ".\Module\$($moduleName).psd1" }
- $Version = (Get-Module -Name $moduleName |Select-Object -Property Version).Version.ToString()
+ if (!(Get-Module -Name $moduleName )) { Import-Module -Name ".\Module\$($moduleName).psd1" }
+ $Version = (Get-Module -Name $moduleName | Select-Object -Property Version).Version.ToString()
  git tag -a v$version -m "$($moduleName) Version $($Version)"
  git push origin v$version
 }
 
 Task Post2Discord -Description "Post a message to discord" -Action {
- $moduleName =  'PoshMongo'
-	$version = (Get-Module -Name $moduleName |Select-Object -Property Version).Version.ToString()
- $Discord = Get-Content .\discord.poshmongo |ConvertFrom-Json
+ $moduleName = 'PoshMongo'
+ $version = (Get-Module -Name $moduleName | Select-Object -Property Version).Version.ToString()
+ $Discord = Get-Content .\discord.poshmongo | ConvertFrom-Json
  $Discord.message.content = "Version $($version) of $($moduleName) released. Please visit Github ($($Github)) or PowershellGallery ($($PoshGallery)) to download."
- Invoke-RestMethod -Uri $Discord.uri -Body ($Discord.message |ConvertTo-Json -Compress) -Method Post -ContentType 'application/json; charset=UTF-8'
+ Invoke-RestMethod -Uri $Discord.uri -Body ($Discord.message | ConvertTo-Json -Compress) -Method Post -ContentType 'application/json; charset=UTF-8'
 }
 
 Task CleanProject -Description "Clean the project before building" -Action {
@@ -73,7 +73,7 @@ Task CreateModuleDirectory -Description "Create the module directory" -Action {
 }
 
 Task CleanModuleDirectory -Description "Clean the module directory" -Action {
- Get-ChildItem .\Module\ |Remove-Item
+ Get-ChildItem .\Module\ | Remove-Item
 }
 
 Task CopyModuleFiles -Description "Copy files for the module" -Action {
@@ -100,4 +100,8 @@ Task NugetPack -Description "Pack the nuget file" -Action {
 Task NugetPush -Description "Push nuget to PowerShell Gallery" -Action {
  $config = [xml](Get-Content .\nuget.config)
  nuget push .\Module\*.nupkg -NonInteractive -ApiKey "$($config.configuration.apikeys.add.value)" -ConfigFile .\nuget.config
+}
+
+Task PesterTest -Description "Test Cmdlets" -Action {
+ Invoke-Pester
 }

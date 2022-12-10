@@ -4,15 +4,15 @@ using System.Security.Authentication;
 
 namespace PoshMongo.Connection
 {
-    [Cmdlet(VerbsCommunications.Connect, "Instance")]
-    [OutputType("MongoDB.Driver.MongoClient")]
-    [CmdletBinding(HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Connect-MongoDBInstance.md#connect-mongodbinstance", PositionalBinding = true)]
+    [Cmdlet(VerbsCommunications.Connect, "Instance", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Connect-MongoDBInstance.md#connect-mongodbinstance")]
+    [OutputType("MongoDB.Driver.IMongoClient")]
+    [CmdletBinding(PositionalBinding = true)]
     public class ConnectInstance : PSCmdlet
     {
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]
-        public string? ConnectionString { get; set; }
+        public string ConnectionString { get; set; } = string.Empty;
         [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
-        public SwitchParameter ForceTls12 { get; set; }
+        public SwitchParameter ForceTls12 { get; set; } = false;
         protected override void BeginProcessing()
         {
             MongoClientSettings Settings = MongoClientSettings.FromConnectionString(ConnectionString);
@@ -20,7 +20,8 @@ namespace PoshMongo.Connection
             {
                 Settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
             }
-            SessionState.PSVariable.Set("Client", new MongoClient(Settings));
+            IMongoClient Client = new MongoClient(Settings);
+            SessionState.PSVariable.Set("Client", Client);
             WriteObject(SessionState.PSVariable.Get("Client").Value);
         }
     }

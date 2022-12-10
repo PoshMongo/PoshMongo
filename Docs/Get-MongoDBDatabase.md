@@ -14,7 +14,7 @@ Get a MongoDB Database
 ## SYNTAX
 
 ```powershell
-Get-MongoDBDatabase [[-DatabaseName] <String>] [[-Client] <MongoClient>] [<CommonParameters>]
+Get-MongoDBDatabase [[-DatabaseName] <String>] [[-Client] <IMongoClient>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -58,7 +58,7 @@ Get a list of databases from MongoDB
 The MongoClient to use for a connection
 
 ```yaml
-Type: MongoDB.Driver.MongoClient
+Type: MongoDB.Driver.IMongoClient
 Parameter Sets: (All)
 Aliases:
 

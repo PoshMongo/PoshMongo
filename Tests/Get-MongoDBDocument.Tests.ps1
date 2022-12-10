@@ -4,11 +4,11 @@ BeforeAll {
  Import-Module "$($RootPath)\Module\$($Module).psd1" -Force
  Connect-MongoDBInstance -ConnectionString (Get-Content .\ConnectionSettings) | Out-Null
  New-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection1' | Out-Null
- Add-MongoDBDocument -Document '{"_id":"1","LastName":"Smith","FirstName":"John"}' | Out-Null
- New-MongoDBCollection -CollectionName 'myCollection2' | Out-Null
- Add-MongoDBDocument -Document '{"_id":"1","LastName":"Smith","FirstName":"John"}' | Out-Null
- Add-MongoDBDocument -Document '{"_id":"2","LastName":"Doe","FirstName":"Jane"}' | Out-Null
+ $Collection1 = New-MongoDBCollection -CollectionName 'myCollection1' -DatabaseName 'MyDB'
+ Add-MongoDBDocument -Document '{"_id":"1","LastName":"Smith","FirstName":"John"}' -MongoCollection $Collection1 | Out-Null
+ $Collection2 = New-MongoDBCollection -CollectionName 'myCollection2' -DatabaseName 'MyDB'
+ Add-MongoDBDocument -Document '{"_id":"1","LastName":"Smith","FirstName":"John"}' -MongoCollection $Collection2 | Out-Null
+ Add-MongoDBDocument -Document '{"_id":"2","LastName":"Doe","FirstName":"Jane"}' -MongoCollection $Collection2 | Out-Null
 }
 AfterAll {
  Remove-MongoDBDatabase -DatabaseName 'MyDB' | Out-Null
@@ -16,51 +16,22 @@ AfterAll {
 Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document" {
  Context "Cmdlet Tests" {
   It "Should have HelpUri defined in Cmdlet() declaration" {
-   [System.Uri]::new((Get-Command Get-MongoDBDocument |Select-Object -ExpandProperty HelpUri)).GetType().FullName | Should -Be 'System.Uri'
+   [System.Uri]::new((Get-Command Get-MongoDBDocument | Select-Object -ExpandProperty HelpUri)).GetType().FullName | Should -Be 'System.Uri'
   }
  }
  Context "Testing ParameterSets" {
-  Context "DocumentId ParameterSet" {
-   It "ParameterSet should contain, DocumentId, HideId" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.DocumentId | Should -Be $true
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.DocumentId | Should -Be $true
+  Context "CollectionNameId ParameterSet" {
+   It "ParameterSet should contain, DocumentId, CollectionName, DatabaseName, HideId" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionNameId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionNameId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DatabaseName'].ParameterSets.CollectionNameId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameId | Should -Be $true
    }
    It "DocumentId should be String" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Type String
    }
    It "DocumentId should be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.DocumentId.IsMandatory | Should -Be $true
-   }
-   It "HideId should be a SwitchParameter" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
-   }
-   It "HideId should not be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.DocumentId.IsMandatory | Should -Not -Be $true
-   }
-  }
-  Context "Filter ParameterSet" {
-   It "ParameterSet should contain, Filter, HideId" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.Filter | Should -Be $true
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.Filter | Should -Be $true
-   }
-   It "Filter should be Hashtable" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
-   }
-   It "Filter should be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.Filter.IsMandatory | Should -Be $true
-   }
-   It "HideId should be a SwitchParameter" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
-   }
-   It "HideId should not be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.Filter.IsMandatory | Should -Not -Be $true
-   }
-  }
-  Context "CollectionNameId ParameterSet" {
-   It "ParameterSet should contain, CollectionName, DocumentId, HideId" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionNameId | Should -Be $true
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionNameId | Should -Be $true
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameId | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionNameId.IsMandatory | Should -Be $true
    }
    It "CollectionName should be String" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter CollectionName -Type String
@@ -68,11 +39,11 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
    It "CollectionName should be Mandatory" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter CollectionName -Mandatory
    }
-   It "DocumentId should be String" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter DocumentId -Type String
+   It "DatabaseName should be String" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter DatabaseName -Type String
    }
-   It "DocumentId should be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DocumentId'].ParameterSets.CollectionNameId.IsMandatory | Should -Be $true
+   It "DatabaseName should be Mandatory" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter DatabaseName -Mandatory
    }
    It "HideId should be a SwitchParameter" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
@@ -83,9 +54,16 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   }
   Context "CollectionNameFilter ParameterSet" {
    It "ParameterSet should contain, CollectionName, Filter, HideId" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionNameFilter | Should -Be $true
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionNameFilter | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DatabaseName'].ParameterSets.CollectionNameId | Should -Be $true
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameFilter | Should -Be $true
+   }
+   It "Filter should be a HashTable" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
+   }
+   It "Filter should be Mandatory" {
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter.IsMandatory | Should -Be $true
    }
    It "CollectionName should be String" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter CollectionName -Type String
@@ -93,11 +71,11 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
    It "CollectionName should be Mandatory" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter CollectionName -Mandatory
    }
-   It "Filter should be a HashTable" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
+   It "DatabaseName should be String" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter DatabaseName -Type String
    }
-   It "Filter should be Mandatory" {
-    (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter.IsMandatory | Should -Be $true
+   It "DatabaseName should be Mandatory" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter DatabaseName -Mandatory
    }
    It "HideId should be a SwitchParameter" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter HideId -Type System.Management.Automation.SwitchParameter
@@ -109,6 +87,7 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   Context "CollectionNameList ParameterSet" {
    It "ParameterSet should contain, CollectionName, List, HideId" {
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['CollectionName'].ParameterSets.CollectionNameList | Should -Be $true
+    (Get-Command -Name 'Get-MongoDBDocument').Parameters['DatabaseName'].ParameterSets.CollectionNameId | Should -Be $true
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['List'].ParameterSets.CollectionNameList | Should -Be $true
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameList | Should -Be $true
    }
@@ -117,6 +96,12 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
    }
    It "CollectionName should be Mandatory" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter CollectionName -Mandatory
+   }
+   It "DatabaseName should be String" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter DatabaseName -Type String
+   }
+   It "DatabaseName should be Mandatory" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter DatabaseName -Mandatory
    }
    It "List should be SwitchParameter" {
     Get-Command Get-MongoDBDocument | Should -HaveParameter List -Type System.Management.Automation.SwitchParameter
@@ -208,56 +193,22 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   }
  }
  Context "Get-MongoDBDocument Usage" {
-  Context "Get-MongoDBDocument DocumentId ParameterSet" {
-   Context "Without a DocumentId" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument | Should -BeOfType 'System.Collections.Generic.List[string]'
-    }
-   }
-   Context "With a DocumentId" {
-    It "Should Return System.String" {
-     Get-MongoDBDocument -DocumentId '1' | Should -BeOfType System.String
-    }
-   }
-   Context "With an invalid DocumentId" {
-    It "Should throw an error: C# null values of type 'BsonDocument' cannot be serialized" {
-     { Get-MongoDBDocument -DocumentId '3' } | Should -Throw "C# null values of type 'BsonDocument' cannot be serialized using a serializer of type 'BsonDocumentSerializer'."
-    }
-   }
-  }
-  Context "Get-MongoDBDocument Filter ParameterSet" {
-   Context "Without a Filter" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument | Should -BeOfType 'System.Collections.Generic.List[string]'
-    }
-   }
-   Context "With a Filter" {
-    It "Should Return System.String" {
-     Get-MongoDBDocument -Filter @{'_id'= '1' } | Should -BeOfType System.String
-    }
-   }
-   Context "With an invalid Filter" {
-    It "Should throw an error: C# null values of type 'BsonDocument' cannot be serialized" {
-     { Get-MongoDBDocument -Filter @{'_id'= '3' } } | Should -Throw "C# null values of type 'BsonDocument' cannot be serialized using a serializer of type 'BsonDocumentSerializer'."
-    }
-   }
-  }
   Context "Get-MongoDBDocument CollectionNameList ParameterSet" {
    Context "With a CollectionName" {
     It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -CollectionName 'myCollection2' | Should -BeOfType 'System.Collections.Generic.List[string]'
+     Get-MongoDBDocument -CollectionName 'myCollection2' -DatabaseName 'MyDB' | Should -BeOfType 'System.Collections.Generic.List[string]'
     }
    }
    Context "Without a CollectionName" {
     It "Should throw an error: Missing an argument for parameter 'CollectionName'" {
-     { Get-MongoDBDocument -CollectionName } | Should -Throw "Missing an argument for parameter 'CollectionName'. Specify a parameter of type 'System.String' and try again."
+     { Get-MongoDBDocument -CollectionName  -DatabaseName 'MyDB' } | Should -Throw "Missing an argument for parameter 'CollectionName'. Specify a parameter of type 'System.String' and try again."
     }
    }
   }
   Context "Get-MongoDBDocument CollectionList ParameterSet" {
    Context "With a Collection" {
     It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -MongoCollection $Collection | Should -BeOfType 'System.Collections.Generic.List[string]'
+     Get-MongoDBDocument -MongoCollection $Collection1 | Should -BeOfType 'System.Collections.Generic.List[string]'
     }
    }
    Context "Without a Collection" {
@@ -269,29 +220,29 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   Context "Get-MongoDBDocument CollectionNameId ParameterSet" {
    Context "With a CollectionName" {
     It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -CollectionName 'myCollection2' | Should -BeOfType 'System.Collections.Generic.List[string]'
+     Get-MongoDBDocument -CollectionName 'myCollection2' -DatabaseName 'MyDB' | Should -BeOfType 'System.Collections.Generic.List[string]'
     }
    }
    Context "With a CollectionName and DocumentId" {
     It "Should Return System.String" {
-     Get-MongoDBDocument -CollectionName 'myCollection2' -DocumentId '1' | Should -BeOfType System.String
+     Get-MongoDBDocument -DocumentId '1' -CollectionName 'myCollection2' -DatabaseName 'MyDB' | Should -BeOfType System.String
     }
    }
    Context "Without a CollectionName" {
     It "Should throw an error: Value cannot be null. Cannot bind argument to parameter 'CollectionName' because it is an empty string." {
-     { Get-MongoDBDocument -CollectionName '' -DocumentId '1' } | Should -Throw "Cannot bind argument to parameter 'CollectionName' because it is an empty string."
+     { Get-MongoDBDocument -DocumentId '1' -CollectionName '' -DatabaseName 'MyDB' } | Should -Throw "Cannot bind argument to parameter 'CollectionName' because it is an empty string."
     }
    }
   }
   Context "Get-MongoDBDocument CollectionNameFilter ParameterSet" {
    Context "With a CollectionName" {
     It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -CollectionName 'myCollection2' | Should -BeOfType 'System.Collections.Generic.List[string]'
+     Get-MongoDBDocument -CollectionName 'myCollection2' -Database 'MyDB' | Should -BeOfType 'System.Collections.Generic.List[string]'
     }
    }
    Context "With a CollectionName and Filter" {
     It "Should Return System.String" {
-     Get-MongoDBDocument -CollectionName 'myCollection2' -Filter @{'_id'='1'} | Should -BeOfType System.String
+     Get-MongoDBDocument -Filter @{'_id' = '1' } -CollectionName 'myCollection2' -Database 'MyDB'| Should -BeOfType System.String
     }
    }
    Context "Without a Collection" {
@@ -303,12 +254,12 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   Context "Get-MongoDBDocument CollectionId ParameterSet" {
    Context "With a CollectionName" {
     It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -MongoCollection $Collection | Should -BeOfType 'System.Collections.Generic.List[string]'
+     Get-MongoDBDocument -MongoCollection $Collection1 | Should -BeOfType 'System.Collections.Generic.List[string]'
     }
    }
    Context "With a CollectionName and DocumentId" {
     It "Should Return System.String" {
-     Get-MongoDBDocument -MongoCollection $Collection -DocumentId '1' | Should -BeOfType System.String
+     Get-MongoDBDocument -MongoCollection $Collection1 -DocumentId '1' | Should -BeOfType System.String
     }
    }
    Context "Without a Collection" {
@@ -320,17 +271,17 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   Context "Get-MongoDBDocument CollectionFilter ParameterSet" {
    Context "With a CollectionName" {
     It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -MongoCollection $Collection  | Should -BeOfType 'System.Collections.Generic.List[string]'
+     Get-MongoDBDocument -MongoCollection $Collection2  | Should -BeOfType 'System.Collections.Generic.List[string]'
     }
    }
    Context "With a CollectionName and Filter" {
     It "Should Return System.String" {
-     Get-MongoDBDocument -MongoCollection $Collection -Filter @{'_id'='1'} | Should -BeOfType System.String
+     Get-MongoDBDocument -MongoCollection $Collection2 -Filter @{'_id' = '1' } | Should -BeOfType System.String
     }
    }
    Context "Without a Collection" {
     It "Should throw an error: Value cannot be null." {
-     { Get-MongoDBDocument -MongoCollection $null -Filter @{'_id'='1'} } | Should -Throw "Cannot bind argument to parameter 'MongoCollection' because it is null."
+     { Get-MongoDBDocument -MongoCollection $null -Filter @{'_id' = '1' } } | Should -Throw "Cannot bind argument to parameter 'MongoCollection' because it is null."
     }
    }
   }

@@ -7,49 +7,46 @@ namespace PoshMongo.Document
 {
     [Cmdlet(VerbsCommon.Add, "Document", HelpUri = "https://github.com/PoshMongo/PoshMongo/blob/master/Docs/Add-MongoDBDocument.md#add-mongodbdocument")]
     [OutputType("System.Text.Json")]
-    [CmdletBinding(PositionalBinding = true, DefaultParameterSetName = "Default")]
+    [CmdletBinding(PositionalBinding = true)]
     public class AddDocumentCmdlet : PSCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Default")]
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionName")]
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection")]
-        public string Document { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionName")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Collection")]
+        public string Document { get; set; } = string.Empty;
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionName")]
         public string CollectionName { get; set; } = string.Empty;
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Collection", ValueFromPipeline = true)]
-        public IMongoCollection<BsonDocument>? MongoCollection { get; set; }
+        [Parameter(Mandatory = true, Position = 2, ParameterSetName = "CollectionName")] 
+        public string DatabaseName { get; set; } = string.Empty;
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection", ValueFromPipeline = true)]
+        public IMongoCollection<BsonDocument>? MongoCollection { get; set; } = null;
+        private IMongoDatabase? MongoDatabase { get; set; } = null;
+        private IMongoClient? Client { get; set; } = null;
+        protected override void BeginProcessing()
+        {
+            Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
+            if (!(string.IsNullOrEmpty(DatabaseName)) && !(string.IsNullOrEmpty(CollectionName)))
+            {
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
+                MongoCollection = Operations.GetCollection(MongoDatabase, CollectionName);
+            }
+        }
         protected override void ProcessRecord()
         {
-            if (MongoCollection == null)
-            {
-                if (!(string.IsNullOrEmpty(CollectionName)))
-                {
-                    MongoDatabaseBase MongoDatabase = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
-                    MongoCollection = MongoDatabase.GetCollection<BsonDocument>(CollectionName, new MongoCollectionSettings());
-                }
-                else
-                {
-                    MongoCollection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
-                }
-            }
-            WriteVerbose(ParameterSetName);
             switch (ParameterSetName)
             {
                 case "CollectionName":
-                    WriteObject(AddDocument(MongoCollection, Document));
+                    if (MongoCollection != null)
+                    {
+                        WriteObject(Operations.AddDocument(MongoCollection, Document));
+                    }
                     break;
-                default:
-                    MongoCollection = (IMongoCollection<BsonDocument>)SessionState.PSVariable.Get("Collection").Value;
-                    WriteObject(AddDocument(MongoCollection, Document));
+                case "Collection":
+                    if (MongoCollection != null)
+                    {
+                        WriteObject(Operations.AddDocument(MongoCollection, Document));
+                    }
                     break;
             }
-        }
-        private static string AddDocument(IMongoCollection<BsonDocument> Collection, string document)
-        {
-            BsonDocument bsonDocument = BsonDocument.Parse(document);
-            Collection.InsertOne(bsonDocument);
-            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", bsonDocument["_id"]);
-            return Collection.Find(filter).FirstOrDefault().ToJson();
         }
     }
 }

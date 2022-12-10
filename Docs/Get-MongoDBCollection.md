@@ -13,12 +13,6 @@ Get a MongoDB Collection
 
 ## SYNTAX
 
-### Collection
-
-```powershell
-Get-MongoDBCollection [[-CollectionName] <String>] [<CommonParameters>]
-```
-
 ### DatabaseName
 
 ```powershell
@@ -28,7 +22,7 @@ Get-MongoDBCollection [[-CollectionName] <String>] [-DatabaseName] <String> [<Co
 ### Database
 
 ```powershell
-Get-MongoDBCollection [[-CollectionName] <String>] [-MongoDatabase] <MongoDatabaseBase> [<CommonParameters>]
+Get-MongoDBCollection [[-CollectionName] <String>] [-MongoDatabase] <IMongoDatabase> [<CommonParameters>]
 ```
 
 ### CollectionNamespace
@@ -128,11 +122,11 @@ The name of the collection to retrieve from the Database
 
 ```yaml
 Type: System.String
-Parameter Sets: Collection, DatabaseName, Database
+Parameter Sets: DatabaseName, Database
 Aliases:
 
 Required: False
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -179,7 +173,7 @@ Accept wildcard characters: False
 This is a database object that holds the collection to return
 
 ```yaml
-Type: MongoDB.Driver.MongoDatabaseBase
+Type: MongoDB.Driver.IMongoDatabase
 Parameter Sets: Database
 Aliases:
 

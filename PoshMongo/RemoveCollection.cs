@@ -10,59 +10,40 @@ namespace PoshMongo.Collection
     [CmdletBinding(PositionalBinding = true)]
     public class RemoveCollectionCmdlet : PSCmdlet
     {
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionName")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
         public string CollectionName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DatabaseName")]
         public string DatabaseName { get; set; } = string.Empty;
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection", ValueFromPipeline = true)]
-        public IMongoCollection<BsonDocument>? Collection { get; set; }
-        private IMongoDatabase? MongoDatabase { get; set; }
-        protected override void ProcessRecord()
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Collection", ValueFromPipeline = true)]
+        public IMongoCollection<BsonDocument>? Collection { get; set; } = null;
+        private IMongoDatabase? MongoDatabase { get; set; } = null;
+        private IMongoClient? Client { get; set; } = null;
+        protected override void BeginProcessing()
         {
-            if (string.IsNullOrEmpty(DatabaseName))
+            Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
+            if (!(string.IsNullOrEmpty(CollectionName)))
             {
-                MongoDatabase = (MongoDatabaseBase)SessionState.PSVariable.Get("Database").Value;
-            } else
-            {
-                MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
-                if (Client != null)
-                {
-                    MongoDatabase = Client.GetDatabase(DatabaseName);
-                }
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
             }
             if (Collection != null)
             {
-                MongoClient Client = (MongoClient)SessionState.PSVariable.Get("Client").Value;
-                MongoDatabase = Client.GetDatabase(Collection.CollectionNamespace.DatabaseNamespace.DatabaseName);
+                MongoDatabase = Operations.GetDatabase(Client, Collection.CollectionNamespace.DatabaseNamespace.DatabaseName);
             }
+        }
+        protected override void ProcessRecord()
+        {
             switch (ParameterSetName)
             {
-                case "CollectionName":
-                    if (!(string.IsNullOrEmpty(CollectionName)))
-                    {
-                        if (MongoDatabase != null)
-                        {
-                            MongoDatabase.DropCollection(CollectionName);
-                        }
-                    }
-                    break;
                 case "DatabaseName":
-                    if (!(string.IsNullOrEmpty(CollectionName)) && !(string.IsNullOrEmpty(DatabaseName)))
+                    if (MongoDatabase != null)
                     {
-                        if (MongoDatabase != null)
-                        {
-                            MongoDatabase.DropCollection(CollectionName);
-                        }
+                        Operations.RemoveCollection(MongoDatabase, CollectionName);
                     }
                     break;
                 case "Collection":
-                    if (Collection != null)
+                    if (MongoDatabase != null && Collection != null)
                     {
-                        if (MongoDatabase != null)
-                        {
-                            MongoDatabase.DropCollection(Collection.CollectionNamespace.CollectionName);
-                        }
+                        Operations.RemoveCollection(MongoDatabase, Collection.CollectionNamespace.CollectionName);
                     }
                     break;
             }
