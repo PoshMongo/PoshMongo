@@ -241,6 +241,12 @@ namespace PoshMongo
             FilterDefinition<BsonDocument> result = Builders<BsonDocument>.Filter.And(filters);
             Collection.DeleteOne(result);
         }
+        /// <summary>
+        /// Run a command against a Database
+        /// </summary>
+        /// <param name="mongoDatabase">The Database to run the command against</param>
+        /// <param name="CommandString">The Command</param>
+        /// <returns></returns>
         public static BsonDocument RunCommand(IMongoDatabase mongoDatabase, string CommandString)
         {
             if (!(string.IsNullOrEmpty(CommandString)))
