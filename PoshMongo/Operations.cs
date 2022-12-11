@@ -55,20 +55,6 @@ namespace PoshMongo
         /// </summary>
 
         /// <summary>
-        /// Return a list of Collection from a MongoDatabase
-        /// </summary>
-        /// <param name="mongoDatabase"> The MongoDatabase to get a list of Collections from</param>
-        /// <returns></returns>
-        public static List<IMongoCollection<BsonDocument>> GetCollection(IMongoDatabase mongoDatabase)
-        {
-            List<IMongoCollection<BsonDocument>> Collections = new();
-            foreach (string collectionName in mongoDatabase.ListCollectionNames().ToEnumerable())
-            {
-                Collections.Add(mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings()));
-            }
-            return Collections;
-        }
-        /// <summary>
         /// Return a Collection from a MongoDatabase
         /// </summary>
         /// <param name="mongoDatabase">The MongoDatabase to a get Collection from</param>
