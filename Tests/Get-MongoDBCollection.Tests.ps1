@@ -70,7 +70,7 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
   Context "Get-MongoDBCollection DatabaseName ParameterSet" {
    Context "With a DatabaseName" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
-     (Get-MongoDBCollection -DatabaseName 'MyDB').GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+     (Get-MongoDBCollection -DatabaseName 'MyDB').GetType().FullName | Should -Be 'System.Object[]'
     }
    }
    Context "With a DatabaseName and CollectionName" {
@@ -84,8 +84,8 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
     }
    }
    Context "Without a CollectionName" {
-    It "Should Return MongoDB.Driver.MongoCollectionImpl`1[MongoDB.Bson.BsonDocument]" {
-     (Get-MongoDBCollection -DatabaseName 'MyDB' -CollectionName '').GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+    It "Should Return MongoDB.Driver.IMongoCollection" {
+     (Get-MongoDBCollection -DatabaseName 'MyDB' -CollectionName '').GetType().FullName | Should -Be 'System.Object[]'
     }
    }
   }
@@ -93,7 +93,7 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
    Context "With a Database" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
      $Database = Get-MongoDBDatabase -DatabaseName 'MyDB';
-     (Get-MongoDBCollection -MongoDatabase $Database).GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+     (Get-MongoDBCollection -MongoDatabase $Database).GetType().FullName | Should -Be 'System.Object[]'
     }
    }
    Context "With a Database and CollectionName" {
@@ -108,9 +108,9 @@ Describe "Get-MongoDBCollection" -Tag "PoshMongo", "GetCollectionCmdlet", "Colle
     }
    }
    Context "Without a CollectionName" {
-    It "Should Return MongoDB.Driver.MongoCollectionImpl`1[MongoDB.Bson.BsonDocument]" {
+    It "Should Return MongoDB.Driver.IMongoCollection" {
      $Database = Get-MongoDBDatabase -DatabaseName 'MyDB';
-     (Get-MongoDBCollection -MongoDatabase $Database -CollectionName '').GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoCollection`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]], MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+     (Get-MongoDBCollection -MongoDatabase $Database -CollectionName '').GetType().FullName | Should -Be 'System.Object[]'
     }
    }
   }

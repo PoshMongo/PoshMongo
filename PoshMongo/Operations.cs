@@ -55,20 +55,6 @@ namespace PoshMongo
         /// </summary>
 
         /// <summary>
-        /// Return a list of Collection from a MongoDatabase
-        /// </summary>
-        /// <param name="mongoDatabase"> The MongoDatabase to get a list of Collections from</param>
-        /// <returns></returns>
-        public static List<IMongoCollection<BsonDocument>> GetCollection(IMongoDatabase mongoDatabase)
-        {
-            List<IMongoCollection<BsonDocument>> Collections = new();
-            foreach (string collectionName in mongoDatabase.ListCollectionNames().ToEnumerable())
-            {
-                Collections.Add(mongoDatabase.GetCollection<BsonDocument>(collectionName, new MongoCollectionSettings()));
-            }
-            return Collections;
-        }
-        /// <summary>
         /// Return a Collection from a MongoDatabase
         /// </summary>
         /// <param name="mongoDatabase">The MongoDatabase to a get Collection from</param>
@@ -88,46 +74,6 @@ namespace PoshMongo
         public static IMongoDatabase GetDatabase(IMongoClient Client, string DatabaseName)
         {
             return Client.GetDatabase(DatabaseName);
-        }
-        /// <summary>
-        /// Return a list of MongoDatabases from a MongoClient
-        /// </summary>
-        /// <param name="Client">A Connected MongoClient</param>
-        /// <returns></returns>
-        public static List<IMongoDatabase> GetDatabase(IMongoClient Client)
-        {
-            List<IMongoDatabase> mongoDatabases = new();
-            foreach (string db in Client.ListDatabaseNames().ToEnumerable())
-            {
-                mongoDatabases.Add(Client.GetDatabase(db));
-            }
-            return mongoDatabases;
-        }
-        /// <summary>
-        /// Return a list of Document from a Collection
-        /// </summary>
-        /// <param name="Collection">The Collection to get Documents from</param>
-        /// <param name="noId">Boolean to display ID field</param>
-        /// <returns></returns>
-        public static List<string> GetDocument(IMongoCollection<BsonDocument> Collection, bool noId)
-        {
-            List<string> Documents = new();
-            if (noId == true)
-            {
-                ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                foreach (BsonDocument doc in Collection.Find(new BsonDocument()).Project(projection).ToList())
-                {
-                    Documents.Add(doc.ToJson());
-                }
-            }
-            else
-            {
-                foreach (BsonDocument doc in Collection.Find(new BsonDocument()).ToList())
-                {
-                    Documents.Add(doc.ToJson());
-                }
-            }
-            return Documents;
         }
         /// <summary>
         /// Return a Document from a Collection by Id

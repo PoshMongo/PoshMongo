@@ -195,8 +195,8 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
  Context "Get-MongoDBDocument Usage" {
   Context "Get-MongoDBDocument CollectionNameList ParameterSet" {
    Context "With a CollectionName" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -CollectionName 'myCollection2' -DatabaseName 'MyDB' | Should -BeOfType 'System.Collections.Generic.List[string]'
+    It "System.Text.Json" {
+     (Get-MongoDBDocument -CollectionName 'myCollection2' -DatabaseName 'MyDB').GetType().FullName | Should -Be 'System.Object[]'
     }
    }
    Context "Without a CollectionName" {
@@ -207,8 +207,8 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   }
   Context "Get-MongoDBDocument CollectionList ParameterSet" {
    Context "With a Collection" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -MongoCollection $Collection1 | Should -BeOfType 'System.Collections.Generic.List[string]'
+    It "Should Return System.Text.Json" {
+     (Get-MongoDBDocument -MongoCollection $Collection1).GetType().FullName | Should -Be 'System.String'
     }
    }
    Context "Without a Collection" {
@@ -219,8 +219,8 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   }
   Context "Get-MongoDBDocument CollectionNameId ParameterSet" {
    Context "With a CollectionName" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -CollectionName 'myCollection2' -DatabaseName 'MyDB' | Should -BeOfType 'System.Collections.Generic.List[string]'
+    It "Should Return System.Text.Json" {
+     (Get-MongoDBDocument -CollectionName 'myCollection2' -DatabaseName 'MyDB').GetType().FullName | Should -Be 'System.Object[]'
     }
    }
    Context "With a CollectionName and DocumentId" {
@@ -236,8 +236,8 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   }
   Context "Get-MongoDBDocument CollectionNameFilter ParameterSet" {
    Context "With a CollectionName" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -CollectionName 'myCollection2' -Database 'MyDB' | Should -BeOfType 'System.Collections.Generic.List[string]'
+    It "System.Text.Json" {
+     (Get-MongoDBDocument -CollectionName 'myCollection2' -Database 'MyDB').GetType().FullName | Should -Be 'System.Object[]'
     }
    }
    Context "With a CollectionName and Filter" {
@@ -253,8 +253,8 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   }
   Context "Get-MongoDBDocument CollectionId ParameterSet" {
    Context "With a CollectionName" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -MongoCollection $Collection1 | Should -BeOfType 'System.Collections.Generic.List[string]'
+    It "Should Return System.Text.Json" {
+     (Get-MongoDBDocument -MongoCollection $Collection1).GetType().FullName | Should -Be 'System.String'
     }
    }
    Context "With a CollectionName and DocumentId" {
@@ -270,8 +270,8 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
   }
   Context "Get-MongoDBDocument CollectionFilter ParameterSet" {
    Context "With a CollectionName" {
-    It "Should Return System.Collections.Generic.List[string]" {
-     Get-MongoDBDocument -MongoCollection $Collection2  | Should -BeOfType 'System.Collections.Generic.List[string]'
+    It "Should Return System.Text.Json" {
+     (Get-MongoDBDocument -MongoCollection $Collection2).GetType().FullName | Should -BeOfType 'System.String'
     }
    }
    Context "With a CollectionName and Filter" {

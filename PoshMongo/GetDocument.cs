@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections;
 using System.Management.Automation;
+using System.Text.Json;
 
 namespace PoshMongo.Document
 {
@@ -104,13 +105,21 @@ namespace PoshMongo.Document
                 case "CollectionList":
                     if (MongoCollection != null)
                     {
-                        WriteObject(Operations.GetDocument(MongoCollection, HideId));
+                        foreach (BsonDocument doc in MongoCollection.Find(new BsonDocument()).ToList())
+                        {
+                            DocumentId = (string)doc.GetValue("_id");
+                            WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
+                        }
                     }
                     break;
                 case "CollectionNameList":
                     if (MongoCollection != null)
                     {
-                        WriteObject(Operations.GetDocument(MongoCollection, HideId));
+                        foreach (BsonDocument doc in MongoCollection.Find(new BsonDocument()).ToList())
+                        {
+                            DocumentId = (string)doc.GetValue("_id");
+                            WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
+                        }
                     }
                     break;
                 default:

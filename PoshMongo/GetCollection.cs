@@ -51,7 +51,10 @@ namespace PoshMongo.Collection
                     {
                         if (string.IsNullOrEmpty(CollectionName))
                         {
-                            WriteObject(Operations.GetCollection(MongoDatabase));
+                            foreach (string collectionName in MongoDatabase.ListCollectionNames().ToEnumerable())
+                            {
+                                WriteObject(Operations.GetCollection(MongoDatabase, collectionName));
+                            }
                         }
                         else
                         {
@@ -66,7 +69,10 @@ namespace PoshMongo.Collection
                         {
                             if (string.IsNullOrEmpty(CollectionName))
                             {
-                                WriteObject(Operations.GetCollection(MongoDatabase));
+                                foreach (string collectionName in MongoDatabase.ListCollectionNames().ToEnumerable())
+                                {
+                                    WriteObject(Operations.GetCollection(MongoDatabase, collectionName));
+                                }
                             }
                             else
                             {
@@ -80,7 +86,10 @@ namespace PoshMongo.Collection
                     {
                         if (string.IsNullOrEmpty(CollectionName))
                         {
-                            WriteObject(Operations.GetCollection(MongoDatabase));
+                            foreach (string collectionName in MongoDatabase.ListCollectionNames().ToEnumerable())
+                            {
+                                WriteObject(Operations.GetCollection(MongoDatabase, collectionName));
+                            }
                         }
                         else
                         {
