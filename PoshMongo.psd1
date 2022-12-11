@@ -12,7 +12,7 @@
 RootModule = 'PoshMongo.dll'
 
 # Version number of this module.
-ModuleVersion = '3.0.0'
+ModuleVersion = '3.1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -72,7 +72,7 @@ RequiredAssemblies = @('.\PoshMongo.dll')
 # FunctionsToExport = @()
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = @('Connect-Instance','New-Database','Get-Database','Remove-Database','New-Collection','Get-Collection','Remove-Collection','Add-Document','Get-Document','Remove-Document')
+CmdletsToExport = @('Connect-Instance','New-Database','Get-Database','Remove-Database','New-Collection','Get-Collection','Remove-Collection','Add-Document','Get-Document','Remove-Document', 'Invoke-RunCommand')
 
 # Variables to export from this module
 VariablesToExport = '*'

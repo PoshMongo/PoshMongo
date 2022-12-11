@@ -32,6 +32,10 @@ Get a MongoDB Database
 
 ### [Get-MongoDBDocument](Get-MongoDBDocument.md)
 
+Run a MongoDB Command
+
+### [Invoke-MongoDBRunCommand](Invoke-MongoDBRunCommand.md)
+
 Get a MongoDB Document
 
 ### [New-MongoDBCollection](New-MongoDBCollection.md)
