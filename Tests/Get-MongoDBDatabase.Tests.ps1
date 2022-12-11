@@ -21,7 +21,7 @@ Describe "Get-MongoDBDatabase" -Tag "PoshMongo", "GetDatabaseCmdlet", "Database"
    It "Should be String" {
     Get-Command Get-MongoDBDatabase | Should -HaveParameter DatabaseName -Type String
    }
-   It "Should be Mandatory" {
+   It "Should Not be Mandatory" {
     Get-Command Get-MongoDBDatabase | Should -HaveParameter DatabaseName -not -Mandatory
    }
   }
@@ -29,15 +29,15 @@ Describe "Get-MongoDBDatabase" -Tag "PoshMongo", "GetDatabaseCmdlet", "Database"
    It "Should be IMongoClient" {
     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Type MongoDB.Driver.IMongoClient
    }
-   It "Should be Mandatory" {
+   It "Should be Not Mandatory" {
     Get-Command Get-MongoDBDatabase | Should -HaveParameter Client -Not -Mandatory
    }
   }
  }
  Context "Get-MongoDBDatabase Usage" {
   Context "Without a DatabaseName" {
-   It "Should Return MongoDB.Driver.MongoDatabaseBase" {
-    (Get-MongoDBDatabase).GetType().FullName | Should -Be 'System.Collections.Generic.List`1[[MongoDB.Driver.IMongoDatabase, MongoDB.Driver, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+   It "Should Return MongoDB.Driver.IMongoDatabase" {
+    (Get-MongoDBDatabase).GetType().FullName | Should -Be 'System.Object[]'
    }
   }
   Context "With a DatabaseName" {
