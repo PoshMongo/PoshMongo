@@ -15,13 +15,14 @@ namespace PoshMongo.Invoke
     [CmdletBinding(PositionalBinding = true)]
     public class InvokeRunCommand : PSCmdlet
     {
-        [Parameter(Mandatory = false, Position = 0, ParameterSetName = "Default")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "DatabaseName")]
         public string DatabaseName { get; set; } = string.Empty;
-        [Parameter(Mandatory = false, Position = 1, ParameterSetName = "Default")]
+        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Database", ValueFromPipeline = true)]
+        public IMongoDatabase? MongoDatabase { get; set; } = null;
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "DatabaseName")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Database")]
         public string CommandString { get; set; } = string.Empty;
-        [Parameter(Mandatory = false, Position = 2, ParameterSetName = "Default")]
-        public IMongoClient? Client { get; set; } = null;
-        private IMongoDatabase? MongoDatabase { get; set; } = null;
+        private IMongoClient? Client { get; set; } = null;
         protected override void BeginProcessing()
         {
             if (Client == null)
@@ -36,12 +37,21 @@ namespace PoshMongo.Invoke
                     throw new MongoConnectionException(new MongoDB.Driver.Core.Connections.ConnectionId(server.ServerId), "Must be connected to a MongoDB instance.");
                 }
             }
-            MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
-            if (!(string.IsNullOrEmpty(CommandString)))
+            if (!(string.IsNullOrEmpty(DatabaseName)))
             {
-                BsonDocument Result = Operations.RunCommand(MongoDatabase, CommandString);
-                string JsonResult = JsonSerializer.Serialize(BsonTypeMapper.MapToDotNetValue(Result), new JsonSerializerOptions { WriteIndented = true });
-                WriteObject(JsonResult);
+                MongoDatabase = Operations.GetDatabase(Client, DatabaseName);
+            }
+        }
+        protected override void ProcessRecord()
+        {
+            if (MongoDatabase != null)
+            {
+                if (!(string.IsNullOrEmpty(CommandString)))
+                {
+                    BsonDocument Result = Operations.RunCommand(MongoDatabase, CommandString);
+                    string JsonResult = JsonSerializer.Serialize(BsonTypeMapper.MapToDotNetValue(Result), new JsonSerializerOptions { WriteIndented = true });
+                    WriteObject(JsonResult);
+                }
             }
         }
     }
