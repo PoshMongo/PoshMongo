@@ -14,7 +14,16 @@ expanded, either from GetEnumerator() or a Foreach-Object.
 The following changes have been applied:
 
 - GetDatabaseCmdlet
+  - Instead of passing the client into a method and iterating there, we now iterate over the client and pass the Client and DatabaseName to the method
+  - Removed the GetDatabase(Client) method as it's no longer required
 - GetCollectionCmdlet
+  - Instead of passing the Database into a method and iterating there, we now iterate over the Database and pass the Database and CollectionName to the method
+  - Removed the GetCollection(Database) method as it's no longer required
+- GetDocumentCmdlet
+  - Instead of passing the Collection into a method and iterating there, we now iterate over the Collection and pass the Collection and DocumentId to the method
+  - Removed the GetDocument(Collection) method as it's no longer required
+- Updated Tests
+- Updated Help
 
 --
 
