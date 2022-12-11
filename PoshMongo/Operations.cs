@@ -76,32 +76,6 @@ namespace PoshMongo
             return Client.GetDatabase(DatabaseName);
         }
         /// <summary>
-        /// Return a list of Document from a Collection
-        /// </summary>
-        /// <param name="Collection">The Collection to get Documents from</param>
-        /// <param name="noId">Boolean to display ID field</param>
-        /// <returns></returns>
-        public static List<string> GetDocument(IMongoCollection<BsonDocument> Collection, bool noId)
-        {
-            List<string> Documents = new();
-            if (noId == true)
-            {
-                ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                foreach (BsonDocument doc in Collection.Find(new BsonDocument()).Project(projection).ToList())
-                {
-                    Documents.Add(doc.ToJson());
-                }
-            }
-            else
-            {
-                foreach (BsonDocument doc in Collection.Find(new BsonDocument()).ToList())
-                {
-                    Documents.Add(doc.ToJson());
-                }
-            }
-            return Documents;
-        }
-        /// <summary>
         /// Return a Document from a Collection by Id
         /// </summary>
         /// <param name="Collection">The Collection to get the Document from</param>
