@@ -90,20 +90,6 @@ namespace PoshMongo
             return Client.GetDatabase(DatabaseName);
         }
         /// <summary>
-        /// Return a list of MongoDatabases from a MongoClient
-        /// </summary>
-        /// <param name="Client">A Connected MongoClient</param>
-        /// <returns></returns>
-        public static List<IMongoDatabase> GetDatabase(IMongoClient Client)
-        {
-            List<IMongoDatabase> mongoDatabases = new();
-            foreach (string db in Client.ListDatabaseNames().ToEnumerable())
-            {
-                mongoDatabases.Add(Client.GetDatabase(db));
-            }
-            return mongoDatabases;
-        }
-        /// <summary>
         /// Return a list of Document from a Collection
         /// </summary>
         /// <param name="Collection">The Collection to get Documents from</param>

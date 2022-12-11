@@ -33,7 +33,10 @@ namespace PoshMongo.Database
             }
             else
             {
-                WriteObject(Operations.GetDatabase(Client));
+                foreach (string db in Client.ListDatabaseNames().ToEnumerable())
+                {
+                    WriteObject(Operations.GetDatabase(Client, db));
+                }
             }
         }
     }
