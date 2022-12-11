@@ -5,7 +5,20 @@ All changes to this module should be reflected in this document.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [[3.1.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.1.0) - 2022-12-10
+## [[3.1.1]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.1.1) - 2022-12-10
+
+This release is a bugfix for the Cmdlets that return a List<T> of obejcts. In order for Cmdlets to process objects
+on the cmdline they need to come in one at a time. If the output of one cmdlet is a List object, it must first be
+expanded, either from GetEnumerator() or a Foreach-Object.
+
+The following changes have been applied:
+
+- GetDatabaseCmdlet
+- GetCollectionCmdlet
+
+--
+
+## [[3.1.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.1.0) - 2022-12-11
 
 This is release adds a new Cmdlet, Invoke-MongoDBRunCommand, which allows you to run [Commands](https://www.mongodb.com/docs/manual/reference/command/) against your MongoDB.
 
