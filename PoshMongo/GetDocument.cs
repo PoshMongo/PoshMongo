@@ -115,10 +115,21 @@ namespace PoshMongo.Document
                 case "CollectionNameList":
                     if (MongoCollection != null)
                     {
+                        string? DocId;
                         foreach (BsonDocument doc in MongoCollection.Find(new BsonDocument()).ToList())
                         {
-                            DocumentId = (string)doc.GetValue("_id");
-                            WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
+                            DocId = doc.GetValue("_id").ToString();
+                            if (!(string.IsNullOrEmpty(DocId)))
+                            {
+                                if (ObjectId.TryParse(DocId, out objectId))
+                                {
+                                    WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
+                                }
+                                else
+                                {
+                                    WriteObject(Operations.GetDocument(MongoCollection, DocId, HideId));
+                                }
+                            }
                         }
                     }
                     break;
