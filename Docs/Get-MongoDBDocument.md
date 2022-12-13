@@ -31,7 +31,7 @@ Get-MongoDBDocument [-DocumentId] <String>
 ### CollectionFilter
 
 ```powershell
-Get-MongoDBDocument [-Filter] <Hashtable>
+Get-MongoDBDocument [-Filter] <String>
  [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [-HideId]
  [<CommonParameters>]
 ```
@@ -39,7 +39,7 @@ Get-MongoDBDocument [-Filter] <Hashtable>
 ### CollectionNameFilter
 
 ```powershell
-Get-MongoDBDocument [-Filter] <Hashtable> [-CollectionName] <String> [-DatabaseName] <String> [-HideId]
+Get-MongoDBDocument [-Filter] <String> [-CollectionName] <String> [-DatabaseName] <String> [-HideId]
  [<CommonParameters>]
 ```
 
@@ -76,7 +76,7 @@ Get a specific document by the id
 ### Example 2
 
 ```powershell
-PS C:\> Get-MongoDBDocument -Filter @{'Name'='FirstName'}
+PS C:\> Get-MongoDBDocument -Filter '{"Name":"FirstName"}'
 
 _id  : 4e27b0f5-aaa0-4d4d-bdc8-43f811242d93
 Name : FirstName
@@ -153,21 +153,10 @@ Accept wildcard characters: False
 
 ### -Filter
 
-This is a hashtable of values that are converted into a simple equality type
-filter. For example:
-
-```powershell
-@{'Name'='FirstName'}
-```
-
-Is translated into a FilterDefinition object
-
-```csharp
-Filter.Eq(key, value));
-```
+This is a Json string that represents the filter to be applied. See Notes
 
 ```yaml
-Type: System.Collections.Hashtable
+Type: System.String
 Parameter Sets: CollectionFilter, CollectionNameFilter
 Aliases:
 
@@ -243,3 +232,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [FilterDefinitionBuilder](https://mongodb.github.io/mongo-csharp-driver/2.18/apidocs/html/T_MongoDB_Driver_FilterDefinitionBuilder_1.htm)
+
+[Filters](https://mongodb.github.io/mongo-csharp-driver/2.18/reference/driver/definitions/#filters)
