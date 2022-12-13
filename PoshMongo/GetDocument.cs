@@ -18,7 +18,7 @@ namespace PoshMongo.Document
 
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionFilter")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "CollectionNameFilter")]
-        public Hashtable Filter { get; set; } = new Hashtable();
+        public string Filter { get; set; } = string.Empty;
 
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameId")]
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "CollectionNameFilter")]
@@ -47,6 +47,7 @@ namespace PoshMongo.Document
         public SwitchParameter List { get; set; }
         private IMongoDatabase? MongoDatabase { get; set; } = null;
         private IMongoClient? Client { get; set; } = null;
+        private FilterDefinition<BsonDocument> BFilter { get; set; }
         protected override void BeginProcessing()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;
@@ -78,9 +79,11 @@ namespace PoshMongo.Document
                     }
                     break;
                 case "CollectionNameFilter":
+                    BFilter = BsonDocument.Parse(Filter);
+                    WriteVerbose(BFilter.ToJson());
                     if (MongoCollection != null)
                     {
-                        WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId));
+                        WriteObject(Operations.GetDocument(MongoCollection, BFilter, HideId));
                     }
                     break;
                 case "CollectionId":
@@ -97,28 +100,51 @@ namespace PoshMongo.Document
                     }
                     break;
                 case "CollectionFilter":
+                    BFilter = BsonDocument.Parse(Filter);
                     if (MongoCollection != null)
                     {
-                        WriteObject(Operations.GetDocument(MongoCollection, Filter, HideId));
+                        WriteObject(Operations.GetDocument(MongoCollection, BFilter, HideId));
                     }
                     break;
                 case "CollectionList":
                     if (MongoCollection != null)
                     {
+                        string? DocId;
                         foreach (BsonDocument doc in MongoCollection.Find(new BsonDocument()).ToList())
                         {
-                            DocumentId = (string)doc.GetValue("_id");
-                            WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
+                            DocId = doc.GetValue("_id").ToString();
+                            if (!(string.IsNullOrEmpty(DocId)))
+                            {
+                                if (ObjectId.TryParse(DocId, out objectId))
+                                {
+                                    WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
+                                }
+                                else
+                                {
+                                    WriteObject(Operations.GetDocument(MongoCollection, DocId, HideId));
+                                }
+                            }
                         }
                     }
                     break;
                 case "CollectionNameList":
                     if (MongoCollection != null)
                     {
+                        string? DocId;
                         foreach (BsonDocument doc in MongoCollection.Find(new BsonDocument()).ToList())
                         {
-                            DocumentId = (string)doc.GetValue("_id");
-                            WriteObject(Operations.GetDocument(MongoCollection, DocumentId, HideId));
+                            DocId = doc.GetValue("_id").ToString();
+                            if (!(string.IsNullOrEmpty(DocId)))
+                            {
+                                if (ObjectId.TryParse(DocId, out objectId))
+                                {
+                                    WriteObject(Operations.GetDocument(MongoCollection, objectId, HideId));
+                                }
+                                else
+                                {
+                                    WriteObject(Operations.GetDocument(MongoCollection, DocId, HideId));
+                                }
+                            }
                         }
                     }
                     break;

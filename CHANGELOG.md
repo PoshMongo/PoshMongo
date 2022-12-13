@@ -5,6 +5,32 @@ All changes to this module should be reflected in this document.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[3.2.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.2.0) - 2022-12-12
+
+This release resolves a bugfix for Get-MongoDBDocument, where it encounters an error when attempting to return BsonDocument ObjectID. This release also adds a feature to Get-MongoDBDocument, you can now pass in a filter as a string. For more details on specifics please reference this [document](https://mongodb.github.io/mongo-csharp-driver/2.18/reference/driver/definitions/#filters).
+
+For example:
+
+```powershell
+Get-MongoDBDocument -Filter '{"_id" : "1" }' -CollectionName 'myCollection2' -Database 'MyDB'
+{
+  "_id": "1",
+  "LastName": "Smith",
+  "FirstName": "John"
+}
+```
+
+The following changes have been applied:
+
+- GetDocumentCmdlet
+  - Updated GetDocument() methods to return pretty json
+  - Filter Update
+    - Filter now accepts a json string as a filter
+- Updated Tests
+- Updated Help
+
+--
+
 ## [[3.1.1]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.1.1) - 2022-12-11
 
 This release is a bugfix for the Cmdlets that return a List<T> of obejcts. In order for Cmdlets to process objects

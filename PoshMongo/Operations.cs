@@ -6,6 +6,7 @@ using System.Reflection.Metadata;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections;
+using System.Text.Json;
 
 namespace PoshMongo
 {
@@ -84,16 +85,19 @@ namespace PoshMongo
         /// <returns></returns>
         public static string GetDocument(IMongoCollection<BsonDocument> Collection, string Id, bool noId)
         {
+            BsonDocument Result;
             FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", Id);
             if (noId == true)
             {
                 ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                return Collection.Find(id).Project(projection).FirstOrDefault().ToJson();
+                Result = Collection.Find(id).Project(projection).FirstOrDefault();
             }
             else
             {
-                return Collection.Find(id).FirstOrDefault().ToJson();
+                Result = Collection.Find(id).FirstOrDefault();
             }
+            string JsonResult = JsonSerializer.Serialize(BsonTypeMapper.MapToDotNetValue(Result), new JsonSerializerOptions { WriteIndented = true });
+            return JsonResult;
         }
         /// <summary>
         /// Return a Document from a Collection by Object ID
@@ -104,16 +108,19 @@ namespace PoshMongo
         /// <returns></returns>
         public static string GetDocument(IMongoCollection<BsonDocument> Collection, ObjectId Id, bool noId)
         {
+            BsonDocument Result;
             FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(Id.ToString()));
             if (noId == true)
             {
                 ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                return Collection.Find(id).Project(projection).FirstOrDefault().ToJson();
+                Result = Collection.Find(id).Project(projection).FirstOrDefault();
             }
             else
             {
-                return Collection.Find(id).FirstOrDefault().ToJson();
+                Result = Collection.Find(id).FirstOrDefault();
             }
+            string JsonResult = JsonSerializer.Serialize(BsonTypeMapper.MapToDotNetValue(Result), new JsonSerializerOptions { WriteIndented = true });
+            return JsonResult;
         }
         /// <summary>
         /// Return a Document from a Collection using a Filter
@@ -122,23 +129,20 @@ namespace PoshMongo
         /// <param name="filter">A filter for Documents</param>
         /// <param name="noId">Boolean to display ID field</param>
         /// <returns></returns>
-        public static string GetDocument(IMongoCollection<BsonDocument> Collection, Hashtable filter, bool noId)
+        public static string GetDocument(IMongoCollection<BsonDocument> Collection, FilterDefinition<BsonDocument> filter, bool noId)
         {
-            List<FilterDefinition<BsonDocument>> filters = new List<FilterDefinition<BsonDocument>>();
-            foreach (string key in filter.Keys)
-            {
-                filters.Add(Builders<BsonDocument>.Filter.Eq(key, filter[key]));
-            }
-            FilterDefinition<BsonDocument> id = Builders<BsonDocument>.Filter.And(filters);
+            BsonDocument Result;
             if (noId == true)
             {
                 ProjectionDefinition<BsonDocument> projection = Builders<BsonDocument>.Projection.Exclude("_id");
-                return Collection.Find(id).Project(projection).FirstOrDefault().ToJson();
+                Result = Collection.Find(filter).Project(projection).FirstOrDefault();
             }
             else
             {
-                return Collection.Find(id).FirstOrDefault().ToJson();
+                Result = Collection.Find(filter).FirstOrDefault();
             }
+            string JsonResult = JsonSerializer.Serialize(BsonTypeMapper.MapToDotNetValue(Result), new JsonSerializerOptions { WriteIndented = true });
+            return JsonResult;
         }
         /// <summary>
         /// Delete

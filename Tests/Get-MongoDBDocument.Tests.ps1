@@ -59,8 +59,8 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['DatabaseName'].ParameterSets.CollectionNameId | Should -Be $true
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['HideId'].ParameterSets.CollectionNameFilter | Should -Be $true
    }
-   It "Filter should be a HashTable" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
+   It "Filter should be a String" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type System.String
    }
    It "Filter should be Mandatory" {
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionNameFilter.IsMandatory | Should -Be $true
@@ -153,8 +153,8 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
    It "Collection should be Mandatory" {
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['MongoCollection'].ParameterSets.CollectionFilter.IsMandatory | Should -Be $true
    }
-   It "Filter should be Hashtable" {
-    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type Hashtable
+   It "Filter should be Filter" {
+    Get-Command Get-MongoDBDocument | Should -HaveParameter Filter -Type System.String
    }
    It "Filter should be Mandatory" {
     (Get-Command -Name 'Get-MongoDBDocument').Parameters['Filter'].ParameterSets.CollectionFilter.IsMandatory | Should -Be $true
@@ -242,7 +242,7 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
    }
    Context "With a CollectionName and Filter" {
     It "Should Return System.String" {
-     Get-MongoDBDocument -Filter @{'_id' = '1' } -CollectionName 'myCollection2' -Database 'MyDB'| Should -BeOfType System.String
+     Get-MongoDBDocument -Filter '{"_id" : "1" }' -CollectionName 'myCollection2' -Database 'MyDB'| Should -BeOfType System.String
     }
    }
    Context "Without a Collection" {
@@ -276,7 +276,7 @@ Describe "Get-MongoDBDocument" -Tag "PoshMongo", "GetDocumentCmdlet", "Document"
    }
    Context "With a CollectionName and Filter" {
     It "Should Return System.String" {
-     Get-MongoDBDocument -MongoCollection $Collection2 -Filter @{'_id' = '1' } | Should -BeOfType System.String
+     Get-MongoDBDocument -MongoCollection $Collection2 -Filter '{"_id" : "1" }' | Should -BeOfType System.String
     }
    }
    Context "Without a Collection" {
