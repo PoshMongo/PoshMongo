@@ -5,6 +5,20 @@ All changes to this module should be reflected in this document.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[3.2.1]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.2.1) - 2022-12-14
+
+This is a minor release to fix the Update-Help issue #25. The Manifest was missing the HelpInfoUri, and the HelpInfo.xml is generated based on values in the PoshMongo.md file. This file had an incorrect download location so this has been updated.
+
+The following changes have been applied:
+
+- PoshMongo.psd1
+  - Added the missing value for HelpInfoURI
+- PoshMongo.md
+  - Added the correct value for Download Help Link
+- Updated Help
+
+--
+
 ## [[3.2.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.2.0) - 2022-12-12
 
 This release resolves a bugfix for Get-MongoDBDocument, where it encounters an error when attempting to return BsonDocument ObjectID. This release also adds a feature to Get-MongoDBDocument, you can now pass in a filter as a string. For more details on specifics please reference this [document](https://mongodb.github.io/mongo-csharp-driver/2.18/reference/driver/definitions/#filters).
