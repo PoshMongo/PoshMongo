@@ -12,7 +12,7 @@
 RootModule = 'PoshMongo.dll'
 
 # Version number of this module.
-ModuleVersion = '3.2.0'
+ModuleVersion = '3.2.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -123,7 +123,7 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://raw.githubusercontent.com/PoshMongo/PoshMongo/main/cabs/'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 DefaultCommandPrefix = 'MongoDB'
