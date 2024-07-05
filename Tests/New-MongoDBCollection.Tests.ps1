@@ -50,7 +50,7 @@ Describe "New-MongoDBCollection" -Tag "PoshMongo", "NewCollectionCmdlet", "Colle
   Context "New-MongoDBCollection DatabaseName ParameterSet" {
    Context "With a DatabaseName" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
-     (New-MongoDBCollection -DatabaseName 'MyDB1' -CollectionName 'myCollection2').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+     (New-MongoDBCollection -DatabaseName 'MyDB1' -CollectionName 'myCollection2').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.27.0.0, Culture=neutral, PublicKeyToken=null]]'
     }
    }
    Context "Without a DatabaseName" {
@@ -78,7 +78,7 @@ Describe "New-MongoDBCollection" -Tag "PoshMongo", "NewCollectionCmdlet", "Colle
    Context "With a Database" {
     It "Should Return MongoDB.Driver.IMongoCollection" {
      $Database = Get-MongoDBDatabase -DatabaseName 'MyDB1';
-     (New-MongoDBCollection -MongoDatabase $Database -CollectionName 'myCollection3').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.18.0.0, Culture=neutral, PublicKeyToken=null]]'
+     (New-MongoDBCollection -MongoDatabase $Database -CollectionName 'myCollection3').GetType().FullName | Should -Be 'MongoDB.Driver.MongoCollectionImpl`1[[MongoDB.Bson.BsonDocument, MongoDB.Bson, Version=2.27.0.0, Culture=neutral, PublicKeyToken=null]]'
     }
    }
    Context "Without a Database" {
