@@ -5,6 +5,31 @@ All changes to this module should be reflected in this document.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[3.3.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.3.0) - 2022-12-14
+
+These changes allow the PowerShell cmdlet to leverage the `-Force` parameter to control upsert behavior when adding documents to a MongoDB collection.
+
+### Operations Class
+
+1. **Method Enhancement**:
+   - Enhanced the `AddDocument` method to accept an additional boolean parameter for upsert functionality (`isUpsert`).
+
+2. **Upsert Logic**:
+   - Incorporated logic to replace an existing document if `isUpsert` is true, otherwise, it performs a standard insert.
+
+#### Cmdlet Class
+
+1. **Force Parameter Addition**:
+   - Added a `Force` parameter to the cmdlet, enabling users to specify whether the document should be upserted.
+
+2. **Determine Upsert Based on Force**:
+   - Used the presence of the `Force` switch to determine the value of the `isUpsert` parameter.
+
+3. **Integration with Operations Class**:
+   - Passed the determined `isUpsert` value from the cmdlet to the `AddDocument` method in the `Operations` class.
+
+--
+
 ## [[3.2.1]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.2.1) - 2022-12-14
 
 This is a minor release to fix the Update-Help issue #25. The Manifest was missing the HelpInfoUri, and the HelpInfo.xml is generated based on values in the PoshMongo.md file. This file had an incorrect download location so this has been updated.
