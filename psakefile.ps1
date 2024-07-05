@@ -77,7 +77,7 @@ Task CleanModuleDirectory -Description "Clean the module directory" -Action {
 }
 
 Task CopyModuleFiles -Description "Copy files for the module" -Action {
- Copy-Item .\PoshMongo\bin\Release\net6.0\*.dll Module -Force
+ Copy-Item .\PoshMongo\bin\Release\net7.0\*.dll Module -Force
  Copy-Item .\PoshMongo.psd1 Module -Force
 }
 

@@ -21,20 +21,30 @@ namespace PoshMongo
         /// </summary>
         /// <param name="Collection">The collection to add the document to</param>
         /// <param name="document">A json string document</param>
+        /// <param name="isUpsert">Boolean to indicate if upsert should be performed</param>
         /// <returns></returns>
-        public static string AddDocument(IMongoCollection<BsonDocument> Collection, string document)
+        public static string AddDocument(IMongoCollection<BsonDocument> Collection, string document, bool isUpsert)
         {
             BsonDocument bsonDocument = BsonDocument.Parse(document);
-            Collection.InsertOne(bsonDocument);
             FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", bsonDocument["_id"]);
+
+            if (isUpsert)
+            {
+                ReplaceOptions options = new ReplaceOptions { IsUpsert = true };
+                Collection.ReplaceOne(filter, bsonDocument, options);
+            }
+            else
+            {
+                Collection.InsertOne(bsonDocument);
+            }
+
             return Collection.Find(filter).FirstOrDefault().ToJson();
-        }
-        /// <summary>
-        /// Create a Collection in a MongoDatabase
-        /// </summary>
-        /// <param name="collectionName">The name of the Collection to create</param>
-        /// <param name="mongoDatabase">The MongoDatabase to create the Collection in</param>
-        /// <returns></returns>
+        }        /// <summary>
+                 /// Create a Collection in a MongoDatabase
+                 /// </summary>
+                 /// <param name="collectionName">The name of the Collection to create</param>
+                 /// <param name="mongoDatabase">The MongoDatabase to create the Collection in</param>
+                 /// <returns></returns>
         public static IMongoCollection<BsonDocument> NewCollection(string collectionName, IMongoDatabase mongoDatabase)
         {
             mongoDatabase.CreateCollection(collectionName, new CreateCollectionOptions(), new CancellationToken());
