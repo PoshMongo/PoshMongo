@@ -47,7 +47,7 @@ namespace PoshMongo.Document
         public SwitchParameter List { get; set; }
         private IMongoDatabase? MongoDatabase { get; set; } = null;
         private IMongoClient? Client { get; set; } = null;
-        private FilterDefinition<BsonDocument> BFilter { get; set; }
+        private FilterDefinition<BsonDocument>? BFilter { get; set; }
         protected override void BeginProcessing()
         {
             Client = (IMongoClient)SessionState.PSVariable.Get("Client").Value;

@@ -19,6 +19,8 @@ namespace PoshMongo.Document
         public string DatabaseName { get; set; } = string.Empty;
         [Parameter(Mandatory = true, Position = 1, ParameterSetName = "Collection", ValueFromPipeline = true)]
         public IMongoCollection<BsonDocument>? MongoCollection { get; set; } = null;
+        [Parameter(Mandatory = false)]
+        public SwitchParameter Force { get; set; }
         private IMongoDatabase? MongoDatabase { get; set; } = null;
         private IMongoClient? Client { get; set; } = null;
         protected override void BeginProcessing()
@@ -32,18 +34,19 @@ namespace PoshMongo.Document
         }
         protected override void ProcessRecord()
         {
+            bool isUpsert = Force.IsPresent;
             switch (ParameterSetName)
             {
                 case "CollectionName":
                     if (MongoCollection != null)
                     {
-                        WriteObject(Operations.AddDocument(MongoCollection, Document));
+                        WriteObject(Operations.AddDocument(MongoCollection, Document, isUpsert));
                     }
                     break;
                 case "Collection":
                     if (MongoCollection != null)
                     {
-                        WriteObject(Operations.AddDocument(MongoCollection, Document));
+                        WriteObject(Operations.AddDocument(MongoCollection, Document, isUpsert));
                     }
                     break;
             }
