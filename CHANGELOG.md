@@ -5,6 +5,12 @@ All changes to this module should be reflected in this document.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[3.3.1]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.3.1) - 2024-07-19
+
+This is a minor release that updated some of the internal documentation as it was outdated and confusing.
+
+--
+
 ## [[3.3.0]](https://github.com/PoshMongo/PoshMongo/releases/tag/v3.3.0) - 2022-12-14
 
 These changes allow the PowerShell cmdlet to leverage the `-Force` parameter to control upsert behavior when adding documents to a MongoDB collection.
