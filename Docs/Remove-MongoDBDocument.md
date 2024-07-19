@@ -17,42 +17,44 @@ Remove a MongoDB Document
 
 ```powershell
 Remove-MongoDBDocument [-DocumentId] <String> [-CollectionName] <String> [-DatabaseName] <String>
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CollectionId
 
 ```powershell
 Remove-MongoDBDocument [-DocumentId] <String>
- [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [<CommonParameters>]
+ [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CollectionNameFilter
 
 ```powershell
 Remove-MongoDBDocument [-Filter] <Hashtable> [-CollectionName] <String> [-DatabaseName] <String>
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CollectionFilter
 
 ```powershell
 Remove-MongoDBDocument [-Filter] <Hashtable>
- [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [<CommonParameters>]
+ [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DocumentCollectionName
 
 ```powershell
 Remove-MongoDBDocument [-CollectionName] <String> [-DatabaseName] <String> [-Document] <String>
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DocumentCollection
 
 ```powershell
 Remove-MongoDBDocument [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]>
- [-Document] <String> [<CommonParameters>]
+ [-Document] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -177,6 +179,22 @@ Aliases:
 
 Required: True
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

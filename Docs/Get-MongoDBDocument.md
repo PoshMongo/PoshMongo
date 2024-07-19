@@ -17,7 +17,7 @@ Get a MongoDB Document
 
 ```powershell
 Get-MongoDBDocument [-DocumentId] <String> [-CollectionName] <String> [-DatabaseName] <String> [-HideId]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CollectionId
@@ -25,7 +25,7 @@ Get-MongoDBDocument [-DocumentId] <String> [-CollectionName] <String> [-Database
 ```powershell
 Get-MongoDBDocument [-DocumentId] <String>
  [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [-HideId]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CollectionFilter
@@ -33,27 +33,28 @@ Get-MongoDBDocument [-DocumentId] <String>
 ```powershell
 Get-MongoDBDocument [-Filter] <String>
  [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [-HideId]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CollectionNameFilter
 
 ```powershell
 Get-MongoDBDocument [-Filter] <String> [-CollectionName] <String> [-DatabaseName] <String> [-HideId]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CollectionNameList
 
 ```powershell
-Get-MongoDBDocument [-CollectionName] <String> [-DatabaseName] <String> [-HideId] [-List] [<CommonParameters>]
+Get-MongoDBDocument [-CollectionName] <String> [-DatabaseName] <String> [-HideId] [-List]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### CollectionList
 
 ```powershell
 Get-MongoDBDocument [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [-HideId]
- [-List] [<CommonParameters>]
+ [-List] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -212,6 +213,22 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

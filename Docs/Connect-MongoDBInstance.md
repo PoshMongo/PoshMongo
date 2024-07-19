@@ -14,7 +14,8 @@ Connect to a MongoDB Instance
 ## SYNTAX
 
 ```powershell
-Connect-MongoDBInstance [-ConnectionString] <String> [-ForceTls12] [<CommonParameters>]
+Connect-MongoDBInstance [-ConnectionString] <String> [-ForceTls12] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,6 +62,22 @@ Aliases:
 
 Required: False
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

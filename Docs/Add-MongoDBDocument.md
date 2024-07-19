@@ -16,15 +16,16 @@ This cmdlet adds a document (JSON) to a MongoDB Collection.
 ### CollectionName
 
 ```powershell
-Add-MongoDBDocument [-Document] <String> [-CollectionName] <String> [-DatabaseName] <String>
- [<CommonParameters>]
+Add-MongoDBDocument [-Document] <String> [-CollectionName] <String> [-DatabaseName] <String> [-Force]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Collection
 
 ```powershell
 Add-MongoDBDocument [-Document] <String>
- [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [<CommonParameters>]
+ [-MongoCollection] <MongoDB.Driver.IMongoCollection`1[MongoDB.Bson.BsonDocument]> [-Force]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -103,6 +104,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Force
+
+{{ Fill Force Description }}
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -MongoCollection
 
 A Collection object to add the Document to
@@ -116,6 +133,22 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

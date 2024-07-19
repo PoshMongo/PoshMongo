@@ -16,13 +16,15 @@ This Cmdlet enables running commands directly against the MongoDB Instance.
 ### DatabaseName
 
 ```powershell
-Invoke-MongoDBRunCommand [-DatabaseName] <String> [-CommandString] <String> [<CommonParameters>]
+Invoke-MongoDBRunCommand [-DatabaseName] <String> [-CommandString] <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Database
 
 ```powershell
-Invoke-MongoDBRunCommand [-MongoDatabase] <IMongoDatabase> [-CommandString] <String> [<CommonParameters>]
+Invoke-MongoDBRunCommand [-MongoDatabase] <IMongoDatabase> [-CommandString] <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -132,6 +134,22 @@ Required: True
 Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

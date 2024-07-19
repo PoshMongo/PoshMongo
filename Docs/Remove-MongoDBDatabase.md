@@ -16,13 +16,15 @@ Remove a MongoDB Database
 ### Default
 
 ```powershell
-Remove-MongoDBDatabase [-DatabaseName] <String> [[-Client] <IMongoClient>] [<CommonParameters>]
+Remove-MongoDBDatabase [-DatabaseName] <String> [[-Client] <IMongoClient>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Database
 
 ```powershell
-Remove-MongoDBDatabase [[-Client] <IMongoClient>] [-Database] <IMongoDatabase> [<CommonParameters>]
+Remove-MongoDBDatabase [[-Client] <IMongoClient>] [-Database] <IMongoDatabase>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -84,6 +86,22 @@ Aliases:
 
 Required: True
 Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: System.Management.Automation.ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
