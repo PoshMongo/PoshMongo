@@ -37,7 +37,8 @@ select the collection (Get-MongoDBCollection) before a document can be added.
 ### Example 1
 
 ```powershell
-PS C:\> Add-MongoDBDocument -Document '{"_id":"4e27b0f5-aaa0-4d4d-bdc8-43f811242d93","Name":"FirstName"}'
+PS C:\> Add-MongoDBDocument -Document '{"_id":"19511","FirstName":"Joe","LastName":"Friday"}' -CollectionName 'myCollection1' -DatabaseName 'MyDB'
+{ "_id" : "19511", "FirstName" : "Joe", "LastName" : "Friday" }
 ```
 
 An example showing how to add a simple json document to the collection
@@ -45,10 +46,11 @@ An example showing how to add a simple json document to the collection
 ### Example 2
 
 ```powershell
-PS C:\> Add-MongoDBDocument -Document $ComplexDocument |ConvertTo-Json -Compress
+PS C:\> $Collection1 | Add-MongoDBDocument -Document '{"_id":"19792","Luke":"Joe","LastName":"Duke"}'
+{ "_id" : "19792", "Luke" : "Joe", "LastName" : "Duke" }
 ```
 
-An example showing how to add a more complex document to the collection
+You can use the pipeline to also add documents to a collection
 
 ## PARAMETERS
 
